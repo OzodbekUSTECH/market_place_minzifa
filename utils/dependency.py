@@ -17,13 +17,15 @@ from fastapi.security import OAuth2PasswordBearer
 def get_users_services(db: Session = Depends(get_db)):
     return UsersService(UsersRepository(session=db, model=User))
 
+
+
 def get_maillist_services(db: Session = Depends(get_db)):
     return MailListService(MailListRepository(session=db, model=MailList))
 
 
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/users/login")
 
 
 async def get_current_user(

@@ -1,12 +1,12 @@
 import uvicorn
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from api import all_routers
 
 app = FastAPI(title="Market place by Minzifa Travel")
 
 for router in all_routers:
-    app.include_router(router)
+    app.include_router(router, prefix='/v1')
 
 # from fastapi_cache import FastAPICache
 # from fastapi_cache.backends.redis import RedisBackend
