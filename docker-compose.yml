@@ -1,0 +1,38 @@
+version: '3'
+services:
+  db:
+    image: postgres:13.3
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: marketplacedb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 77girado
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8008:8000
+    command: sh -c "alembic upgrade head && gunicorn -b 0.0.0.0:8000 main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker"
+    depends_on:
+      - db
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - "8080:80"  # Здесь изменяем порт
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
