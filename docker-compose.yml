@@ -27,8 +27,8 @@ services:
     container_name: pgadmin_marketplace
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
-      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_DEFAULT_EMAIL=marketplace@pgadmin.com
+      - PGADMIN_DEFAULT_PASSWORD=eshonpir63
     ports:
       - "8080:80"  # Здесь изменяем порт
     depends_on:
