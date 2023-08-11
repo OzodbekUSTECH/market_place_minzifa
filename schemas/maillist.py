@@ -15,7 +15,7 @@ class MailListSchema(BaseModel):
     name: Optional[str]
     email: EmailStr
 
-    class Config:
+    class ConfigDict:
         from_attribute = True
 
 
