@@ -2,7 +2,7 @@ version: '3'
 services:
   db:
     image: postgres:13.3
-    container_name: postgres_db
+    container_name: market_place_db
     restart: always
     environment:
       POSTGRES_DB: marketplacedb
@@ -24,7 +24,7 @@ services:
       - db
 
   pgadmin:
-    container_name: pgadmin
+    container_name: pgadmin_marketplace
     image: dpage/pgadmin4
     environment:
       - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
