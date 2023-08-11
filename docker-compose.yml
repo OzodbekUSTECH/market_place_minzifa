@@ -5,7 +5,7 @@ services:
     container_name: market_place_db
     restart: always
     environment:
-      POSTGRES_DB: marketplacedb
+      POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 77girado
     ports:
