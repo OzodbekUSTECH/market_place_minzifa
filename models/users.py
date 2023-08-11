@@ -1,6 +1,7 @@
 from database.db import Base
 from enum import Enum as PyEnum
 from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 
@@ -15,4 +16,6 @@ class User(Base):
     is_traveler_expert = Column(Boolean, default=False)
     is_traveler = Column(Boolean, default=False)    
 
-    role = Column(Integer, ForeignKey("roles.id"))
+    role_id = Column(Integer, ForeignKey("roles.id"))
+
+    role = relationship("Role")

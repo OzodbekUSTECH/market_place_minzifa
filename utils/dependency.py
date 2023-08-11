@@ -1,4 +1,4 @@
-from models import User, MailList, Role, Permession
+from models import User, MailList, Role, Permission, RolePermission
 
 from repositories.users import UsersRepository
 from services.users import UsersService
@@ -11,6 +11,9 @@ from services.roles import RolesService
 
 from repositories.permissions import PermissonsRepository
 from services.permissions import PermissionsService
+
+from repositories.rolepermissions import RolePermissionsRepository
+from services.rolepermissions import RolePermissionsService
 
 from database.db import get_db
 from fastapi import Depends, HTTPException, status
@@ -31,8 +34,10 @@ async def get_rolesservices(db: Session = Depends(get_db)):
     return RolesService(RolesRepository(session=db, model=Role))
 
 async def get_permissionsservices(db: Session = Depends(get_db)):
-    return PermissionsService(PermissonsRepository(session=db, model=Permession))
+    return PermissionsService(PermissonsRepository(session=db, model=Permission))
 
+async def get_rolepermissions(db: Session = Depends(get_db)):
+    return RolePermissionsService(RolePermissionsRepository(session=db, model=RolePermission))
 
 
 
@@ -44,17 +49,16 @@ async def get_current_user(
     token: str = Depends(oauth2_scheme),
     users_service: UsersService = Depends(get_users_services)
 ):
-    print(token)
     return await users_service.get_current_user(token)
 
 
 
 class RoleChecker:
-    def __init__(self, roles: list[str]):
-        self.allowed_roles = roles
+    def __init__(self, permission_endpoint: str):
+        self.allowed_permission = permission_endpoint
 
     def __call__(self, current_user = Depends(get_current_user)):
-        if current_user.role not in self.allowed_roles:
+        if self.allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Access denied. Insufficient privileges."

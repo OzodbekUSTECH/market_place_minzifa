@@ -11,9 +11,9 @@ router = APIRouter(
 )
 
 
-@router.get('', name="get list of permessions", response_model=PermissionSchema)
+@router.get('', name="get list of permessions", response_model=list[PermissionSchema])
 async def get_list_of_permessions(
-    pagination: Pagination,
+    pagination: Annotated[Pagination, Depends()],
     perms_service: Annotated[PermissionsService, Depends(get_permissionsservices)]
 ) -> PermissionSchema:
     return await perms_service.get_all_permissions(pagination)
@@ -34,7 +34,7 @@ async def create_permission_data(
     return await perms_service.create_permission(permission_data)
 
 
-@router.update('/{permission_id}', name="update permission data", response_model=PermissionSchema)
+@router.put('/{permission_id}', name="update permission data", response_model=PermissionSchema)
 async def update_permission_data(
     permission_id: int,
     permission_data: UpdatePermissionSchema,

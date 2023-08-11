@@ -12,3 +12,12 @@ class CreateRoleSchema(BaseModel):
 
 class UpdateRoleSchema(CreateRoleSchema):
     pass
+
+class RolePermissionsSchema(BaseModel):
+    id: int
+    role_id: int
+    name: str
+    endpoint: str
+
+    class ConfigDict:
+        from_attributes = True

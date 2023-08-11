@@ -4,10 +4,16 @@ from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, JSON,
 from sqlalchemy.orm import relationship
 
 
-class Permession(Base):
+class Permission(Base):
     __tablename__ = 'permissions'
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     endpoint = Column(String)
     role_permissions = relationship("RolePermission", back_populates="permission")
+
+    @property
+    def role_id(self):
+        if self.role_permissions:
+            return self.role_permissions[0].role_id
+        return None

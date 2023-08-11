@@ -28,7 +28,7 @@ async def login_in(
     return await users_service.authenticate_user(form_data.username, form_data.password)
 
 
-@router.get('/me', name="get own user data", tags=["Auth"], response_model=UserSchema)
+@router.get('/me', name="get own user data", response_model=UserSchema)
 async def get_own_user_data(
     current_user = Depends(get_current_user),
 ) -> UserSchema:

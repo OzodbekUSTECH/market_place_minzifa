@@ -10,6 +10,7 @@ class UserCreateSchema(BaseModel):
     phone_number: str = None
     is_traveler_expert: bool = False
     is_traveler: bool = False
+    role_id: int
 
     @field_validator("password")
     def password_must_contain_special_characters(cls, v):
@@ -41,6 +42,7 @@ class UserUpdateSchema(BaseModel):
     phone_number: str = None
     is_traveler_expert: bool = False
     is_traveler: bool = False
+    role_id: int
 
 class UserSchema(BaseModel):
     id: int
@@ -49,6 +51,7 @@ class UserSchema(BaseModel):
     phone_number: Optional[str]
     is_traveler_expert: bool
     is_traveler: bool
+    role_id: int
 
     class ConfigDict:
         from_attributes = True

@@ -29,6 +29,7 @@ class BaseRepository:
     
     async def get_by_id(self, id: int):
         instance = self.session.query(self.model).filter(self.model.id == id).first()
+        
         return instance
     
     async def get_by_email(self, email: str):

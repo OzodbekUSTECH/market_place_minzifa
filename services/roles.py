@@ -24,3 +24,6 @@ class RolesService:
         return await self.roles_repo.delete(role_id)
     
     
+    #extends
+    async def get_role_permissions(self, role_id: int):
+        return await self.roles_repo.get_permissions_of_role(role_id)
