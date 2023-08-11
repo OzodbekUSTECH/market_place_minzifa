@@ -1,10 +1,16 @@
-from models import User, MailList
+from models import User, MailList, Role, Permession
 
 from repositories.users import UsersRepository
 from services.users import UsersService
 
 from repositories.maillist import MailListRepository
 from services.maillist import MailListService
+
+from repositories.roles import RolesRepository
+from services.roles import RolesService
+
+from repositories.permissions import PermissonsRepository
+from services.permissions import PermissionsService
 
 from database.db import get_db
 from fastapi import Depends, HTTPException, status
@@ -14,13 +20,19 @@ from fastapi.security import OAuth2PasswordBearer
 
 #services dependencies
 
-def get_users_services(db: Session = Depends(get_db)):
+async def get_users_services(db: Session = Depends(get_db)):
     return UsersService(UsersRepository(session=db, model=User))
 
 
-
-def get_maillist_services(db: Session = Depends(get_db)):
+async def get_maillist_services(db: Session = Depends(get_db)):
     return MailListService(MailListRepository(session=db, model=MailList))
+
+async def get_rolesservices(db: Session = Depends(get_db)):
+    return RolesService(RolesRepository(session=db, model=Role))
+
+async def get_permissionsservices(db: Session = Depends(get_db)):
+    return PermissionsService(PermissonsRepository(session=db, model=Permession))
+
 
 
 

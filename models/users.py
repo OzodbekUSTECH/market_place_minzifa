@@ -1,7 +1,6 @@
 from database.db import Base
 from enum import Enum as PyEnum
-from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum
-from schemas.users import UserSchema
+from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, ForeignKey
 
 
 
@@ -16,4 +15,4 @@ class User(Base):
     is_traveler_expert = Column(Boolean, default=False)
     is_traveler = Column(Boolean, default=False)    
 
-    
+    role = Column(Integer, ForeignKey("roles.id"))
