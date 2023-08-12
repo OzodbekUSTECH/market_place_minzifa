@@ -10,8 +10,8 @@ class RolesRepository(BaseRepository):
         return [perm.permission for perm in role.role_permissions]
 
     async def has_already_role_name(self, role_data: CreateRoleSchema) -> bool:
-        role_names = self.session.query(self.model).all()
-        existing_role_names = [name[0].lower() for name in role_names]  
+        roles = self.session.query(self.model).all()
+        existing_role_names = [r.name.lower() for r in roles]  
 
         return role_data.name.lower() in existing_role_names
         
