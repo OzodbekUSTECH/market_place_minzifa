@@ -8,7 +8,7 @@ class RolePermissionsService:
         self.roleperms_repo: RolePermissionsRepository = roleperms_repo
 
     async def give_permission_for_role(self, role_permission_data: CreateRolePermissionsSchema) -> RolePermissionsSchema:
-        role_permission = await self.roleperms_repo.has_role_permission(role_permission_data.role_id, role_permission_data.permission_id)
+        role_permission = await self.roleperms_repo.has_role_permission(role_permission_data)
         if role_permission:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="This permission already exists")
         return await self.roleperms_repo.create(role_permission_data.model_dump())
