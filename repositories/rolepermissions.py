@@ -11,3 +11,8 @@ class RolePermissionsRepository(BaseRepository):
         self.session.delete(instance)
         self.session.commit()
         return instance
+    
+    async def has_role_permission(self, role_data: CreateRolePermissionsSchema) -> bool:
+        instance = self.session.query(self.model).filter_by(role_id=role_data.role_id, permission_id=role_data.permission_id).first()
+        return instance is not None
+        
