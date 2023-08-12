@@ -4,7 +4,7 @@ from services.roles import RolesService
 from utils.dependency import get_rolesservices, get_current_user
 from repositories.base import Pagination
 from schemas.roles import RoleSchema, CreateRoleSchema, UpdateRoleSchema, RolePermissionsSchema
-from utils.permissions import read_roles, read_role, read_role_permissions, create_role, update_role, delete_role
+from utils.permissions import read_roles, read_role_permissions, create_role, update_role, delete_role
 router = APIRouter(
     prefix="/roles",
     tags=["Roles"],
@@ -27,7 +27,7 @@ async def get_permissions(
 
 
 
-@router.get('/{role_id}', name="get role by ID", response_model=RoleSchema, dependencies=[Depends(read_role)])
+@router.get('/{role_id}', name="get role by ID", response_model=RoleSchema, dependencies=[Depends(read_roles)])
 async def get_role_data_by_id(
     role_id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]

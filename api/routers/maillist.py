@@ -4,7 +4,7 @@ from services.maillist import MailListService
 from schemas.maillist import CreateMailListSchema, MailListSchema, SendMailMessageSchema, UpdateMailListSchema
 from repositories.base import Pagination
 from database.mail import EmailSender
-from utils.permissions import read_mails, read_mail, send_message_emails, update_email, delete_email
+from utils.permissions import read_mails, send_message_emails, update_email, delete_email
 router = APIRouter(
     prefix="/mails",
     tags=["Mailing list"]
@@ -28,7 +28,7 @@ async def get_all_mails_data(
 
 
 
-@router.get('/{mail_id}', name="get mail by ID", response_model=MailListSchema, dependencies=[Depends(read_mail)])
+@router.get('/{mail_id}', name="get mail by ID", response_model=MailListSchema, dependencies=[Depends(read_mails)])
 async def get_mail_data_by_id(
     mail_id: int,
     maillist_services: MailListService = Depends(get_maillist_services)
