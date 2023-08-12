@@ -7,7 +7,7 @@ from schemas.users import UserCreateSchema, UserSchema, UserUpdateSchema, TokenS
 from database.mail import EmailSender
 from repositories.base import Pagination
 from fastapi.security import OAuth2PasswordRequestForm
-from utils.permissions import register_user, read_users, read_user, update_user, delete_user
+from utils.permissions import register_user, read_users, update_user, delete_user
 
 router = APIRouter(
     prefix="/users",
@@ -120,7 +120,7 @@ async def get_all_users_data(
     return users
 
 
-@router.get('/{user_id}', name="get user by ID", response_model=UserSchema, dependencies=[Depends(read_user)])
+@router.get('/{user_id}', name="get user by ID", response_model=UserSchema, dependencies=[Depends(read_users)])
 async def get_user_data_by_id(
     user_id: int,
     users_service: Annotated[UsersService, Depends(get_users_services)]
