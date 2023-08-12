@@ -4,6 +4,7 @@ from services.maillist import MailListService
 from schemas.maillist import CreateMailListSchema, MailListSchema, SendMailMessageSchema, UpdateMailListSchema
 from repositories.base import Pagination
 from database.mail import EmailSender
+from utils.permissions import read_mails, read_mail, send_message_emails, update_email, delete_email
 router = APIRouter(
     prefix="/mails",
     tags=["Mailing list"]
@@ -18,7 +19,7 @@ async def subscribe_to_newsletter(
     return await maillist_services.subscribe(mail_data)
 
 
-@router.get('', name='get all mails', response_model=list[MailListSchema])
+@router.get('', name='get all mails', response_model=list[MailListSchema], dependencies=[Depends(read_mails)])
 async def get_all_mails_data(
     pagination: Pagination = Depends(),
     maillist_services: MailListService = Depends(get_maillist_services)
@@ -27,7 +28,7 @@ async def get_all_mails_data(
 
 
 
-@router.get('/{mail_id}', name="get mail by ID", response_model=MailListSchema)
+@router.get('/{mail_id}', name="get mail by ID", response_model=MailListSchema, dependencies=[Depends(read_mail)])
 async def get_mail_data_by_id(
     mail_id: int,
     maillist_services: MailListService = Depends(get_maillist_services)
@@ -36,7 +37,7 @@ async def get_mail_data_by_id(
 
 
 
-@router.post('/send/all', name="send any message to all subscribed mails")
+@router.post('/send/all', name="send any message to all subscribed mails", dependencies=[Depends(send_message_emails)])
 async def send_message_to_all_subscribed_mails(
     mail_data: SendMailMessageSchema,
     background_tasks: BackgroundTasks,
@@ -48,7 +49,7 @@ async def send_message_to_all_subscribed_mails(
     return {"message": "sent for all"}
 
 
-@router.put('/{mail_id}', name="change the email address data", response_model=MailListSchema)
+@router.put('/{mail_id}', name="change the email address data", response_model=MailListSchema, dependencies=[Depends(update_email)])
 async def update_email_data(
     mail_id: int, 
     email_data: UpdateMailListSchema,
@@ -57,7 +58,7 @@ async def update_email_data(
     return await maillist_services.update_email(mail_id, email_data)
 
 
-@router.delete('/{mail_id}', name="delete mail data", response_model=MailListSchema)
+@router.delete('/{mail_id}', name="delete mail data", response_model=MailListSchema, dependencies=[Depends(delete_email)])
 async def update_mail_data(
     mail_id: int, 
     maillist_services: MailListService = Depends(get_maillist_services)
