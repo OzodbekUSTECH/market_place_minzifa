@@ -14,8 +14,8 @@ class PermissionsService:
         return await self.perms_repo.get_by_id(permission_id)
     
     async def create_permission(self, permission_data: CreatePermissionSchema) -> PermissionSchema:
-        permission = self.perms_repo.get_by_endpoint(permission_data.endpoint)
-        if permission is not None:
+        permission = await self.perms_repo.get_by_endpoint(permission_data.endpoint)
+        if permission:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Such endpoint already has been registered")
         return await self.perms_repo.create(permission_data.model_dump())
     
