@@ -14,9 +14,15 @@ class RolesService:
         return await self.roles_repo.get_by_id(role_id)
     
     async def create_role(self, role_data: CreateRoleSchema) -> RoleSchema:
+        existing_role = await self.roles_repo.has_already_role_name(role_data)
+        if existing_role:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Role with this name already exists")
         return await self.roles_repo.create(role_data.model_dump())
 
     async def update_role(self, role_id: int, role_data: UpdateRoleSchema) -> RoleSchema:
+        existing_role = await self.roles_repo.has_already_role_name(role_data)
+        if existing_role:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Role with this name already exists")
         role_dict = role_data.model_dump()
         return await self.roles_repo.update(role_id, role_dict)
     
