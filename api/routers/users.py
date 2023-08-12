@@ -2,11 +2,12 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from services.users import UsersService
-from utils.dependency import get_users_services, get_current_user
+from utils.dependency import get_users_services, get_current_user, PermissionChecker
 from schemas.users import UserCreateSchema, UserSchema, UserUpdateSchema, TokenSchema, ResetPasswordSchema
 from database.mail import EmailSender
 from repositories.base import Pagination
 from fastapi.security import OAuth2PasswordRequestForm
+from utils.permissions import register_user, read_users, read_user, update_user, delete_user
 
 router = APIRouter(
     prefix="/users",
@@ -14,7 +15,7 @@ router = APIRouter(
 )
 
 
-@router.post('/login', name="get access token", tags=["Auth"], response_model=TokenSchema)
+@router.post('/login', name="get access token", response_model=TokenSchema)
 async def login_in(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     users_service: Annotated[UsersService, Depends(get_users_services)]
@@ -38,7 +39,7 @@ async def get_own_user_data(
     """
     return current_user
 
-@router.post('/forgot/password', tags=["Auth"], name="forgot password")
+@router.post('/forgot/password', name="forgot password")
 async def forgot_password(
     email: str, 
     email_sender: EmailSender = Depends()
@@ -51,7 +52,7 @@ async def forgot_password(
     """
     return await email_sender.send_reset_password_link(email)
 
-@router.post('/reset/password', tags=["Auth"], name="reset password")
+@router.post('/reset/password', name="reset password")
 async def reset_password(
     token: str, 
     user_password: ResetPasswordSchema,
@@ -65,7 +66,7 @@ async def reset_password(
 
     return {"message": "password has been changed successfully"}
 
-@router.post('', name="Registration", tags=["Auth"], response_model=UserSchema)
+@router.post('', name="Registration", response_model=UserSchema)
 async def create_user(
     user_data: UserCreateSchema,
     users_service: Annotated[UsersService, Depends(get_users_services)]
@@ -83,7 +84,7 @@ async def create_user(
     return await users_service.register_user(user_data) 
 
 
-@router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[Depends(get_current_user)])
+@router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[Depends(update_user)]) #update user its permissions checker with required permission for this router
 async def update_user_data(
     user_id: int, 
     user_data: UserUpdateSchema,
@@ -104,7 +105,7 @@ async def update_user_data(
 
 
 
-@router.get('', name="get_all_users", response_model=list[UserSchema])
+@router.get('', name="get_all_users", response_model=list[UserSchema], dependencies=[Depends(read_users)])
 async def get_all_users_data(
     pagination: Annotated[Pagination, Depends()],
     users_service: Annotated[UsersService, Depends(get_users_services)]
@@ -119,7 +120,7 @@ async def get_all_users_data(
     return users
 
 
-@router.get('/{user_id}', name="get user by ID", response_model=UserSchema)
+@router.get('/{user_id}', name="get user by ID", response_model=UserSchema, dependencies=[Depends(read_user)])
 async def get_user_data_by_id(
     user_id: int,
     users_service: Annotated[UsersService, Depends(get_users_services)]
@@ -132,7 +133,7 @@ async def get_user_data_by_id(
     return await users_service.get_user_by_id(user_id)
 
 
-@router.delete('/{user_id}', name="delete user data", response_model=UserSchema)
+@router.delete('/{user_id}', name="delete user data", response_model=UserSchema, dependencies=[Depends(delete_user)])
 async def delete_user_data(
     user_id: int,
     users_service: Annotated[UsersService, Depends(get_users_services)]

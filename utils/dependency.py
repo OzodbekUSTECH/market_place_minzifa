@@ -53,7 +53,7 @@ async def get_current_user(
 
 
 
-class RoleChecker:
+class PermissionChecker:
     def __init__(self, permission_endpoint: str):
         self.allowed_permission = permission_endpoint
 
