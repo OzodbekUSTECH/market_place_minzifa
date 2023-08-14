@@ -16,7 +16,7 @@ router = APIRouter(
 
 
 @router.post('/login', name="get access token", response_model=TokenSchema)
-async def login_in(
+async def get_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     users_service: Annotated[UsersService, Depends(get_users_services)]
 ) -> TokenSchema:
@@ -52,7 +52,7 @@ async def forgot_password(
     """
     return await email_sender.send_reset_password_link(email)
 
-@router.post('/reset/password', name="reset password")
+@router.post('/reset/password', name="reset password", response_model=UserSchema)
 async def reset_password(
     token: str, 
     user_password: ResetPasswordSchema,
@@ -62,9 +62,8 @@ async def reset_password(
     Reset password:
     - return: Message that password has been changed or something went wrong.
     """
-    await users_service.reset_password(token, user_password.password1)
+    return await users_service.reset_password(token, user_password.password1)
 
-    return {"message": "password has been changed successfully"}
 
 @router.post('', name="Registration", response_model=UserSchema)
 async def create_user(
@@ -74,12 +73,6 @@ async def create_user(
     """
     Create User:
     - return: User data.
-
-    UserRole:
-    - SUPERADMIN: СуперАдмин
-    - ADMIN: Админ
-    - EMPLOYEE: Сотрудник
-    - DEALER: Дилер
     """
     return await users_service.register_user(user_data) 
 
@@ -94,19 +87,13 @@ async def update_user_data(
     Update User Data
     - param user_id: The ID of the user to update.
     - return: Updated user data.
-
-    UserRole:
-    - SUPERADMIN: СуперАдмин
-    - ADMIN: Админ
-    - EMPLOYEE: Сотрудник
-    - DEALER: Дилер
     """
     return await users_service.update_user(user_id, user_data)
 
 
 
-@router.get('', name="get_all_users", response_model=list[UserSchema], dependencies=[Depends(read_users)])
-async def get_all_users_data(
+@router.get('', name="get list of users", response_model=list[UserSchema], dependencies=[Depends(read_users)])
+async def get_list_of_users(
     pagination: Annotated[Pagination, Depends()],
     users_service: Annotated[UsersService, Depends(get_users_services)]
 ) -> list[UserSchema]:
@@ -116,12 +103,12 @@ async def get_all_users_data(
     - param page_size: The quantity of users per page.
     - return: list of all users.
     """
-    users = await users_service.get_all_users(pagination)
+    users = await users_service.get_list_of_users(pagination)
     return users
 
 
 @router.get('/{user_id}', name="get user by ID", response_model=UserSchema, dependencies=[Depends(read_users)])
-async def get_user_data_by_id(
+async def get_user_by_id(
     user_id: int,
     users_service: Annotated[UsersService, Depends(get_users_services)]
 ) -> UserSchema:
@@ -134,7 +121,7 @@ async def get_user_data_by_id(
 
 
 @router.delete('/{user_id}', name="delete user data", response_model=UserSchema, dependencies=[Depends(delete_user)])
-async def delete_user_data(
+async def delete_user(
     user_id: int,
     users_service: Annotated[UsersService, Depends(get_users_services)]
 ) -> UserSchema:
@@ -147,9 +134,9 @@ async def delete_user_data(
 
 
 
-@router.get('/{manager_id}/travelers', name="get travelers", response_model=list[UserSchema])
-async def get_travelers(
-    manager_id: int,
-    users_service: Annotated[UsersService, Depends(get_users_services)]
-):
-    return await users_service.get_travelers(manager_id)
+# @router.get('/{manager_id}/travelers', name="get travelers", response_model=list[UserSchema])
+# async def get_list_of_travelers_of_manager(
+#     manager_id: int,
+#     users_service: Annotated[UsersService, Depends(get_users_services)]
+# ):
+#     return await users_service.get_travelers(manager_id)

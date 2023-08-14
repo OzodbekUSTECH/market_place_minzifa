@@ -1,6 +1,5 @@
 from repositories.base import BaseRepository, Pagination
 from schemas.travelermanagers import TravelersSchema, ManagersSchema, CreateTravelerAndManagerSchema
-from models import User
 
 class TravelerManagersRepository(BaseRepository):
     async def get_travelers(self, manager_id: int, pagination: Pagination) -> list[TravelersSchema]:

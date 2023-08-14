@@ -25,7 +25,7 @@ class UsersService:
         new_user = await self.users_repo.create(user_dict)
         return new_user
     
-    async def get_all_users(self, pagination: Pagination) -> list[UserSchema]:
+    async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
         users = await self.users_repo.get_all(pagination)
         
         return users
