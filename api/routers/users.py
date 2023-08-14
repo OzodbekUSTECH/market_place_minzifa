@@ -146,3 +146,10 @@ async def delete_user_data(
     return await users_service.delete_user(user_id)
 
 
+
+@router.get('/{manager_id}/travelers', name="get travelers", response_model=list[UserSchema])
+async def get_travelers(
+    manager_id: int,
+    users_service: Annotated[UsersService, Depends(get_users_services)]
+):
+    return await users_service.get_travelers(manager_id)

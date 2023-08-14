@@ -4,7 +4,6 @@ from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, Forei
 from sqlalchemy.orm import relationship
 
 
-
 class User(Base):
     __tablename__ = 'users'
 
@@ -17,5 +16,7 @@ class User(Base):
     is_traveler = Column(Boolean, default=False)    
 
     role_id = Column(Integer, ForeignKey("roles.id"))
-
     role = relationship("Role")
+    
+    
+

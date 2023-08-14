@@ -1,15 +1,12 @@
 from repositories.base import BaseRepository
 from datetime import datetime, timedelta
 from jose import jwt
+from security.jwthandler import JWTHandler
 
 
 
 
 class UsersRepository(BaseRepository):
-    ACCESS_TOKEN_EXPIRE_MINUTES = 30
-    SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-    ALGORITHM = "HS256"
-
     async def create_access_token(self, data: dict, expires_delta: timedelta | None = None) -> str:
         to_encode = data.copy()
         if expires_delta:
@@ -17,9 +14,15 @@ class UsersRepository(BaseRepository):
         else:
             expire = datetime.utcnow() + timedelta(minutes=15)
         to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
+        encoded_jwt =  await JWTHandler.encode(to_encode)
         return encoded_jwt
 
-    
+    async def get_travelers_of_manager(self, manager_id: int):
+        manager = await self.get_by_id(manager_id)
+
+        travelers = [traveler.traveler for traveler in manager.travelers]
+        return travelers
+
+        
     
         

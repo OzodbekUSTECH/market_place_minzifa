@@ -1,12 +1,13 @@
 from repositories.users import UsersRepository
 from schemas.users import UserCreateSchema, UserUpdateSchema, UserSchema, TokenSchema
-from utils.password import PasswordHandler
+from security.password import PasswordHandler
 from repositories.base import Pagination
 from fastapi import HTTPException, status
 from datetime import timedelta
 from jose import JWTError, jwt
 from schemas.users import TokenData
 from datetime import datetime
+from security.jwthandler import JWTHandler
 
 class UsersService:
     def __init__(self, users_repo: UsersRepository):
@@ -45,25 +46,18 @@ class UsersService:
 
     async def authenticate_user(self, email: str, password: str) -> TokenSchema:
         user = await self.users_repo.get_by_email(email)
-        
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect username or password",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-        
-        if not PasswordHandler.verify(password, user.password):
+            
+        if not user or not PasswordHandler.verify(password, user.password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect username or password",
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        access_token_expires = timedelta(minutes=self.users_repo.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token_expires = timedelta(minutes=JWTHandler.ACCESS_TOKEN_EXPIRE_MINUTES)
 
         access_token = await self.users_repo.create_access_token(
-            data={"sub": user.email}, expires_delta=access_token_expires
+            data={"email": user.email}, expires_delta=access_token_expires
         )
         return TokenSchema(access_token=access_token, token_type="Bearer")
 
@@ -76,8 +70,8 @@ class UsersService:
             headers={"WWW-Authenticate": "Bearer"},
         )
         try:
-            payload = jwt.decode(token, self.users_repo.SECRET_KEY, algorithms=[self.users_repo.ALGORITHM])
-            email: str = payload.get("sub")  # "sub" is the key used by JWT to represent the subject (usually user ID or email)
+            payload = await JWTHandler.decode(token)
+            email: str = payload.get("email")  # "sub" is the key used by JWT to represent the subject (usually user ID or email)
             if email is None:
                 raise credentials_exception
             token_data = TokenData(email=email)
@@ -88,7 +82,7 @@ class UsersService:
         
         if user is None:
             raise credentials_exception
-       
+
         return user
 
     async def get_user_by_email(self, email: str) -> UserSchema:
@@ -96,10 +90,10 @@ class UsersService:
     
     async def generate_reset_token(self, email: str) -> str:
         payload = {
-            "sub": email,
+            "email": email,
             "exp": datetime.utcnow() + timedelta(hours=2)
         }
-        token = jwt.encode(payload, self.users_repo.SECRET_KEY, algorithm=self.users_repo.ALGORITHM)
+        token = await JWTHandler.encode(payload)
         return token
     
     async def reset_password(self, token: str, password: str) -> UserSchema:
@@ -109,7 +103,7 @@ class UsersService:
             "password": hashed_password
         }
         return await self.users_repo.update(user.id, password_dict)
-        
 
     
-    
+    async def get_travelers(self, manager_id: int):
+        return await self.users_repo.get_travelers_of_manager(manager_id)

@@ -1,4 +1,4 @@
-from models import User, MailList, Role, Permission, RolePermission
+from models import User, MailList, Role, Permission, RolePermission, TravelersAndManagersAssociation
 
 from repositories.users import UsersRepository
 from services.users import UsersService
@@ -14,6 +14,9 @@ from services.permissions import PermissionsService
 
 from repositories.rolepermissions import RolePermissionsRepository
 from services.rolepermissions import RolePermissionsService
+
+from repositories.travelermanagers import TravelerManagersRepository
+from services.travelermanagers import TravelerManagersService
 
 from database.db import get_db
 from fastapi import Depends, HTTPException, status
@@ -39,6 +42,8 @@ async def get_permissionsservices(db: Session = Depends(get_db)):
 async def get_rolepermissions(db: Session = Depends(get_db)):
     return RolePermissionsService(RolePermissionsRepository(session=db, model=RolePermission))
 
+async def get_travelermanagers_services(db: Session = Depends(get_db)):
+    return TravelerManagersService(TravelerManagersRepository(session=db, model=TravelersAndManagersAssociation))
 
 
 
