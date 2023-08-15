@@ -69,3 +69,16 @@ class PermissionChecker:
                 detail="Access denied. Insufficient privileges."
             )
         return True
+    
+
+from functools import wraps
+
+async def check_permissions(permission_checker: PermissionChecker):
+    async def decorator(func):
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            permission_result = await permission_checker()
+            if permission_result:
+                return await func(*args, **kwargs)
+        return wrapper
+    return decorator
