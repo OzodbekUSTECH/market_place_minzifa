@@ -56,7 +56,7 @@ class UsersService:
 
         access_token_expires = timedelta(minutes=JWTHandler.ACCESS_TOKEN_EXPIRE_MINUTES)
 
-        access_token = await self.users_repo.create_access_token(
+        access_token = await JWTHandler.create_access_token(
             data={"email": user.email}, expires_delta=access_token_expires
         )
         return TokenSchema(access_token=access_token, token_type="Bearer")
