@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from services.users import UsersService
-from utils.dependency import get_users_services, get_current_user, check_permissions
+from utils.dependency import get_users_services, get_current_user
 from schemas.users import UserCreateSchema, UserSchema, UserUpdateSchema, TokenSchema, ResetPasswordSchema
 from database.mail import EmailSender
 from repositories.base import Pagination
@@ -92,8 +92,7 @@ async def update_user_data(
 
 
 
-@router.get('', name="get list of users", response_model=list[UserSchema])
-@check_permissions(read_users)
+@router.get('', name="get list of users", response_model=list[UserSchema], dependencies=[Depends(read_users)])
 async def get_list_of_users(
     pagination: Annotated[Pagination, Depends()],
     users_service: Annotated[UsersService, Depends(get_users_services)]

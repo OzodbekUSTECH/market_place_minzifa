@@ -70,15 +70,3 @@ class PermissionChecker:
             )
         return True
     
-
-from functools import wraps
-
-def check_permissions(permission_checker: PermissionChecker):
-    def decorator(func):
-        @wraps(func)
-        async def wrapper(*args, **kwargs):
-            permission_result = await permission_checker()
-            if permission_result:
-                return await func(*args, **kwargs)
-        return wrapper
-    return decorator
