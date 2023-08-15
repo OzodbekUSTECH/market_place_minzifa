@@ -73,7 +73,7 @@ class PermissionChecker:
 
 from functools import wraps
 
-async def check_permissions(permission_checker: PermissionChecker):
+def check_permissions(permission_checker: PermissionChecker):
     async def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
