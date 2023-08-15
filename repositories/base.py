@@ -57,7 +57,4 @@ class BaseRepository:
         self.session.commit()
 
         return instance
-    
-
-    #just for mails
-    
+     
