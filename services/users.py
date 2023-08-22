@@ -82,7 +82,7 @@ class UsersService:
         except JWTError:
             raise credentials_exception
         
-        with self.uow:
+        async with self.uow:
             user = await self.uow.users.get_by_email(token_data.email)
             
             if user is None:
