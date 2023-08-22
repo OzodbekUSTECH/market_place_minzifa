@@ -1,7 +1,7 @@
 from typing import Type
 from models import User, MailList, Role, Permission, RolePermission, TravelersAndManagersAssociation
 
-from database.db import Session
+from database.db import session_maker
 from repositories.users import UsersRepository
 from repositories.maillist import MailListRepository
 from repositories.roles import RolesRepository
@@ -23,9 +23,9 @@ class UnitOfWork:
     travelers_managers: Type[TravelerManagersRepository]
 
     def __init__(self):
-        self.session_factory = Session
+        self.session_factory = session_maker
 
-    def __enter__(self):
+    async def __aenter__(self):
         self.session = self.session_factory()
         self.users = UsersRepository(self.session, model=User)
         self.maillist = MailListRepository(self.session, model=MailList)
@@ -34,7 +34,7 @@ class UnitOfWork:
         self.role_permissions = RolePermissionsRepository(self.session, model=RolePermission)
         self.travelers_managers = TravelerManagersRepository(self.session, model=TravelersAndManagersAssociation)
 
-    def __exit__(self, *args):
+    async def __aexit__(self, *args):
         self.rollback()
         self.session.close()
 

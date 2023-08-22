@@ -6,14 +6,14 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 DATABASE_URL = "postgresql://postgres:77girado@db/postgres"
 
 engine = create_engine(DATABASE_URL, echo=True)
-Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+session_maker = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 Base = declarative_base()
 
 
 def get_db():
-    db = Session()
+    db = session_maker()
     try:
         yield db
     finally:
