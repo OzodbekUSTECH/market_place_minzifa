@@ -15,7 +15,7 @@ class UsersService:
         self.uow = uow
 
     async def register_user(self, user_data: UserCreateSchema) -> UserSchema:
-        with self.uow:
+        async with self.uow:
             existing_user = await self.uow.users.get_by_email(user_data.email)
             if existing_user:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already registered")
@@ -25,7 +25,8 @@ class UsersService:
             user_dict = user_data.model_dump()
             user_dict["password"] = hashed_password
             new_user = await self.uow.users.create(user_dict)
-            self.uow.commit()  # Используем синхронный commit
+            await self.uow.commit()
+            print(new_user)  # Используем синхронный commit
             return new_user
     
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
@@ -88,7 +89,7 @@ class UsersService:
             if user is None:
                 raise credentials_exception
 
-            return user.to_read_model()
+            return user
 
     async def get_user_by_email(self, email: str) -> UserSchema:
         return await self.users_repo.get_by_email(email)
