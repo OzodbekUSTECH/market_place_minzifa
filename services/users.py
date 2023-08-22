@@ -48,7 +48,7 @@ class UsersService:
         return deleted_user
 
     async def authenticate_user(self, email: str, password: str) -> TokenSchema:
-        with self.uow:
+        async with self.uow:
             user = await self.uow.users.get_by_email(email)
                 
             if not user or not PasswordHandler.verify(password, user.password):
