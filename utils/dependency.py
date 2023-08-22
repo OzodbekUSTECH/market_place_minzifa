@@ -18,8 +18,8 @@ UOWDep = Annotated[UnitOfWork, Depends(UnitOfWork)]
 
 #services dependencies
 
-async def get_users_services(uow: UOWDep):
-    return UsersService(uow)
+async def get_users_services(db = Depends(get_db)):
+    return UsersService(UnitOfWork(sess=db))
 
 
 async def get_maillist_services(uow: UOWDep):

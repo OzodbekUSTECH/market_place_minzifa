@@ -8,6 +8,7 @@ from repositories.roles import RolesRepository
 from repositories.permissions import PermissionsRepository
 from repositories.rolepermissions import RolePermissionsRepository
 from repositories.travelermanagers import TravelerManagersRepository
+from sqlalchemy.orm import Session
 
 
 
@@ -22,11 +23,11 @@ class UnitOfWork:
     role_permissions: Type[RolePermissionsRepository]
     travelers_managers: Type[TravelerManagersRepository]
 
-    def __init__(self):
-        self.session_factory = session_maker
+    def __init__(self, sess):
+        self.session_factory = sess
 
     def __enter__(self):
-        self.session = self.session_factory()
+        self.session = self.session_factory
         self.users = UsersRepository(self.session, model=User)
         self.maillist = MailListRepository(self.session, model=MailList)
         self.roles = RolePermissionsRepository(self.session, model=Role)
@@ -36,7 +37,7 @@ class UnitOfWork:
 
     def __exit__(self, *args):
         # self.session.close()
-        pass
+        pass    
 
     def commit(self):
         self.session.commit()
