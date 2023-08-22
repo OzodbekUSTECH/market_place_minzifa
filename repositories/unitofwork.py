@@ -26,7 +26,6 @@ class UnitOfWork:
     def __init__(self, sess):
         self.session_factory = sess
 
-    def __enter__(self):
         self.session = self.session_factory
         self.users = UsersRepository(self.session, model=User)
         self.maillist = MailListRepository(self.session, model=MailList)
@@ -35,13 +34,7 @@ class UnitOfWork:
         self.role_permissions = RolePermissionsRepository(self.session, model=RolePermission)
         self.travelers_managers = TravelerManagersRepository(self.session, model=TravelersAndManagersAssociation)
 
-    def __exit__(self, *args):
-        # self.session.close()
-        pass    
+    
 
-    def commit(self):
-        self.session.commit()
 
-    def rollback(self):
-        self.session.rollback()
         

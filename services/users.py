@@ -15,17 +15,16 @@ class UsersService:
         self.uow = uow
 
     async def register_user(self, user_data: UserCreateSchema):
-        with self.uow:
-            existing_user = await self.uow.users.get_by_email(user_data.email)
-            if existing_user:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already registered")
+        existing_user = await self.uow.users.get_by_email(user_data.email)
+        if existing_user:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already registered")
 
-            hashed_password = PasswordHandler.hash(user_data.password)
+        hashed_password = PasswordHandler.hash(user_data.password)
 
-            user_dict = user_data.model_dump()
-            user_dict["password"] = hashed_password
-            new_user = await self.uow.users.create(user_dict)
-            return new_user
+        user_dict = user_data.model_dump()
+        user_dict["password"] = hashed_password
+        new_user = await self.uow.users.create(user_dict)
+        return new_user
     
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
         users = await self.users_repo.get_all(pagination)
