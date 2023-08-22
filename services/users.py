@@ -88,7 +88,7 @@ class UsersService:
             if user is None:
                 raise credentials_exception
 
-            return user
+            return user.to_read_model()
 
     async def get_user_by_email(self, email: str) -> UserSchema:
         return await self.users_repo.get_by_email(email)
