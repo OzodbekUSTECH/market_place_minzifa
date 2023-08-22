@@ -1,11 +1,11 @@
-from repositories.permissions import PermissonsRepository
+from repositories.permissions import PermissionsRepository
 from repositories.base import Pagination
 from fastapi import HTTPException, status
 from schemas.permissions import PermissionSchema, CreatePermissionSchema, UpdatePermissionSchema
 
 class PermissionsService:
-    def __init__(self, perms_repo: PermissonsRepository):
-        self.perms_repo: PermissonsRepository = perms_repo
+    def __init__(self, perms_repo: PermissionsRepository):
+        self.perms_repo: PermissionsRepository = perms_repo
 
     async def get_all_permissions(self, pagination: Pagination) -> list[PermissionSchema]:
         return await self.perms_repo.get_all(pagination)
