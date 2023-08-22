@@ -35,7 +35,6 @@ class UnitOfWork:
         self.travelers_managers = TravelerManagersRepository(self.session, model=TravelersAndManagersAssociation)
 
     def __exit__(self, *args):
-        self.rollback()
         self.session.close()
 
     def commit(self):
