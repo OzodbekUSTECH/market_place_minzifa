@@ -24,9 +24,9 @@ class UnitOfWork:
     travelers_managers: Type[TravelerManagersRepository]
 
     def __init__(self, sess):
-        self.session_factory = sess
+        
 
-        self.session = self.session_factory
+        self.session = sess
         self.users = UsersRepository(self.session, model=User)
         self.maillist = MailListRepository(self.session, model=MailList)
         self.roles = RolePermissionsRepository(self.session, model=Role)

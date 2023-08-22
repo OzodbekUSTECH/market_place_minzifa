@@ -18,7 +18,7 @@ UOWDep = Annotated[UnitOfWork, Depends(UnitOfWork)]
 
 #services dependencies
 
-async def get_users_services(db = Depends(get_db)):
+async def get_users_services(db: Session = Depends(get_db)):
     return UsersService(UnitOfWork(sess=db))
 
 
