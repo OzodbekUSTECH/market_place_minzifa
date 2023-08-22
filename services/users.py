@@ -25,7 +25,7 @@ class UsersService:
             user_dict = user_data.model_dump()
             user_dict["password"] = hashed_password
             new_user = await self.uow.users.create(user_dict)
-            await self.uow.commit()
+            self.uow.commit()
             return new_user
     
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
@@ -88,7 +88,7 @@ class UsersService:
             if user is None:
                 raise credentials_exception
 
-            return user
+            return user.to_read_model()
 
     async def get_user_by_email(self, email: str) -> UserSchema:
         return await self.users_repo.get_by_email(email)
