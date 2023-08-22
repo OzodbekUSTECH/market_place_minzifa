@@ -15,7 +15,7 @@ class UsersService:
         self.uow = uow
 
     async def register_user(self, user_data: UserCreateSchema) -> UserSchema:
-        with self.uow:
+        async with self.uow:
             existing_user = await self.uow.users.get_by_email(user_data.email)
             if existing_user:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already registered")
@@ -25,7 +25,7 @@ class UsersService:
             user_dict = user_data.model_dump()
             user_dict["password"] = hashed_password
             new_user = await self.uow.users.create(user_dict)
-            await self.uow.commit()
+            self.uow.commit()
             return new_user.to_read_model()
     
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
@@ -48,7 +48,7 @@ class UsersService:
         return deleted_user
 
     async def authenticate_user(self, email: str, password: str) -> TokenSchema:
-        with self.uow:
+        async with self.uow:
             user = await self.uow.users.get_by_email(email)
                 
             if not user or not PasswordHandler.verify(password, user.password):
@@ -82,7 +82,7 @@ class UsersService:
         except JWTError:
             raise credentials_exception
         
-        with self.uow:
+        async with self.uow:
             user = await self.uow.users.get_by_email(token_data.email)
             
             if user is None:
