@@ -36,7 +36,7 @@ class UnitOfWork:
 
     async def __aexit__(self, *args):
         await self.rollback()
-        self.session.close()
+        await self.session.close()
 
     async def commit(self):
         self.session.commit()
