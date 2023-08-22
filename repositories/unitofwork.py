@@ -35,12 +35,12 @@ class UnitOfWork:
         self.travelers_managers = TravelerManagersRepository(self.session, model=TravelersAndManagersAssociation)
 
     async def __aexit__(self, *args):
-        self.rollback()
+        await self.rollback()
         self.session.close()
 
-    def commit(self):
+    async def commit(self):
         self.session.commit()
 
-    def rollback(self):
+    async def rollback(self):
         self.session.rollback()
         
