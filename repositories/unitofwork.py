@@ -25,7 +25,7 @@ class UnitOfWork:
     def __init__(self):
         self.session_factory = session_maker
 
-    async def __aenter__(self):
+    async def __enter__(self):
         self.session = self.session_factory()
         self.users = UsersRepository(self.session, model=User)
         self.maillist = MailListRepository(self.session, model=MailList)
@@ -34,7 +34,7 @@ class UnitOfWork:
         self.role_permissions = RolePermissionsRepository(self.session, model=RolePermission)
         self.travelers_managers = TravelerManagersRepository(self.session, model=TravelersAndManagersAssociation)
 
-    async def __aexit__(self, *args):
+    async def __exit__(self, *args):
         await self.rollback()
         self.session.close()
 
