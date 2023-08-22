@@ -22,7 +22,7 @@ class BaseRepository:
         self.model = model
 
     async def create(self, data: dict):
-        instance = self.model(**data)  # Создаем экземпляр модели с переданными данными
+        instance = self.model(**data) # Создаем экземпляр модели с переданными данными
         self.session.add(instance) 
         self.session.commit()     # Добавляем экземпляр в сессию
         return instance
