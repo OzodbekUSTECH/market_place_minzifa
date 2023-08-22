@@ -22,13 +22,14 @@ class BaseRepository:
         self.model = model
 
     async def create(self, data: dict):
-        instance = self.model(**data) # Создаем экземпляр модели с переданными данными
-        self.session.add(instance)
+        instance = self.model(**data)  # Создаем экземпляр модели с переданными данными
+        self.session.add(instance)      # Добавляем экземпляр в сессию
         self.session.commit()
         return instance
     
     async def get_by_id(self, id: int):
         instance = self.session.query(self.model).filter(self.model.id == id).first()
+        
         return instance
     
     async def get_by_email(self, email: str):
@@ -45,10 +46,15 @@ class BaseRepository:
 
         for field, value in data.items():
             setattr(instance, field, value)
+
+        self.session.commit()
+        self.session.refresh(instance)
         return instance
     
     async def delete(self, id: int):
         instance = self.session.query(self.model).filter(self.model.id == id).first()
         self.session.delete(instance)
+        self.session.commit()
+
         return instance
      
