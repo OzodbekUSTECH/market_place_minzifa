@@ -1,4 +1,4 @@
-from repositories.users import UsersRepository
+from repositories.unitofwork import UnitOfWork
 from schemas.users import UserCreateSchema, UserUpdateSchema, UserSchema, TokenSchema
 from security.password import PasswordHandler
 from repositories.base import Pagination
@@ -9,21 +9,24 @@ from schemas.users import TokenData
 from datetime import datetime
 from security.jwthandler import JWTHandler
 
+
 class UsersService:
-    def __init__(self, users_repo: UsersRepository):
-        self.users_repo: UsersRepository = users_repo
+    def __init__(self, uow: UnitOfWork):
+        self.uow = uow
 
     async def register_user(self, user_data: UserCreateSchema) -> UserSchema:
-        existing_user = await self.users_repo.get_by_email(user_data.email)
-        if existing_user:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already registered")
+        async with self.uow:
+            existing_user = await self.uow.users.get_by_email(user_data.email)
+            if existing_user:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already registered")
 
-        hashed_password = PasswordHandler.hash(user_data.password)
+            hashed_password = PasswordHandler.hash(user_data.password)
 
-        user_dict = user_data.model_dump()
-        user_dict["password"] = hashed_password
-        new_user = await self.users_repo.create(user_dict)
-        return new_user
+            user_dict = user_data.model_dump()
+            user_dict["password"] = hashed_password
+            new_user = await self.uow.users.create(user_dict)
+            await self.uow.commit()
+            return new_user
     
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
         users = await self.users_repo.get_all(pagination)
@@ -45,21 +48,22 @@ class UsersService:
         return deleted_user
 
     async def authenticate_user(self, email: str, password: str) -> TokenSchema:
-        user = await self.users_repo.get_by_email(email)
-            
-        if not user or not PasswordHandler.verify(password, user.password):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect username or password",
-                headers={"WWW-Authenticate": "Bearer"},
+        async with self.uow:
+            user = await self.uow.users.get_by_email(email)
+                
+            if not user or not PasswordHandler.verify(password, user.password):
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Incorrect username or password",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+
+            access_token_expires = timedelta(minutes=JWTHandler.ACCESS_TOKEN_EXPIRE_MINUTES)
+
+            access_token = await JWTHandler.create_access_token(
+                data={"email": user.email}, expires_delta=access_token_expires
             )
-
-        access_token_expires = timedelta(minutes=JWTHandler.ACCESS_TOKEN_EXPIRE_MINUTES)
-
-        access_token = await JWTHandler.create_access_token(
-            data={"email": user.email}, expires_delta=access_token_expires
-        )
-        return TokenSchema(access_token=access_token, token_type="Bearer")
+            return TokenSchema(access_token=access_token, token_type="Bearer")
 
     
     
@@ -78,12 +82,13 @@ class UsersService:
         except JWTError:
             raise credentials_exception
         
-        user = await self.users_repo.get_by_email(token_data.email)
-        
-        if user is None:
-            raise credentials_exception
+        async with self.uow:
+            user = await self.uow.users.get_by_email(token_data.email)
+            
+            if user is None:
+                raise credentials_exception
 
-        return user
+            return user
 
     async def get_user_by_email(self, email: str) -> UserSchema:
         return await self.users_repo.get_by_email(email)

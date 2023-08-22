@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    image: postgres:13.3
+    image: postgres:latest
     container_name: market_place_db
     restart: always
     environment:
@@ -19,7 +19,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8008:8000
-    command: sh -c "alembic upgrade head && gunicorn -b 0.0.0.0:8000 main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker"
     depends_on:
       - db
 
