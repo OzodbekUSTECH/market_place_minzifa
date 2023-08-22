@@ -14,7 +14,7 @@ class UsersService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
-    async def register_user(self, user_data: UserCreateSchema) -> UserSchema:
+    async def register_user(self, user_data: UserCreateSchema):
         async with self.uow:
             existing_user = await self.uow.users.get_by_email(user_data.email)
             if existing_user:

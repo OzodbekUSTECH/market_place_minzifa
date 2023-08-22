@@ -65,11 +65,11 @@ async def reset_password(
     return await users_service.reset_password(token, user_password.password1)
 
 
-@router.post('', name="Registration", response_model=UserSchema)
+@router.post('', name="Registration")
 async def create_user(
     user_data: UserCreateSchema,
     users_service: Annotated[UsersService, Depends(get_users_services)]
-) -> UserSchema:
+):
     """
     Create User:
     - return: User data.
