@@ -26,8 +26,7 @@ class UsersService:
             user_dict["password"] = hashed_password
             new_user = await self.uow.users.create(user_dict)
             await self.uow.commit()
-            print(new_user)  # Используем синхронный commit
-            return new_user
+            return new_user.to_read_model()
     
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
         users = await self.users_repo.get_all(pagination)
