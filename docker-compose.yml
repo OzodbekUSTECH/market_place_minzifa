@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    image: postgres:latest
+    image: postgres:13.3
     container_name: market_place_db
     restart: always
     environment:
