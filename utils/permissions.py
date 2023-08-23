@@ -3,16 +3,16 @@ from models import User
 
 
 class PermissionChecker:
-    def __init__(self, permission_endpoint: str, cur_user = None):
+    def __init__(self, permission_endpoint: str + None, cur_user = None):
         self.allowed_permission = permission_endpoint
         self.current_user = cur_user
 
     def __call__(self):
         pass
     @staticmethod
-    def checker():
+    def checker(allowed_permission, cur_user):
         
-        if PermissionChecker.allowed_permission not in [rp.permission.endpoint for rp in PermissionChecker.current_user.role.role_permissions]:
+        if allowed_permission not in [rp.permission.endpoint for rp in cur_user.role.role_permissions]:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Access denied. Insufficient privileges."

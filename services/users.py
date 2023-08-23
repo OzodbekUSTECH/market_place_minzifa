@@ -18,7 +18,7 @@ class UsersService:
     async def register_user(self, user_data: UserCreateSchema, current_user) -> UserSchema:
         # Проверяем разрешение текущего пользователя
 
-        PermissionChecker("register_user", current_user).checker()
+        PermissionChecker.checker("register_user", current_user)
         
         async with self.uow:
             existing_user = await self.uow.users.get_by_email(user_data.email)
