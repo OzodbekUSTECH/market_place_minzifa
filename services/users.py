@@ -68,20 +68,21 @@ class UsersService:
     
     
     async def get_current_user(self, token: str) -> UserSchema:
-        credentials_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,   
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-        try:
-            payload = await JWTHandler.decode(token)
-            email: str = payload.get("email")  # "sub" is the key used by JWT to represent the subject (usually user ID or email)
-            if email is None:
-                raise credentials_exception
-            token_data = TokenData(email=email)
-        except JWTError:
-            raise credentials_exception
         async with self.uow:
+            credentials_exception = HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,   
+                detail="Could not validate credentials",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+            try:
+                payload = await JWTHandler.decode(token)
+                email: str = payload.get("email")  # "sub" is the key used by JWT to represent the subject (usually user ID or email)
+                if email is None:
+                    raise credentials_exception
+                token_data = TokenData(email=email)
+            except JWTError:
+                raise credentials_exception
+            
             user = await self.uow.users.get_by_email(token_data.email)
             
             if user is None:
