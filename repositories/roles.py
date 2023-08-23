@@ -7,7 +7,7 @@ class RolesRepository(BaseRepository):
     
     async def get_permissions_of_role(self, role_id: int):
         role = await self.get_by_id(role_id)
-        return [perm.permission for perm in role.role_permissions]
+        return role.permissions
 
     async def has_already_role_name(self, role_data: CreateRoleSchema) -> bool:
         roles = self.session.query(self.model).all()
