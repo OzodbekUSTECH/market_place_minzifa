@@ -87,7 +87,6 @@ class UsersService:
             
             if user is None:
                 raise credentials_exception
-            await self.uow.commit()
             return user
 
     async def get_user_by_email(self, email: str) -> UserSchema:
