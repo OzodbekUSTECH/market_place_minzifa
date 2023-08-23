@@ -15,7 +15,7 @@ class UsersService:
         self.uow: UnitOfWork = uow
 
     async def register_user(self, user_data: UserCreateSchema) -> UserSchema:
-        async with self.uow:
+        with self.uow:
             existing_user = await self.uow.users.get_by_email(user_data.email)
             if existing_user:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already registered")
@@ -48,7 +48,7 @@ class UsersService:
         return deleted_user
 
     async def authenticate_user(self, email: str, password: str) -> TokenSchema:
-        async with self.uow:
+        with self.uow:
             user = await self.uow.users.get_by_email(email)
                 
             if not user or not PasswordHandler.verify(password, user.password):
@@ -68,7 +68,7 @@ class UsersService:
     
     
     async def get_current_user(self, token: str) -> UserSchema:
-        async with self.uow:
+        with self.uow:
             credentials_exception = HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,   
                 detail="Could not validate credentials",
