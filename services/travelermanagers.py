@@ -16,9 +16,10 @@ class TravelerManagersService:
 
 
     async def get_associations_travel_and_manager_by_id(self, association_id: int):
-        association = await self.uow.travelers_managers.get_by_id(association_id)
-        await self.uow.commit()
-        return  association
+        async with self.uow:
+            association = await self.uow.travelers_managers.get_by_id(association_id)
+            await self.uow.commit()
+            return association
 
 
     async def get_travelers_of_manager(self, manager_id: int, pagination: Pagination) -> list[TravelersSchema]:
