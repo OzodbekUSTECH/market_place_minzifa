@@ -55,4 +55,4 @@ class RolesService:
         async with self.uow:
             role = await self.uow.roles.get_by_id(role_id)
             await self.uow.commit()
-            return [rp.permission for rp in role.role_permissions]
+            return role.role_permissions.permission
