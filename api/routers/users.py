@@ -69,7 +69,7 @@ async def reset_password(
 async def create_user(
     user_data: UserCreateSchema,
     users_service: Annotated[UsersService, Depends(get_users_services)],
-    current_user: Annotated[User, Depends(get_users_services)]
+    current_user: Annotated[User, Depends(get_current_user)]
 ) -> UserSchema:
     """
     Create User:
