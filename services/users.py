@@ -29,9 +29,10 @@ class UsersService:
             return new_user
         
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
-        users = await self.users_repo.get_all(pagination)
-        
-        return users
+        async with self.uow:
+            users = await self.uow.users.get_all(pagination)
+            
+            return users
 
     async def get_user_by_id(self, user_id: int) -> UserSchema:
         user = await self.users_repo.get_by_id(user_id)
@@ -87,8 +88,7 @@ class UsersService:
             
             if user is None:
                 raise credentials_exception
-            await self.uow.commit()
-            return user
+        return user
 
     async def get_user_by_email(self, email: str) -> UserSchema:
         return await self.users_repo.get_by_email(email)
