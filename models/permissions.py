@@ -20,5 +20,6 @@ class Permission(Base):
     
     def to_read_model(self):
         return RolePermissionsSchema(
-            **self.__dict__
+            **self.__dict__,
+            role_id=self.role_id,
         )
