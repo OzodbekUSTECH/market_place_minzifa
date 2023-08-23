@@ -3,7 +3,7 @@ from models import User
 
 
 class PermissionChecker:
-    def __init__(self, permission_endpoint: str + None, cur_user = None):
+    def __init__(self, permission_endpoint: str = None, cur_user = None):
         self.allowed_permission = permission_endpoint
         self.current_user = cur_user
 
