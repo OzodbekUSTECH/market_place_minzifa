@@ -10,7 +10,7 @@ class Permission(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     endpoint = Column(String)
-    role_permissions = relationship("RolePermission", back_populates="permission")
+    role_permissions = relationship("RolePermission", back_populates="permission", lazy="subquery")
 
     @property
     def role_id(self):

@@ -10,5 +10,5 @@ class RolePermission(Base):
     role_id = Column(Integer, ForeignKey('roles.id'), primary_key=True, index=True)
     permission_id = Column(Integer, ForeignKey('permissions.id'), primary_key=True)
 
-    role = relationship("Role", back_populates="role_permissions", lazy="joined")
-    permission = relationship("Permission", back_populates="role_permissions", lazy="joined")
+    role = relationship("Role", back_populates="role_permissions", lazy="subquery")
+    permission = relationship("Permission", back_populates="role_permissions", lazy="subquery")
