@@ -99,9 +99,10 @@ class UsersService:
             
             if user is None:
                 raise credentials_exception
-            await self.uow.session.refresh(user.role, attribute_names=["role_permissions"])
 
             await self.uow.commit()
+            await self.uow.session.refresh(user.role, attribute_names=["role_permissions"])
+
             return user
 
     async def get_user_by_email(self, email: str) -> UserSchema:
