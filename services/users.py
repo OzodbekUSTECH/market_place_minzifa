@@ -10,6 +10,7 @@ from datetime import datetime
 from security.jwthandler import JWTHandler
 
 from repositories.unitofwork import UnitOfWork
+
 class UsersService:
     def __init__(self, uow: UnitOfWork):
         self.uow: UnitOfWork = uow
@@ -31,13 +32,14 @@ class UsersService:
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
         async with self.uow:
             users = await self.uow.users.get_all(pagination)
-            
-            return [user[0].to_read_model() for user in users]
+            await self.uow.commit()
+            return users
 
     async def get_user_by_id(self, user_id: int) -> UserSchema:
         async with self.uow:
             user = await self.uow.users.get_by_id(user_id)
-            return user.to_read_model()
+            await self.uow.commit()
+            return user
 
     async def update_user(self, user_id: int, user_data: UserUpdateSchema) -> UserSchema:
         user_dict = user_data.model_dump()
@@ -93,11 +95,14 @@ class UsersService:
             
             if user is None:
                 raise credentials_exception
-            return user.to_read_model()
+            await self.uow.commit()
+            return user
 
     async def get_user_by_email(self, email: str) -> UserSchema:
         async with self.uow:
-            return await self.uow.users.get_by_email(email)
+            user = await self.uow.users.get_by_email(email)
+            await self.uow.commit()
+            return user
     
     async def generate_reset_token(self, email: str) -> str:
         payload = {

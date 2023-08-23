@@ -36,7 +36,7 @@ class BaseRepository:
         return instance
     
     async def get_all(self, pagination: Pagination):
-        instances = self.session.query(self.model).offset(pagination.offset).limit(pagination.limit).all()
+        instances = self.session.query(self.model).order_by("id").offset(pagination.offset).limit(pagination.limit).all()
         return instances
 
     

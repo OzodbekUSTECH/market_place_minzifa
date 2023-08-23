@@ -53,7 +53,8 @@ class UserSchema(BaseModel):
     is_traveler: bool
     role_id: int
 
-    
+    class ConfigDict:
+        from_attributes = True
 
 
 
