@@ -3,6 +3,7 @@ from repositories.base import Pagination
 from fastapi import HTTPException, status
 from schemas.roles import RoleSchema, CreateRoleSchema, UpdateRoleSchema
 from repositories.unitofwork import UnitOfWork
+from utils.exceptions import CustomExceptions
 
 class RolesService:
     def __init__(self, uow: UnitOfWork):
@@ -26,7 +27,7 @@ class RolesService:
 
             existing_role = await self.uow.roles.has_already_role_name(role_data)
             if existing_role:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Role with this name already exists")
+                raise CustomExceptions.conflict("Role with this name already exists")
             
             created_role = await self.uow.roles.create(role_dict)
             await self.uow.commit()
@@ -38,7 +39,8 @@ class RolesService:
 
             existing_role = await self.uow.roles.has_already_role_name(role_data)
             if existing_role:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Role with this name already exists")
+                raise CustomExceptions.conflict("Role with this name already exists")
+
             created_role = await self.uow.roles.update(role_id, role_dict)
             await self.uow.commit()
             return created_role

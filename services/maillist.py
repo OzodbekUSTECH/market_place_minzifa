@@ -3,6 +3,7 @@ from schemas.maillist import CreateMailListSchema, UpdateMailListSchema, MailLis
 from fastapi import HTTPException, status
 from repositories.base import Pagination
 from repositories.unitofwork import UnitOfWork
+from utils.exceptions import CustomExceptions
 
 
 class MailListService:
@@ -15,7 +16,7 @@ class MailListService:
         async with self.uow:
             existing_email = await self.uow.maillist.get_by_email(mail_data.email)
             if existing_email:
-                raise HTTPException(status_code=status.HTTP_200_OK, detail="You already subscribed!")
+                raise CustomExceptions.conflict("You already subscribed!")
             created_mail = await self.uow.maillist.create(mail_dict)
             await self.uow.commit()
             return created_mail

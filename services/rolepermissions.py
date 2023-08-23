@@ -3,6 +3,7 @@ from repositories.base import Pagination
 from fastapi import HTTPException, status
 from schemas.rolepermissions import RolePermissionsSchema, CreateRolePermissionsSchema, DeleteRolePermissionsSchema
 from repositories.unitofwork import UnitOfWork
+from utils.exceptions import CustomExceptions
 
 class RolePermissionsService:
     def __init__(self, uow: UnitOfWork):
@@ -13,7 +14,7 @@ class RolePermissionsService:
         async with self.uow:
             role_permission = await self.uow.role_permissions.has_role_permission(role_permission_data)
             if role_permission:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="This permission already exists")
+                raise CustomExceptions.conflict("This permission already exists")
             created_role_permission = await self.uow.role_permissions.create(role_permission_dict)
             await self.uow.commit()
             return created_role_permission

@@ -3,6 +3,7 @@ from repositories.base import Pagination
 from fastapi import HTTPException, status
 from schemas.permissions import PermissionSchema, CreatePermissionSchema, UpdatePermissionSchema
 from repositories.unitofwork import UnitOfWork
+from utils.exceptions import CustomExceptions
 
 class PermissionsService:
     def __init__(self, uow: UnitOfWork):
@@ -25,7 +26,7 @@ class PermissionsService:
 
             permission = await self.uow.permissions.get_by_endpoint(permission_data.endpoint)
             if permission:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Such endpoint already has been registered")
+                raise CustomExceptions.conflict("Such endpoint already has been registered")
             created_permission = await self.uow.permissions.create(permission_data.model_dump())
             await self.uow.commit()
             return created_permission
