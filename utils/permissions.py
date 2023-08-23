@@ -7,6 +7,8 @@ class PermissionChecker:
         self.allowed_permission = permission_endpoint
         self.current_user = cur_user
 
+    def __call__(self):
+        pass
     @staticmethod
     def checker():
         
