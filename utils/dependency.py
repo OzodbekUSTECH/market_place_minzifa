@@ -64,6 +64,7 @@ class PermissionChecker:
         self.allowed_permission = permission_endpoint
 
     def __call__(self, current_user = Depends(get_current_user)):
+        
         if self.allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
