@@ -2,7 +2,7 @@ from database.db import Base
 from enum import Enum as PyEnum
 from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, JSON, ForeignKey
 from sqlalchemy.orm import relationship
-from schemas.permissions import PermissionSchema
+from schemas.roles import RolePermissionsSchema
 
 class Permission(Base):
     __tablename__ = 'permissions'
@@ -19,7 +19,6 @@ class Permission(Base):
         return None
     
     def to_read_model(self):
-        return PermissionSchema(
-            **self.__dict__,
-            role_id=self.role_id
+        return RolePermissionsSchema(
+            **self.__dict__
         )

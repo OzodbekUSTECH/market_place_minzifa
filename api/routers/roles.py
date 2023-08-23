@@ -18,7 +18,7 @@ async def get_list_of_roles(
 ) -> list[RoleSchema]:
     return await roles_service.get_all_roles(pagination)
 
-@router.get('/{role_id}/permissions', name="get all permissions of role",  dependencies=[Depends(read_role_permissions)])
+@router.get('/{role_id}/permissions', name="get all permissions of role", dependencies=[Depends(read_role_permissions)])
 async def get_permissions(
     role_id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]
