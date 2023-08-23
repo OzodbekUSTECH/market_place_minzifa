@@ -65,17 +65,16 @@ async def reset_password(
     return await users_service.reset_password(token, user_password.password1)
 
 
-@router.post('', name="Registration", response_model=UserSchema)
+@router.post('', name="Registration", response_model=UserSchema, dependencies=[Depends(register_user)])
 async def create_user(
     user_data: UserCreateSchema,
     users_service: Annotated[UsersService, Depends(get_users_services)],
-    current_user: Annotated[User, Depends(get_current_user)]
 ) -> UserSchema:
     """
     Create User:
     - return: User data.
     """
-    return await users_service.register_user(user_data, current_user) 
+    return await users_service.register_user(user_data) 
 
 
 @router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[Depends(update_user)]) #update user its permissions checker with required permission for this router
