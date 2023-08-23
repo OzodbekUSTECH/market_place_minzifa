@@ -22,12 +22,10 @@ class TravelersAndManagersAssociation(Base):
     
     def to_read_model_of_traveler(self):
         return TravelersSchema(
-            manager_id=self.manager_id,
             **self.traveler.__dict__  
         )
     
     def to_read_model_of_manager(self):
         return ManagersSchema(
-            traveler_id=self.traveler_id,
             **self.manager.__dict__  
         )

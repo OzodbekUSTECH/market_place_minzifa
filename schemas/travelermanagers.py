@@ -3,6 +3,7 @@ from typing import Optional
 
 class TravelersSchema(BaseModel):
     id: int
+    traveler_id: int
     manager_id: int
     email: str
     company_name: Optional[str]
@@ -16,6 +17,7 @@ class TravelersSchema(BaseModel):
 
 class ManagersSchema(BaseModel):
     id: int
+    manager_id: int
     traveler_id: int
     email: str
     company_name: Optional[str]
