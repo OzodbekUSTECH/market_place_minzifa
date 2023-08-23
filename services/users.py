@@ -10,12 +10,16 @@ from datetime import datetime
 from security.jwthandler import JWTHandler
 
 from repositories.unitofwork import UnitOfWork
-
+from utils.permissions import PermissionChecker
 class UsersService:
-    def __init__(self, uow: UnitOfWork):
+    def __init__(self, uow: UnitOfWork, permission_checker: PermissionChecker):
         self.uow: UnitOfWork = uow
+        self.permission_checker = permission_checker
 
-    async def register_user(self, user_data: UserCreateSchema) -> UserSchema:
+    async def register_user(self, user_data: UserCreateSchema, current_user) -> UserSchema:
+        # Проверяем разрешение текущего пользователя
+        self.permission_checker(current_user)
+        
         async with self.uow:
             existing_user = await self.uow.users.get_by_email(user_data.email)
             if existing_user:

@@ -8,7 +8,7 @@ from database.mail import EmailSender
 from repositories.base import Pagination
 from fastapi.security import OAuth2PasswordRequestForm
 from utils.permissions import register_user, read_users, update_user, delete_user
-
+from models import User
 router = APIRouter(
     prefix="/users",
     tags=["Users"],
@@ -68,13 +68,14 @@ async def reset_password(
 @router.post('', name="Registration", response_model=UserSchema)
 async def create_user(
     user_data: UserCreateSchema,
-    users_service: Annotated[UsersService, Depends(get_users_services)]
+    users_service: Annotated[UsersService, Depends(get_users_services)],
+    current_user: Annotated[User, Depends(get_users_services)]
 ) -> UserSchema:
     """
     Create User:
     - return: User data.
     """
-    return await users_service.register_user(user_data) 
+    return await users_service.register_user(user_data, current_user) 
 
 
 @router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[Depends(update_user)]) #update user its permissions checker with required permission for this router
@@ -92,7 +93,7 @@ async def update_user_data(
 
 
 
-@router.get('', name="get list of users", response_model=list[UserSchema], dependencies=[Depends(read_users)])
+@router.get('', name="get list of users", response_model=list[UserSchema])
 async def get_list_of_users(
     pagination: Annotated[Pagination, Depends()],
     users_service: Annotated[UsersService, Depends(get_users_services)]
