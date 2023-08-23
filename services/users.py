@@ -99,6 +99,8 @@ class UsersService:
             
             if user is None:
                 raise credentials_exception
+            await self.uow.session.refresh(user.role, attribute_names=["role_permissions"])
+
             await self.uow.commit()
             return user
 

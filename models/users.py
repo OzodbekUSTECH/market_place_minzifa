@@ -16,7 +16,7 @@ class User(Base):
     is_traveler = Column(Boolean, default=False)    
 
     role_id = Column(Integer, ForeignKey("roles.id"))
-    role = relationship("Role", lazy='subquery')
+    role = relationship("Role")
     
     
     def to_read_model(self):
