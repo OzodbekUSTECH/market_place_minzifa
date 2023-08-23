@@ -42,7 +42,7 @@ async def create_role_data(
     return await roles_service.create_role(role_data)
 
 @router.put('/{role_id}', name="Update Role", response_model=RoleSchema,dependencies=[Depends(update_role)])
-async def get_role_data_by_id(
+async def update_role_data(
     role_id: int,
     role_data: UpdateRoleSchema,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]
@@ -50,9 +50,9 @@ async def get_role_data_by_id(
     return await roles_service.update_role(role_id, role_data)
 
 
-@router.delete('/{role_id}', name="Create Role", response_model=RoleSchema, dependencies=[Depends(delete_role)])
-async def get_role_data_by_id(
+@router.delete('/{role_id}', name="Delete role", response_model=RoleSchema, dependencies=[Depends(delete_role)])
+async def delete_role_by_id(
     role_id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]
 ) -> RoleSchema:
-    return await roles_service.get_role_by_id(role_id)
+    return await roles_service.delete_role(role_id)

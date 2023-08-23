@@ -51,6 +51,5 @@ class BaseRepository:
     async def delete(self, id: int):
         instance = self.session.query(self.model).filter(self.model.id == id).first()
         self.session.delete(instance)
-
         return instance
      

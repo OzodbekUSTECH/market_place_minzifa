@@ -18,7 +18,4 @@ class RolePermission(Base):
             **self.__dict__
         )
     
-    def to_read_permission_of_role(self):
-        return RolePermissionsSchema(
-            **self.permission.__dict__
-        )
+    
