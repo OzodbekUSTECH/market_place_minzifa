@@ -101,7 +101,7 @@ class UsersService:
                 raise credentials_exception
 
             await self.uow.commit()
-            await self.uow.session.refresh(user.role, attribute_names=["role_permissions"])
+            # await self.uow.session.refresh(user.role, attribute_names=["role_permissions"])
 
             return user
 
