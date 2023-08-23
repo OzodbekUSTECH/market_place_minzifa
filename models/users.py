@@ -2,7 +2,7 @@ from database.db import Base
 from enum import Enum as PyEnum
 from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, ForeignKey
 from sqlalchemy.orm import relationship
-
+from schemas.users import UserSchema
 
 class User(Base):
     __tablename__ = 'users'
@@ -19,4 +19,7 @@ class User(Base):
     role = relationship("Role")
     
     
-
+    def to_read_model(self):
+        return UserSchema(
+            **self.__dict__
+        )
