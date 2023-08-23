@@ -53,6 +53,6 @@ class RolesService:
     #extends
     async def get_role_permissions(self, role_id: int):
         async with self.uow:
-            permissions = await self.uow.roles.get_permissions_of_role(role_id)
+            role = await self.uow.roles.get_permissions_of_role(role_id)
             await self.uow.commit()
-            return permissions
+            return [rp.permission for rp in role.role_permissions]
