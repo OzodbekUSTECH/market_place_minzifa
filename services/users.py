@@ -32,7 +32,7 @@ class UsersService:
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
         async with self.uow:
             users = await self.uow.users.get_all(pagination)
-            # await self.uow.commit()
+            await self.uow.commit()
             return users
 
     async def get_user_by_id(self, user_id: int) -> UserSchema:
