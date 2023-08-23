@@ -32,21 +32,26 @@ class UsersService:
         async with self.uow:
             users = await self.uow.users.get_all(pagination)
             
-            return users
+            return [user[0].to_read_model() for user in users]
 
     async def get_user_by_id(self, user_id: int) -> UserSchema:
-        user = await self.users_repo.get_by_id(user_id)
-        return user
+        async with self.uow:
+            user = await self.uow.users.get_by_id(user_id)
+            return user.to_read_model()
 
     async def update_user(self, user_id: int, user_data: UserUpdateSchema) -> UserSchema:
         user_dict = user_data.model_dump()
-        updated_user = await self.users_repo.update(user_id, user_dict)
-        return updated_user
+        async with self.uow:
+            updated_user = await self.uow.users.update(user_id, user_dict)
+            await self.uow.commit()
+            return updated_user
 
 
     async def delete_user(self, user_id: int) -> UserSchema:
-        deleted_user = await self.users_repo.delete(user_id)
-        return deleted_user
+        async with self.uow:
+            deleted_user = await self.uow.users.delete(user_id)
+            await self.uow.commit()
+            return deleted_user
 
     async def authenticate_user(self, email: str, password: str) -> TokenSchema:
         async with self.uow:
@@ -69,29 +74,30 @@ class UsersService:
     
     
     async def get_current_user(self, token: str) -> UserSchema:
-        async with self.uow:
-            credentials_exception = HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,   
-                detail="Could not validate credentials",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-            try:
-                payload = await JWTHandler.decode(token)
-                email: str = payload.get("email")  # "sub" is the key used by JWT to represent the subject (usually user ID or email)
-                if email is None:
-                    raise credentials_exception
-                token_data = TokenData(email=email)
-            except JWTError:
+        credentials_exception = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,   
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        try:
+            payload = await JWTHandler.decode(token)
+            email: str = payload.get("email")  # "sub" is the key used by JWT to represent the subject (usually user ID or email)
+            if email is None:
                 raise credentials_exception
-            
+            token_data = TokenData(email=email)
+        except JWTError:
+            raise credentials_exception
+        async with self.uow:
+        
             user = await self.uow.users.get_by_email(token_data.email)
             
             if user is None:
                 raise credentials_exception
-        return user
+            return user.to_read_model()
 
     async def get_user_by_email(self, email: str) -> UserSchema:
-        return await self.users_repo.get_by_email(email)
+        async with self.uow:
+            return await self.uow.users.get_by_email(email)
     
     async def generate_reset_token(self, email: str) -> str:
         payload = {
@@ -102,13 +108,18 @@ class UsersService:
         return token
     
     async def reset_password(self, token: str, password: str) -> UserSchema:
+        
         user = await self.get_current_user(token)
         hashed_password = PasswordHandler.hash(password)
         password_dict = {
             "password": hashed_password
         }
-        return await self.users_repo.update(user.id, password_dict)
+        async with self.uow:
+            updated_user = await self.uow.users.update(user.id, password_dict)
+            await self.uow.commit()
+            return updated_user
 
     
     async def get_travelers(self, manager_id: int):
-        return await self.users_repo.get_travelers_of_manager(manager_id)
+        async with self.uow:
+            return await self.uow.users.get_travelers_of_manager(manager_id)
