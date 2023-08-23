@@ -25,9 +25,10 @@ from fastapi.security import OAuth2PasswordBearer
 
 
 #services dependencies
-
-async def get_users_services(db: Session = Depends(get_db)):
-    return UsersService(UsersRepository(session=db, model=User))
+from repositories.unitofwork import UnitOfWork
+from typing import Annotated
+async def get_users_services(uow: Annotated[UnitOfWork, Depends(UnitOfWork)]):
+    return UsersService(uow)
 
 
 async def get_maillist_services(db: Session = Depends(get_db)):

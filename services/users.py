@@ -9,22 +9,25 @@ from schemas.users import TokenData
 from datetime import datetime
 from security.jwthandler import JWTHandler
 
+from repositories.unitofwork import UnitOfWork
 class UsersService:
-    def __init__(self, users_repo: UsersRepository):
-        self.users_repo: UsersRepository = users_repo
+    def __init__(self, users_repo: UnitOfWork):
+        self.users_repo: UnitOfWork = users_repo
 
     async def register_user(self, user_data: UserCreateSchema) -> UserSchema:
-        existing_user = await self.users_repo.get_by_email(user_data.email)
-        if existing_user:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already registered")
+        async with self.users_repo:
+            existing_user = await self.users_repo.users.get_by_email(user_data.email)
+            if existing_user:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already registered")
 
-        hashed_password = PasswordHandler.hash(user_data.password)
+            hashed_password = PasswordHandler.hash(user_data.password)
 
-        user_dict = user_data.model_dump()
-        user_dict["password"] = hashed_password
-        new_user = await self.users_repo.create(user_dict)
-        return new_user
-    
+            user_dict = user_data.model_dump()
+            user_dict["password"] = hashed_password
+            new_user = await self.users_repo.users.create(user_dict)
+            self.users_repo.commit()
+            return new_user
+        
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
         users = await self.users_repo.get_all(pagination)
         
