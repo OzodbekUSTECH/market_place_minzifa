@@ -1,23 +1,6 @@
-from fastapi import HTTPException, status
-from models import User
+from utils.dependency import PermissionChecker
 
 
-class PermissionChecker:
-    def __init__(self, permission_endpoint: str = None, cur_user = None):
-        self.allowed_permission = permission_endpoint
-        self.current_user = cur_user
-
-    def __call__(self):
-        pass
-    @staticmethod
-    def checker(allowed_permission, cur_user):
-        
-        if allowed_permission not in [rp.permission.endpoint for rp in cur_user.role.role_permissions]:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Access denied. Insufficient privileges."
-            )
-        return True
 #related to users
 register_user = PermissionChecker("register_user")
 read_users = PermissionChecker("read_users")

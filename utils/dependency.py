@@ -23,7 +23,6 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 
-from utils.permissions import PermissionChecker
 
 #services dependencies
 from repositories.unitofwork import UnitOfWork
@@ -64,8 +63,7 @@ class PermissionChecker:
     def __init__(self, permission_endpoint: str):
         self.allowed_permission = permission_endpoint
 
-    def __call__(self, current_user: User):
-        
+    def __call__(self, current_user = Depends(get_current_user)):
         if self.allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
