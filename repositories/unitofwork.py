@@ -29,7 +29,7 @@ class UnitOfWork:
         self.session = self.session_factory()
         self.users = UsersRepository(self.session, model=User)
         self.maillist = MailListRepository(self.session, model=MailList)
-        self.roles = RolePermissionsRepository(self.session, model=Role)
+        self.roles = RolesRepository(self.session, model=Role)
         self.permissions = PermissionsRepository(self.session, model=Permission)
         self.role_permissions = RolePermissionsRepository(self.session, model=RolePermission)
         self.travelers_managers = TravelerManagersRepository(self.session, model=TravelersAndManagersAssociation)

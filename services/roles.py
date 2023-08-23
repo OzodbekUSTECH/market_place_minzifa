@@ -21,13 +21,14 @@ class RolesService:
             return role
     
     async def create_role(self, role_data: CreateRoleSchema) -> RoleSchema:
+        role_dict = role_data.model_dump()
         async with self.uow:
 
             existing_role = await self.uow.roles.has_already_role_name(role_data)
             if existing_role:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Role with this name already exists")
             
-            created_role = await self.uow.roles.create(role_data.model_dump())
+            created_role = await self.uow.roles.create(role_dict)
             await self.uow.commit()
             return created_role
 
