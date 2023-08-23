@@ -13,7 +13,7 @@ from repositories.unitofwork import UnitOfWork
 
 class UsersService:
     def __init__(self, uow: UnitOfWork):
-        self.uow: UnitOfWork = uow
+        self.uow = uow
 
     async def register_user(self, user_data: UserCreateSchema) -> UserSchema:
         async with self.uow:

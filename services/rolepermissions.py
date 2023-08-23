@@ -2,19 +2,27 @@ from repositories.rolepermissions import RolePermissionsRepository
 from repositories.base import Pagination
 from fastapi import HTTPException, status
 from schemas.rolepermissions import RolePermissionsSchema, CreateRolePermissionsSchema, DeleteRolePermissionsSchema
+from repositories.unitofwork import UnitOfWork
 
 class RolePermissionsService:
-    def __init__(self, roleperms_repo: RolePermissionsRepository):
-        self.roleperms_repo: RolePermissionsRepository = roleperms_repo
+    def __init__(self, uow: UnitOfWork):
+        self.uow = uow
 
     async def give_permission_for_role(self, role_permission_data: CreateRolePermissionsSchema) -> RolePermissionsSchema:
-        role_permission = await self.roleperms_repo.has_role_permission(role_permission_data)
-        if role_permission:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="This permission already exists")
-        return await self.roleperms_repo.create(role_permission_data.model_dump())
+        role_permission_dict = role_permission_data.model_dump()
+        async with self.uow:
+            role_permission = await self.uow.role_permissions.has_role_permission(role_permission_data)
+            if role_permission:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="This permission already exists")
+            created_role_permission = await self.uow.travelers_managers.create(role_permission_dict)
+            await self.uow.commit()
+            return created_role_permission
         
 
     
     async def delete_permission_for_role(self, role_permission_data: DeleteRolePermissionsSchema) -> RolePermissionsSchema:
-        return await self.roleperms_repo.delete_permission_for_role(role_permission_data)
+        async with self.uow:
+            deleted_role_permission = await self.uow.role_permissions.delete_permission_for_role(role_permission_data)
+            await self.uow.commit()
+            return deleted_role_permission
         

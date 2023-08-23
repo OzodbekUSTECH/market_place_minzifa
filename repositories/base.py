@@ -46,14 +46,11 @@ class BaseRepository:
         for field, value in data.items():
             setattr(instance, field, value)
 
-        self.session.commit()
-        self.session.refresh(instance)
         return instance
     
     async def delete(self, id: int):
         instance = self.session.query(self.model).filter(self.model.id == id).first()
         self.session.delete(instance)
-        self.session.commit()
 
         return instance
      

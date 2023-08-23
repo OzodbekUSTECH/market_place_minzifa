@@ -27,24 +27,27 @@ from fastapi.security import OAuth2PasswordBearer
 #services dependencies
 from repositories.unitofwork import UnitOfWork
 from typing import Annotated
-async def get_users_services(uow: Annotated[UnitOfWork, Depends(UnitOfWork)]):
+
+UOWDependency = Annotated[UnitOfWork, Depends(UnitOfWork)]
+
+async def get_users_services(uow: UOWDependency):
     return UsersService(uow)
 
 
-async def get_maillist_services(db: Session = Depends(get_db)):
-    return MailListService(MailListRepository(session=db, model=MailList))
+async def get_maillist_services(uow: UOWDependency):
+    return MailListService(uow)
 
-async def get_rolesservices(db: Session = Depends(get_db)):
-    return RolesService(RolesRepository(session=db, model=Role))
+async def get_rolesservices(uow: UOWDependency):
+    return RolesService(uow)
 
-async def get_permissionsservices(db: Session = Depends(get_db)):
-    return PermissionsService(PermissionsRepository(session=db, model=Permission))
+async def get_permissionsservices(uow: UOWDependency):
+    return PermissionsService(uow)
 
-async def get_rolepermissions(db: Session = Depends(get_db)):
-    return RolePermissionsService(RolePermissionsRepository(session=db, model=RolePermission))
+async def get_rolepermissions(uow: UOWDependency):
+    return RolePermissionsService(uow)
 
-async def get_travelermanagers_services(db: Session = Depends(get_db)):
-    return TravelerManagersService(TravelerManagersRepository(session=db, model=TravelersAndManagersAssociation))
+async def get_travelermanagers_services(uow: UOWDependency):
+    return TravelerManagersService(uow)
 
 
 
