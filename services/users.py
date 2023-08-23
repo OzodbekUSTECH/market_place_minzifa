@@ -97,7 +97,6 @@ class UsersService:
                 raise credentials_exception
 
             await self.uow.commit()
-            # await self.uow.session.refresh(user.role, attribute_names=["role_permissions"])
 
             return user
 
@@ -128,6 +127,6 @@ class UsersService:
             return updated_user
 
     
-    async def get_travelers(self, manager_id: int):
-        async with self.uow:
-            return await self.uow.users.get_travelers_of_manager(manager_id)
+    # async def get_travelers(self, manager_id: int):
+    #     async with self.uow:
+    #         return await self.uow.users.get_travelers_of_manager(manager_id)

@@ -13,13 +13,6 @@ class TravelerManagersRepository(BaseRepository):
         managers = [data.to_read_model_of_manager() for data in traveler] 
         return managers
         
-    async def create_traveler_and_manager_association(self, travel_manager_dict: dict) -> TravelersSchema:
-        created_association = await self.create(travel_manager_dict)
-        return created_association.to_read_model_of_traveler()
     
-
-    async def delete_traveler_and_manager_association(self, travel_manager_dict: dict) -> TravelersSchema:
-        created_association = await self.delete(travel_manager_dict)
-        return created_association.to_read_model_of_traveler()
 
     

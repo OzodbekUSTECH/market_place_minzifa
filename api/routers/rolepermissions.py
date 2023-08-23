@@ -20,7 +20,7 @@ async def give_permission_data_for_role(
     return await roleperms_service.give_permission_for_role(role_permission_data)
 
 
-@router.delete('/{role_id}/{permission_id}', name='Give permission for a role', response_model=RolePermissionsSchema, dependencies=[Depends(delete_role_permission)])
+@router.delete('', name='Give permission for a role', response_model=RolePermissionsSchema, dependencies=[Depends(delete_role_permission)])
 async def give_permission_data_for_role(
     role_permission_data: DeleteRolePermissionsSchema,
     roleperms_service: Annotated[RolePermissionsService, Depends(get_rolepermissions)]
