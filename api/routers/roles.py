@@ -18,7 +18,7 @@ async def get_list_of_roles(
 ) -> list[RoleSchema]:
     return await roles_service.get_all_roles(pagination)
 
-@router.get('/{role_id}/permissions', name="get all permissions of role", dependencies=[Depends(read_role_permissions)])
+@router.get('/{role_id}/permissions', name="get all permissions of role", response_model=list[RolePermissionsSchema], dependencies=[Depends(read_role_permissions)])
 async def get_permissions(
     role_id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]
@@ -50,8 +50,8 @@ async def update_role_data(
     return await roles_service.update_role(role_id, role_data)
 
 
-@router.delete('/{role_id}', name="Delete role", response_model=RoleSchema, dependencies=[Depends(delete_role)])
-async def delete_role_by_id(
+@router.delete('/{role_id}', name="Create Role", response_model=RoleSchema, dependencies=[Depends(delete_role)])
+async def delete_role_data(
     role_id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]
 ) -> RoleSchema:
