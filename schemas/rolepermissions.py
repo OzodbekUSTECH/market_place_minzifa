@@ -5,8 +5,7 @@ class RolePermissionsSchema(BaseModel):
     role_id: int
     permission_id: int
 
-    class ConfigDict:
-        from_attributes = True
+    
 
 class CreateRolePermissionsSchema(RolePermissionsSchema):
     pass

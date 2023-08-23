@@ -14,7 +14,7 @@ class RolePermissionsService:
             role_permission = await self.uow.role_permissions.has_role_permission(role_permission_data)
             if role_permission:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="This permission already exists")
-            created_role_permission = await self.uow.travelers_managers.create(role_permission_dict)
+            created_role_permission = await self.uow.role_permissions.create(role_permission_dict)
             await self.uow.commit()
             return created_role_permission
         
