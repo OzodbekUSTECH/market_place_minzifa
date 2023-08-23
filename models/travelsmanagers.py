@@ -2,7 +2,7 @@ from database.db import Base
 from enum import Enum as PyEnum
 from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, ForeignKey
 from sqlalchemy.orm import relationship
-from schemas.travelermanagers import TravelersSchema, ManagersSchema
+from schemas.travelermanagers import TravelersSchema, ManagersSchema, AssociationTravelAndManagerSchema
 
 
 class TravelersAndManagersAssociation(Base):
@@ -14,6 +14,11 @@ class TravelersAndManagersAssociation(Base):
 
     traveler = relationship("User", foreign_keys=[traveler_id], lazy="subquery")
     manager = relationship("User", foreign_keys=[manager_id], lazy="subquery")    
+    
+    def to_read_model(self):
+        return AssociationTravelAndManagerSchema(
+            **self.__dict__
+        )
     
     def to_read_model_of_traveler(self):
         return TravelersSchema(

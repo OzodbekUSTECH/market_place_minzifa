@@ -37,7 +37,7 @@ class BaseRepository:
     
     async def get_all(self, pagination: Pagination):
         instances = self.session.query(self.model).order_by("id").offset(pagination.offset).limit(pagination.limit).all()
-        return instances
+        return [instance[0].to_read_model() for instance in instances]
 
     
     async def update(self, id: int, data: dict):
