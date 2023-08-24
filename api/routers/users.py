@@ -79,7 +79,6 @@ async def create_user(
 
 
 @router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[
-    Depends(user_id_matches_current_user),
     Depends(update_user)
 ]) #update user its permissions checker with required permission for this router
 async def update_user_data(
