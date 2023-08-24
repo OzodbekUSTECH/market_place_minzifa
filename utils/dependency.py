@@ -69,7 +69,7 @@ class PermissionChecker:
 
     def __call__(
             self,
-            user_id: Path(None, alias="user_id"),,  # Указываем user_id обязательным
+            user_id: Path(None, alias="user_id"),  # Указываем user_id обязательным
             current_user = Depends(get_current_user)
         ) -> bool:
         
