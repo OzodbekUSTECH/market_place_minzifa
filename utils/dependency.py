@@ -71,8 +71,7 @@ class PermissionChecker:
             user_id: int | None, 
             current_user = Depends(get_current_user)
         ) -> bool:
-        print(user_id)    
-        if self.allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions] and user_id != current_user.id:
+        if user_id is not None and (self.allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions] or user_id != current_user.id):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Access denied. Insufficient privileges."
