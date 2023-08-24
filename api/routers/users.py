@@ -79,9 +79,9 @@ async def create_user(
 from fastapi import HTTPException, status
 async def user_id_matches_current_user(
     user_id: int,
-    current_user_id: int = Depends(get_current_user),  # Предполагается, что у вас есть доступ к идентификатору текущего пользователя
+    current_user_id: Annotated[User,Depends(get_current_user)]   # Предполагается, что у вас есть доступ к идентификатору текущего пользователя
 ):
-    if user_id != current_user_id:
+    if user_id != current_user_id.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You don't have permission to access this resource",
