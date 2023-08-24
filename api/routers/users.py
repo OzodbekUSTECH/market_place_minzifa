@@ -78,9 +78,7 @@ async def create_user(
 
 
 
-@router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[
-    Depends(update_user)
-]) 
+@router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[Depends(update_user)]) 
 async def update_user_data(
     user_id: int, 
     user_data: UserUpdateSchema,
@@ -123,7 +121,7 @@ async def get_user_by_id(
     return await users_service.get_user_by_id(user_id)
 
 
-@router.delete('/{user_id}', name="delete user data", response_model=UserSchema)
+@router.delete('/{user_id}', name="delete user data", response_model=UserSchema, dependencies=[Depends(delete_user)])
 async def delete_user_data(
     user_id: int,
     users_service: Annotated[UsersService, Depends(get_users_services)]

@@ -61,6 +61,7 @@ async def get_current_user(
     return await users_service.get_current_user(token)
 
 
+from fastapi import Path
 
 class PermissionChecker:
     def __init__(self, permission_endpoint: str):
@@ -68,7 +69,7 @@ class PermissionChecker:
 
     def __call__(
             self,
-            user_id: int | None,  # Указываем user_id обязательным
+            user_id: Path(None, alias="user_id"),,  # Указываем user_id обязательным
             current_user = Depends(get_current_user)
         ) -> bool:
         
@@ -81,14 +82,3 @@ class PermissionChecker:
             )
         return True
     
-from fastapi import HTTPException, status
-async def user_id_matches_current_user(
-    user_id: int,
-    current_user_id: Annotated[User,Depends(get_current_user)]   # Предполагается, что у вас есть доступ к идентификатору текущего пользователя
-):
-    if user_id != current_user_id.id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You don't have permission to access this resource",
-        )
-    return user_id
