@@ -62,6 +62,7 @@ async def get_current_user(
 
 
 from fastapi import Path
+from typing import Optional
 
 class PermissionChecker:
     def __init__(self, permission_endpoint: str):
@@ -69,7 +70,7 @@ class PermissionChecker:
 
     def __call__(
             self,
-            user_id: int = None, 
+            user_id: Optional[int] = None,  # Параметр user_id стал необязательным
             current_user = Depends(get_current_user)
         ) -> bool:
         
