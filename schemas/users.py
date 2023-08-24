@@ -1,5 +1,5 @@
 import re
-from pydantic import BaseModel, EmailStr, field_validator, constr
+from pydantic import BaseModel, EmailStr, field_validator, constr, validator
 from typing import Optional
 
 
@@ -71,7 +71,7 @@ class ResetPasswordSchema(BaseModel):
     password1: constr(min_length=8, max_length=64)
     password2: constr(min_length=8, max_length=64)
 
-    @field_validator("password2")
+    @validator("password2")
     def passwords_match(cls, v, values):
         if v != values['password1']:
             raise ValueError('passwords do not match')
