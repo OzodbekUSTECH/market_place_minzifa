@@ -18,7 +18,7 @@ class PermissionHandler:
         required_permission: str,
         current_user: User
     ) -> bool:
-        if user_id != current_user.id or required_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
+        if user_id != current_user.id and required_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
             raise CustomExceptions.forbidden("Access denied. Insufficient privileges.")
         return True
     
