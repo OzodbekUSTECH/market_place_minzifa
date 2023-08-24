@@ -65,24 +65,33 @@ from fastapi import Path
 from typing import Optional
 
 class PermissionChecker:
-    def __init__(self, permission_endpoint: str, require_user_id: bool = False):
+    def __init__(self, permission_endpoint: str):
         self.allowed_permission = permission_endpoint
-        self.require_user_id = require_user_id
+        
 
     def __call__(
             self,
-            user_id: int = Path(alias="user_id"),
             current_user = Depends(get_current_user)
         ) -> bool:
-        if self.require_user_id and (user_id is None or user_id != current_user.id):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Access denied. Insufficient privileges."
-            )
-        elif self.allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
+       
+        if self.allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Access denied. Insufficient privileges."
             )
         return True
     
+from functools import wraps
+def permission_required(permission_endpoint: str):
+    def decorator(handler):
+        @wraps(handler)
+        async def wrapper(*args, **kwargs):
+            # Выполнить проверку разрешений
+            permission_checker = PermissionChecker(permission_endpoint)
+            permission_checker()
+
+            return await handler(*args, **kwargs)
+
+        return wrapper
+
+    return decorator

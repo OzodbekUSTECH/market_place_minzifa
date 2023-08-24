@@ -9,7 +9,7 @@ from schemas.users import TokenData
 from datetime import datetime
 from security.jwthandler import JWTHandler
 from repositories.unitofwork import UnitOfWork
-
+from models import User
 from utils.exceptions import CustomExceptions
 
 class UsersService:
@@ -127,3 +127,11 @@ class UsersService:
     # async def get_travelers(self, manager_id: int):
     #     async with self.uow:
     #         return await self.uow.users.get_travelers_of_manager(manager_id)
+
+    #checker for auth
+    async def has_permission(self, user_id: int, current_user: User, allowed_permission: str | None) -> bool:
+        if user_id != current_user.id or allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
+            raise CustomExceptions.forbidden("Access denied. Insufficient privileges.")
+        return True
+
+        

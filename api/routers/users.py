@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from services.users import UsersService
-from utils.dependency import get_users_services, get_current_user
+from utils.dependency import get_users_services, get_current_user, permission_required
 from schemas.users import UserCreateSchema, UserSchema, UserUpdateSchema, TokenSchema, ResetPasswordSchema
 from database.mail import EmailSender
 from repositories.base import Pagination
@@ -78,11 +78,13 @@ async def create_user(
 
 
 
-@router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[Depends(update_user)]) 
+@router.put('/{user_id}', name="Update User Data", response_model=UserSchema) 
+@permission_required("update_user")
 async def update_user_data(
     user_id: int, 
     user_data: UserUpdateSchema,
     users_service: Annotated[UsersService, Depends(get_users_services)],
+    # current_user: Annotated[User, Depends(get_current_user)]
 ) -> UserSchema:
     """
     Update User Data
