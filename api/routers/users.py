@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from services.users import UsersService
-from utils.dependency import get_users_services, get_current_user, user_id_matches_current_user
+from utils.dependency import get_users_services, get_current_user
 from schemas.users import UserCreateSchema, UserSchema, UserUpdateSchema, TokenSchema, ResetPasswordSchema
 from database.mail import EmailSender
 from repositories.base import Pagination
