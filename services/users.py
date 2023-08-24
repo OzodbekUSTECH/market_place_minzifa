@@ -27,7 +27,7 @@ class UsersService:
             user_dict = user_data.model_dump()
             user_dict["password"] = hashed_password
             new_user = await self.uow.users.create(user_dict)
-            # await self.uow.commit()
+            await self.uow.commit()
             return new_user
         
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
@@ -39,7 +39,7 @@ class UsersService:
     async def get_user_by_id(self, user_id: int) -> UserSchema:
         async with self.uow:
             user = await self.uow.users.get_by_id(user_id)
-            # await self.uow.commit()
+            await self.uow.commit()
             return user
 
     async def update_user(self, user_id: int, user_data: UserUpdateSchema) -> UserSchema:
