@@ -39,7 +39,7 @@ class UsersService:
     async def get_user_by_id(self, user_id: int) -> UserSchema:
         async with self.uow:
             user = await self.uow.users.get_by_id(user_id)
-            await self.uow.commit()
+            # await self.uow.commit()
             return user
 
     async def update_user(self, user_id: int, user_data: UserUpdateSchema) -> UserSchema:
