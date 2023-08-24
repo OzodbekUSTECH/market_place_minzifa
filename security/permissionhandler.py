@@ -14,9 +14,9 @@ class PermissionHandler:
 
     @staticmethod
     async def has_permission(
-        user_id: int | None,
         required_permission: str,
-        current_user: User
+        current_user: User,
+        user_id: int = None
     ) -> bool:
         if user_id != current_user.id and required_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
             raise CustomExceptions.forbidden("Access denied. Insufficient privileges.")

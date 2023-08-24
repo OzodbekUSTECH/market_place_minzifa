@@ -90,7 +90,11 @@ async def update_user_data(
     - param user_id: The ID of the user to update.
     - return: Updated user data.
     """
-    await PermissionHandler.has_permission(user_id, Permissions.CONTROL_USERS.value, current_user)
+    await PermissionHandler.has_permission(
+        user_id=user_id, 
+        required_permission=Permissions.CONTROL_USERS.value, 
+        current_user=current_user
+    )
 
     return await users_service.update_user(user_id, user_data)
 
@@ -107,8 +111,7 @@ async def get_list_of_users(
     - param page_size: The quantity of users per page.
     - return: list of all users.
     """
-    users = await users_service.get_list_of_users(pagination)
-    return users
+    return await users_service.get_list_of_users(pagination)
 
 
 @router.get('/{user_id}', name="get user by ID", response_model=UserSchema)
@@ -135,7 +138,12 @@ async def delete_user_data(
     - param user_id: The id of the user to delete.
     - return: User data.
     """
-    await PermissionHandler.has_permission(user_id, Permissions.CONTROL_USERS.value, current_user)
+    await PermissionHandler.has_permission(
+        user_id=user_id, 
+        required_permission=Permissions.CONTROL_USERS.value, 
+        current_user=current_user
+    )
+
     return await users_service.delete_user(user_id)
 
 
