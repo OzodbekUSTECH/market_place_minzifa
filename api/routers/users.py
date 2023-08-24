@@ -83,7 +83,6 @@ async def update_user_data(
     user_id: int, 
     user_data: UserUpdateSchema,
     users_service: Annotated[UsersService, Depends(get_users_services)],
-    current_user: Annotated[User, Depends(get_current_user)]
 ) -> UserSchema:
     """
     Update User Data
