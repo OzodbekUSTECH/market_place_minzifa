@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from services.users import UsersService
-from utils.dependency import get_users_services, get_current_user
+from utils.dependency import get_users_services, get_current_user, user_id_matches_current_user
 from schemas.users import UserCreateSchema, UserSchema, UserUpdateSchema, TokenSchema, ResetPasswordSchema
 from database.mail import EmailSender
 from repositories.base import Pagination
@@ -76,19 +76,12 @@ async def create_user(
     """
     return await users_service.register_user(user_data) 
 
-from fastapi import HTTPException, status
-async def user_id_matches_current_user(
-    user_id: int,
-    current_user_id: Annotated[User,Depends(get_current_user)]   # Предполагается, что у вас есть доступ к идентификатору текущего пользователя
-):
-    if user_id != current_user_id.id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You don't have permission to access this resource",
-        )
-    return user_id
 
-@router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[Depends(user_id_matches_current_user)]) #update user its permissions checker with required permission for this router
+
+@router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[
+    Depends(user_id_matches_current_user),
+    Depends(update_user)
+]) #update user its permissions checker with required permission for this router
 async def update_user_data(
     user_id: int, 
     user_data: UserUpdateSchema,
