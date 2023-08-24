@@ -6,7 +6,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 DATABASE_URL = "postgresql://postgres:77girado@db/postgres"
 
 engine = create_engine(DATABASE_URL, echo=True)
-session_maker = sessionmaker(autocommit=False, autoflush=False, expire_on_commit=False, bind=engine)
+session_maker = sessionmaker(expire_on_commit=False, bind=engine)
 
 
 Base = declarative_base()
