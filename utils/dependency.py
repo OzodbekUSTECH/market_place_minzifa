@@ -69,8 +69,8 @@ class PermissionChecker:
 
     def __call__(
             self,
+            current_user: User,
             user_id: int = None, 
-            current_user = Depends(get_current_user)
         ) -> bool:
         
         if user_id and user_id == current_user.id:
