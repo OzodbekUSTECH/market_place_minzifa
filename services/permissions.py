@@ -4,7 +4,7 @@ from fastapi import HTTPException, status
 from schemas.permissions import PermissionSchema, CreatePermissionSchema, UpdatePermissionSchema
 from repositories.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
-
+from security.permissionhandler import PermissionHandler
 class PermissionsService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
@@ -22,6 +22,8 @@ class PermissionsService:
             return permission 
     
     async def create_permission(self, permission_data: CreatePermissionSchema) -> PermissionSchema:
+        await PermissionHandler.is_allowed_permission_endpoint(permission_data.endpoint)
+
         async with self.uow:
 
             permission = await self.uow.permissions.get_by_endpoint(permission_data.endpoint)
@@ -32,6 +34,7 @@ class PermissionsService:
             return created_permission
     
     async def update_permission(self, permission_id: int, permission_data: UpdatePermissionSchema) -> PermissionSchema:
+        await PermissionHandler.is_allowed_permission_endpoint(permission_data.endpoint)
         role_dict = permission_data.model_dump()
         async with self.uow:
             updated_permission = await self.uow.permissions.update(permission_id, role_dict)

@@ -4,7 +4,8 @@ from services.permissions import PermissionsService
 from utils.dependency import get_permissionsservices, get_current_user
 from repositories.base import Pagination
 from schemas.permissions import PermissionSchema, CreatePermissionSchema, UpdatePermissionSchema
-from utils.permissions import control_roles_and_permissions
+from models import User
+from security.permissionhandler import PermissionHandler, Permissions
 router = APIRouter(
     prefix="/permessions",
     tags=["Permissions"],
@@ -26,26 +27,47 @@ async def get_permission_data_by_id(
 ) -> PermissionSchema:
     return await perms_service.get_permission_by_id(permission_id)
 
-@router.post('', name="create permission", response_model=PermissionSchema, dependencies=[Depends(control_roles_and_permissions)])
+@router.post('', name="create permission", response_model=PermissionSchema)
 async def create_permission_data(
     permission_data: CreatePermissionSchema,
-    perms_service: Annotated[PermissionsService, Depends(get_permissionsservices)]
+    perms_service: Annotated[PermissionsService, Depends(get_permissionsservices)],
+    current_user: Annotated[User, Depends(get_current_user)]
 ) -> PermissionSchema:
+    
+    await PermissionHandler.has_permission(
+        required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
+        current_user=current_user
+    )
+
     return await perms_service.create_permission(permission_data)
 
 
-@router.put('/{permission_id}', name="update permission data", response_model=PermissionSchema, dependencies=[Depends(control_roles_and_permissions)])
+@router.put('/{permission_id}', name="update permission data", response_model=PermissionSchema)
 async def update_permission_data(
     permission_id: int,
     permission_data: UpdatePermissionSchema,
-    perms_service: Annotated[PermissionsService, Depends(get_permissionsservices)]
+    perms_service: Annotated[PermissionsService, Depends(get_permissionsservices)],
+    current_user: Annotated[User, Depends(get_current_user)]
 ) -> PermissionSchema:
+    
+    await PermissionHandler.has_permission(
+        required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
+        current_user=current_user
+    )
+
     return await perms_service.update_permission(permission_id, permission_data)
 
 
-@router.delete("/{permission_id}", name="delete permission", response_model=PermissionSchema, dependencies=[Depends(control_roles_and_permissions)])
+@router.delete("/{permission_id}", name="delete permission", response_model=PermissionSchema)
 async def delete_permission_data(
     permission_id: int,
-    perms_service: Annotated[PermissionsService, Depends(get_permissionsservices)]
+    perms_service: Annotated[PermissionsService, Depends(get_permissionsservices)],
+    current_user: Annotated[User, Depends(get_current_user)]
 ) -> PermissionSchema:
+    
+    await PermissionHandler.has_permission(
+        required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
+        current_user=current_user
+    )
+
     return await perms_service.delete_permission(permission_id)

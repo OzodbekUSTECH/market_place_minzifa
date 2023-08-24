@@ -2,13 +2,13 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from services.users import UsersService
-from utils.dependency import get_users_services, get_current_user, permission_required
+from utils.dependency import get_users_services, get_current_user
 from schemas.users import UserCreateSchema, UserSchema, UserUpdateSchema, TokenSchema, ResetPasswordSchema
 from database.mail import EmailSender
 from repositories.base import Pagination
 from fastapi.security import OAuth2PasswordRequestForm
-from utils.permissions import register_user, update_user, delete_user
 from models import User
+from security.permissionhandler import PermissionHandler, Permissions
 router = APIRouter(
     prefix="/users",
     tags=["Users"],
@@ -79,18 +79,19 @@ async def create_user(
 
 
 @router.put('/{user_id}', name="Update User Data", response_model=UserSchema) 
-@permission_required("update_user")
 async def update_user_data(
     user_id: int, 
     user_data: UserUpdateSchema,
     users_service: Annotated[UsersService, Depends(get_users_services)],
-    # current_user: Annotated[User, Depends(get_current_user)]
+    current_user: Annotated[User, Depends(get_current_user)]
 ) -> UserSchema:
     """
     Update User Data
     - param user_id: The ID of the user to update.
     - return: Updated user data.
     """
+    await PermissionHandler.has_permission(user_id, Permissions.CONTROL_USERS.value, current_user)
+
     return await users_service.update_user(user_id, user_data)
 
 
@@ -123,16 +124,18 @@ async def get_user_by_id(
     return await users_service.get_user_by_id(user_id)
 
 
-@router.delete('/{user_id}', name="delete user data", response_model=UserSchema, dependencies=[Depends(delete_user)])
+@router.delete('/{user_id}', name="delete user data", response_model=UserSchema)
 async def delete_user_data(
     user_id: int,
-    users_service: Annotated[UsersService, Depends(get_users_services)]
+    users_service: Annotated[UsersService, Depends(get_users_services)],
+    current_user: Annotated[User, Depends(get_current_user)]
 ) -> UserSchema:
     """
     Delete User:
     - param user_id: The id of the user to delete.
     - return: User data.
     """
+    await PermissionHandler.has_permission(user_id, Permissions.CONTROL_USERS.value, current_user)
     return await users_service.delete_user(user_id)
 
 

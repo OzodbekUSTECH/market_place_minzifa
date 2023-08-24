@@ -61,37 +61,21 @@ async def get_current_user(
     return await users_service.get_current_user(token)
 
 
-from fastapi import Path
-from typing import Optional
 
-class PermissionChecker:
-    def __init__(self, permission_endpoint: str):
-        self.allowed_permission = permission_endpoint
+
+# class PermissionChecker:
+#     def __init__(self, permission_endpoint: str):
+#         self.allowed_permission = permission_endpoint
+
+#     def __call__(
+#             self,
+#             current_user = Depends(get_current_user)
+#         ) -> bool:
         
-
-    def __call__(
-            self,
-            current_user = Depends(get_current_user)
-        ) -> bool:
-       
-        if self.allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Access denied. Insufficient privileges."
-            )
-        return True
+#         if self.allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
+#             raise HTTPException(
+#                 status_code=status.HTTP_403_FORBIDDEN,
+#                 detail="Access denied. Insufficient privileges."
+#             )
+#         return True
     
-from functools import wraps
-def permission_required(permission_endpoint: str):
-    def decorator(handler):
-        @wraps(handler)
-        async def wrapper(*args, **kwargs):
-            # Выполнить проверку разрешений
-            permission_checker = PermissionChecker(permission_endpoint)
-            permission_checker()
-
-            return await handler(*args, **kwargs)
-
-        return wrapper
-
-    return decorator

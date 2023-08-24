@@ -46,7 +46,7 @@ class UsersService:
         user_dict = user_data.model_dump()
         async with self.uow:
             existing_user = await self.uow.users.get_by_email(user_data.email)
-            if existing_user:
+            if existing_user and existing_user.email != user_data.email:
                 raise CustomExceptions.conflict("Already exists user with this email")
             updated_user = await self.uow.users.update(user_id, user_dict)
             await self.uow.commit()
@@ -129,9 +129,6 @@ class UsersService:
     #         return await self.uow.users.get_travelers_of_manager(manager_id)
 
     #checker for auth
-    async def has_permission(self, user_id: int, current_user: User, allowed_permission: str | None) -> bool:
-        if user_id != current_user.id or allowed_permission not in [rp.permission.endpoint for rp in current_user.role.role_permissions]:
-            raise CustomExceptions.forbidden("Access denied. Insufficient privileges.")
-        return True
+    
 
         
