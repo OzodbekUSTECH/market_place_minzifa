@@ -3,7 +3,7 @@ from utils.dependency import PermissionChecker
 
 #related to users
 register_user = PermissionChecker("register_user")
-read_users = PermissionChecker("read_users")
+# read_users = PermissionChecker("read_users")ф
 update_user = PermissionChecker("update_user")
 delete_user = PermissionChecker("delete_user")
 

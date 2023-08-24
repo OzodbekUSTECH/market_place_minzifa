@@ -7,7 +7,7 @@ from schemas.users import UserCreateSchema, UserSchema, UserUpdateSchema, TokenS
 from database.mail import EmailSender
 from repositories.base import Pagination
 from fastapi.security import OAuth2PasswordRequestForm
-from utils.permissions import register_user, read_users, update_user, delete_user
+from utils.permissions import register_user, update_user, delete_user
 from models import User
 router = APIRouter(
     prefix="/users",
@@ -76,12 +76,23 @@ async def create_user(
     """
     return await users_service.register_user(user_data) 
 
+from fastapi import HTTPException, status
+async def user_id_matches_current_user(
+    user_id: int,
+    current_user_id: int = Depends(get_current_user),  # Предполагается, что у вас есть доступ к идентификатору текущего пользователя
+):
+    if user_id != current_user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You don't have permission to access this resource",
+        )
+    return user_id
 
-@router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[Depends(update_user)]) #update user its permissions checker with required permission for this router
+@router.put('/{user_id}', name="Update User Data", response_model=UserSchema, dependencies=[Depends(user_id_matches_current_user)]) #update user its permissions checker with required permission for this router
 async def update_user_data(
     user_id: int, 
     user_data: UserUpdateSchema,
-    users_service: Annotated[UsersService, Depends(get_users_services)]
+    users_service: Annotated[UsersService, Depends(get_users_services)],
 ) -> UserSchema:
     """
     Update User Data
@@ -107,7 +118,7 @@ async def get_list_of_users(
     return users
 
 
-@router.get('/{user_id}', name="get user by ID", response_model=UserSchema, dependencies=[Depends(read_users)])
+@router.get('/{user_id}', name="get user by ID", response_model=UserSchema)
 async def get_user_by_id(
     user_id: int,
     users_service: Annotated[UsersService, Depends(get_users_services)]
@@ -120,8 +131,8 @@ async def get_user_by_id(
     return await users_service.get_user_by_id(user_id)
 
 
-@router.delete('/{user_id}', name="delete user data", response_model=UserSchema, dependencies=[Depends(delete_user)])
-async def delete_user(
+@router.delete('/{user_id}', name="delete user data", response_model=UserSchema)
+async def delete_user_data(
     user_id: int,
     users_service: Annotated[UsersService, Depends(get_users_services)]
 ) -> UserSchema:
