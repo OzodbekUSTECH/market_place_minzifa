@@ -2,10 +2,10 @@ from utils.dependency import PermissionChecker
 
 
 #related to users
-register_user = PermissionChecker("register_user")
+register_user = PermissionChecker("register_user", require_user_id=True)
 # read_users = PermissionChecker("read_users")ф
-update_user = PermissionChecker("update_user")
-delete_user = PermissionChecker("delete_user")
+update_user = PermissionChecker("update_user", require_user_id=True)
+delete_user = PermissionChecker("delete_user", require_user_id=True)
 
 
 #related to roles
