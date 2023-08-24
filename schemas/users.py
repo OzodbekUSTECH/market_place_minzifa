@@ -72,10 +72,11 @@ class ResetPasswordSchema(BaseModel):
     password2: constr(min_length=8, max_length=64)
 
     @field_validator("password2")
-    def passwords_match(cls, password2, values, **kwargs):
-        if "password1" in values and password2 != values["password1"]:
-            raise ValueError("Passwords do not match")
-        return password2
+    def passwords_match(cls, v, values):
+        if v != values['password1']:
+            raise ValueError('passwords do not match')
+        return v
+    
     
     @field_validator("password1")
     def password_must_contain_special_characters(cls, v):
