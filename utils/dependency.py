@@ -71,7 +71,7 @@ class PermissionChecker:
 
     def __call__(
             self,
-            user_id: int = None, 
+            user_id: int = Path(alias="user_id"),
             current_user = Depends(get_current_user)
         ) -> bool:
         if self.require_user_id and (user_id is None or user_id != current_user.id):
