@@ -16,9 +16,13 @@ class ToursService:
         async with self.uow:
             created_tour = await self.uow.tours.create(tour_dict)
             prices = await self._create_prices_for_tour(tour_id=created_tour.id, price=tour_data.price)
-            if prices:
-                await self.uow.commit()
-                return created_tour
+            
+            await self.uow.commit()
+            response = TourSchema(
+                name=tour_data.name,
+                prices=prices
+            )
+            return response
 
     async def _create_prices_for_tour(self, tour_id: int, price: float):
         base_currency = await self.uow.currencies.get_by_name('USD')
