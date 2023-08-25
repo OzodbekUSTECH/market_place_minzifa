@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 
-@router.post('')
+@router.post('', response_model=TourSchema)
 async def create_tour(
     tour_data: CreateTourSchema,
     tours_service: Annotated[ToursService, Depends(get_tours_services)]
@@ -26,3 +26,26 @@ async def get_list_of_tours(
     tours_service: Annotated[ToursService, Depends(get_tours_services)]
 ) -> list[TourSchema]:
     return await tours_service.get_list_of_tours(pagination)
+
+@router.get('/{tour_id}', response_model=TourSchema)
+async def get_tour_by_id(
+    tour_id: int,
+    tours_service: Annotated[ToursService, Depends(get_tours_services)]
+) -> TourSchema:
+    return await tours_service.get_tour_by_id(tour_id)
+
+@router.put('/{tour_id}', response_model=TourSchema)
+async def update_tour(
+    tour_id: int,
+    tour_data: UpdateTourSchema,
+    tours_service: Annotated[ToursService, Depends(get_tours_services)]
+) -> TourSchema:
+    return await tours_service.update_tour(tour_id, tour_data)
+
+
+@router.delete('/{tour_id}', response_model=TourSchema)
+async def delete_tour(
+    tour_id: int,
+    tours_service: Annotated[ToursService, Depends(get_tours_services)]
+) -> TourSchema:
+    return await tours_service.delete_tour(tour_id)
