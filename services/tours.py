@@ -28,7 +28,6 @@ class ToursService:
     async def _create_prices_for_tour(self, tour_id: int, price: float):
         base_currency = await self.uow.currencies.get_by_name('USD')
         target_currencies = await self.uow.currencies.get_all()
-        await self.uow.commit()
         
         prices_to_create = []
         
