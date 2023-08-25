@@ -9,7 +9,7 @@ class Tour(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     
-    prices = relationship("TourPrice", back_populates="tour")
+    prices = relationship("TourPrice", back_populates="tour", lazy="subquery")
 
     def to_read_model_with_prices(self):
         # prices_data = [
@@ -21,7 +21,6 @@ class Tour(Base):
         
         return TourSchema(
             **self.__dict__,
-            prices=self.prices
         )
 
     
