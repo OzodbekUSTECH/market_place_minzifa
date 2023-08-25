@@ -12,12 +12,21 @@ class ToursService:
     # Ваш метод для создания тура с ценами
     async def create_tour(self, tour_data: CreateTourSchema) -> TourSchema:
         tour_dict = tour_data.model_dump(exclude={"price"})
+        price = tour_data.price
         async with self.uow:
             created_tour = await self.uow.tours.create(tour_dict)
-            await self._create_prices_for_tour(
-                tour=created_tour,
-                price=tour_data.price
-            )
+            base_currency = await self.uow.currencies.get_by_name('USD')
+            target_currencies = await self.uow.currencies.get_all()        
+            for target_currency in target_currencies:
+                converted_price = price if target_currency == base_currency else price * target_currency.exchange_rate
+                
+                create_price_data = CreateTourPriceSchema(
+                    tour_id=created_tour.id,
+                    currency_id=target_currency.id,
+                    price=converted_price
+                )
+                await self.uow.tour_prices.create(create_price_data.model_dump())
+        
             #had to use get_by_id for the response model in the router! Otherwise it doesn't work
             #i got a fastapi.exceptions.ResponseValidationError
             # tour = await self.uow.tours.get_by_id(created_tour.id)
@@ -46,3 +55,6 @@ class ToursService:
     async def get_tour_by_id(self, tour_id: int) -> TourSchema:
         async with self.uow:
             return await self.uow.tours.get_by_id(tour_id)
+        
+    async def update_tour(self, tour_id: int, tour_data: UpdateTourSchema) -> TourSchema:
+        ...
