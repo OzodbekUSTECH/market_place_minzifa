@@ -22,7 +22,6 @@ class Tour(Base):
             )
         return TourSchema(
             **self.__dict__,
-            prices=prices
         )
 class TourPrice(Base):
     __tablename__ = 'tour_prices'
