@@ -20,9 +20,7 @@ class Tour(Base):
         ]
         
         return TourSchema(
-            id=self.id,
-            **self.__dict__,
-            prices=prices_data
+            **self[0].__dict__,
         )
 
     
