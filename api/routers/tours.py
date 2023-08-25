@@ -17,7 +17,7 @@ router = APIRouter(
 async def create_tour(
     tour_data: CreateTourSchema,
     tours_service: Annotated[ToursService, Depends(get_tours_services)]
-) -> TourSchema:
+):
     return await tours_service.create_tour(tour_data)
 
 @router.get('')
