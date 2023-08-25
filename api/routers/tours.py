@@ -17,12 +17,12 @@ router = APIRouter(
 async def create_tour(
     tour_data: CreateTourSchema,
     tours_service: Annotated[ToursService, Depends(get_tours_services)]
-):
+) -> TourSchema:
     return await tours_service.create_tour(tour_data)
 
 @router.get('')
 async def get_list_of_tours(
     pagination: Annotated[Pagination, Depends()],
     tours_service: Annotated[ToursService, Depends(get_tours_services)]
-):
+) -> list[TourSchema]:
     return await tours_service.get_list_of_tours(pagination)
