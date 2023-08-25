@@ -25,7 +25,7 @@ class ToursService:
         target_currencies = await self.uow.currencies.get_all()
 
         for target_currency in target_currencies:
-            if target_currency.id == base_currency.id:
+            if target_currency == base_currency:
                 converted_price = price
             else:
                 converted_price = price * target_currency.exchange_rate
@@ -41,6 +41,6 @@ class ToursService:
         
     async def get_list_of_tours(self, pagination: Pagination):
         async with self.uow:
-            list_of_tours = await self.uow.tours.create(pagination)
+            list_of_tours = await self.uow.tours.get_all(pagination)
             await self.uow.commit()
             return list_of_tours
