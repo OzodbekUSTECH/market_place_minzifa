@@ -16,12 +16,13 @@ class TourPricesService:
         for target_currency in target_currencies:
             converted_price = price_data.price if target_currency == base_currency else price_data.price * target_currency.exchange_rate
             
-            create_price_data = CreateTourPriceSchema(
-                tour_id=price_data.tour_id,
-                currency_id=target_currency.id,
-                price=converted_price
-            )
-            created_price = await self.uow.tour_prices.create(create_price_data.model_dump())
+            
+            price_dict = {
+                "tour_id": price_data.tour_id,
+                "currency_id": target_currency.id,
+                "price": converted_price
+            }
+            created_price = await self.uow.tour_prices.create(price_dict)
             response.append(TourPriceSchema(**created_price.__dict__))
         return response
     
