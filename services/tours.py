@@ -28,6 +28,7 @@ class ToursService:
     async def _create_prices_for_tour(self, tour_id: int, price: float):
         base_currency = await self.uow.currencies.get_by_name('USD')
         target_currencies = await self.uow.currencies.get_all()
+        await self.uow.commit()
         
         prices_to_create = []
         
@@ -42,6 +43,7 @@ class ToursService:
             created_price = await self.uow.tour_prices.create(create_price_data.model_dump())  # Создание цены
             prices_to_create.append(TourPriceSchema(**created_price.__dict__))
         await self.uow.commit()
+        
         return prices_to_create
             
 
