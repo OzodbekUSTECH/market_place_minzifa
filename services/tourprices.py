@@ -4,6 +4,7 @@ from datetime import datetime
 from models import Tour
 from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
+from utils.currency import CurrencyHandler
 
 class TourPricesService:
     def __init__(self, uow: UnitOfWork):
@@ -55,7 +56,8 @@ class TourPricesService:
                     converted_price = price_data.price
                 else:
                     target_currency = await self.uow.currencies.get_by_id(price.currency_id)
-                    converted_price = price_data.price * target_currency.exchange_rate
+                    exchange_rate = CurrencyHandler.get_exchange_rate(target_currency.name)
+                    converted_price = price_data.price * exchange_rate
 
                 price_dict = {
                     "price": converted_price,
