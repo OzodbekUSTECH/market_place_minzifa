@@ -18,21 +18,23 @@ class ToursService:
                 tour=created_tour,
                 price=tour_data.price
             )
-            tour = await self.uow.tours.get_by_id(created_tour.id)
-            return tour
+            #had to use get_by_id for the response model in the router! Otherwise it doesn't work
+            # tour = await self.uow.tours.get_by_id(created_tour.id)
+            return created_tour
 
     async def _create_prices_for_tour(self, tour: Tour, price: float):
-        base_currency = await self.uow.currencies.get_by_name('USD')
-        target_currencies = await self.uow.currencies.get_all()        
-        for target_currency in target_currencies:
-            converted_price = price if target_currency == base_currency else price * target_currency.exchange_rate
-            
-            create_price_data = CreateTourPriceSchema(
-                tour_id=tour.id,
-                currency_id=target_currency.id,
-                price=converted_price
-            )
-            await self.uow.tour_prices.create(create_price_data.model_dump())
+        async with self.uow:
+            base_currency = await self.uow.currencies.get_by_name('USD')
+            target_currencies = await self.uow.currencies.get_all()        
+            for target_currency in target_currencies:
+                converted_price = price if target_currency == base_currency else price * target_currency.exchange_rate
+                
+                create_price_data = CreateTourPriceSchema(
+                    tour_id=tour.id,
+                    currency_id=target_currency.id,
+                    price=converted_price
+                )
+                await self.uow.tour_prices.create(create_price_data.model_dump())
         
             
 
