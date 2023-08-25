@@ -7,5 +7,5 @@ class TourPricesRepository(BaseRepository):
         return prices
         
     
-
+    
     

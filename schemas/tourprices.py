@@ -5,8 +5,9 @@ class CreateTourPriceSchema(BaseModel):
     tour_id: int
     price: float
 
-class UpdateTourPriceSchema(CreateTourPriceSchema):
-    pass
+class UpdateTourPriceSchema(BaseModel):
+    price: float
+
 
 class TourPriceSchema(CreateTourPriceSchema):
     id: int

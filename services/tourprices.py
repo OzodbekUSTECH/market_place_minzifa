@@ -44,4 +44,27 @@ class TourPricesService:
             return await self.uow.tour_prices.get_by_tour_id(tour_id)
         
 
+    async def update_tour_prices(self, tour_id: int, price_data: UpdateTourPriceSchema) -> list[TourPriceSchema]:
+        async with self.uow:
+            prices = await self.uow.tour_prices.get_by_tour_id(tour_id)
+            base_currency = await self.uow.currencies.get_by_name('USD')
+
+            response = []
+            for price in prices:
+                if price.currency_id == base_currency.id:
+                    converted_price = price_data.price
+                else:
+                    target_currency = await self.uow.currencies.get_by_id(price.currency_id)
+                    converted_price = price_data.price * target_currency.exchange_rate
+
+                price_dict = {
+                    "price": converted_price,
+                }
+                updated_price = await self.uow.tour_prices.update(price.id, price_dict)
+                response.append(TourPriceSchema(**updated_price.__dict__))
+
+            
+        return response
+        
+
     
