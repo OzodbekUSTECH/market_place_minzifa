@@ -16,13 +16,14 @@ router = APIRouter(
 @router.post('')
 async def create_currency(
     currency_data: CreateCurrencySchema,
-    currency_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
+    currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
 ):
-    return await currency_service.create_currency(currency_data)
+    created_currency = await currencies_service.create_currency(currency_data)
+    return created_currency
 
 @router.get('')
 async def get_list_of_tours(
     pagination: Annotated[Pagination, Depends()],
-    currency_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
+    currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
 ):
-    return await currency_service.get_list_of_currencies(pagination)
+    return await currencies_service.get_list_of_currencies(pagination)
