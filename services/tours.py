@@ -11,9 +11,7 @@ class ToursService:
 
     # Ваш метод для создания тура с ценами
     async def create_tour(self, tour_data: CreateTourSchema):
-        tour_dict = {
-            "name": tour_data.name
-        }
+        tour_dict = tour_data.model_dump(exclude={"price"})
         async with self.uow:
             created_tour = await self.uow.tours.create(tour_dict)
             await self._create_prices_for_tour(
