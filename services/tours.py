@@ -47,5 +47,4 @@ class ToursService:
     async def get_list_of_tours(self, pagination: Pagination):
         async with self.uow:
             list_of_tours = await self.uow.tours.get_all(pagination)
-            await self.uow.commit()
             return list_of_tours
