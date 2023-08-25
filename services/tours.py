@@ -9,38 +9,35 @@ class ToursService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
+    # Ваш метод для создания тура с ценами
     async def create_tour(self, tour_data: CreateTourSchema):
-        tour_dict = {
-            "name": tour_data.name
-        }
         async with self.uow:
-            created_tour = await self.uow.tours.create(tour_dict)
+            created_tour = await self.uow.tours.create({"name": tour_data.name})
             
             base_currency = await self.uow.currencies.get_by_name('USD')
             target_currencies = await self.uow.currencies.get_all()
-            res = []
+            
+            prices_to_create = []
+            
             for target_currency in target_currencies:
-                if target_currency == base_currency:
-                    converted_price = tour_data.price
-                else:
-                    converted_price = tour_data.price * target_currency.exchange_rate
-
+                converted_price = tour_data.price if target_currency == base_currency else tour_data.price * target_currency.exchange_rate
+                
                 create_price_data = CreateTourPriceSchema(
                     tour_id=created_tour.id,
                     currency_id=target_currency.id,
                     price=converted_price
                 )
-                created_price = await self.uow.tour_prices.create(create_price_data.model_dump())  # Создание цен для тура
-                res_data = TourPriceSchema(
-                    **created_price.__dict__
-                )
-                res.append(res_data)
+                created_price = await self.uow.tour_prices.create(create_price_data.model_dump())  # Создание цены
+                prices_to_create.append(TourPriceSchema(**created_price))
+            
             await self.uow.commit()
-            response = TourSchema(
-                **created_tour.__dict__,
-                prices=created_tour.prices
+            
+            return TourSchema(
+                id=created_tour.id,
+                name=created_tour.name,
+                prices=prices_to_create
             )
-            return response
+
 
     async def _create_prices_for_tour(self, tour_id: int, price: float):
         base_currency = await self.uow.currencies.get_by_name('USD')
