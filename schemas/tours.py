@@ -15,7 +15,7 @@ class TourPriceSchema(CreateTourPriceSchema):
 
 class CreateTourSchema(BaseModel):
     name: str
-    price: CreateTourPriceSchema
+    price: float
 
 class UpdateTourSchema(CreateTourSchema):
     pass
