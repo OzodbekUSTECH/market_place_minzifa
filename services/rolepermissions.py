@@ -14,7 +14,7 @@ class RolePermissionsService:
             if role_permission:
                 raise CustomExceptions.conflict("This permission already exists")
             created_role_permission = await self.uow.role_permissions.create(role_permission_dict)
-            await self.uow.commit()
+            
             return created_role_permission
         
 
@@ -22,6 +22,6 @@ class RolePermissionsService:
     async def delete_permission_for_role(self, role_permission_data: DeleteRolePermissionsSchema) -> RolePermissionsSchema:
         async with self.uow:
             deleted_role_permission = await self.uow.role_permissions.delete_permission_for_role(role_permission_data)
-            await self.uow.commit()
+            
             return deleted_role_permission
         

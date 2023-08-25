@@ -24,19 +24,16 @@ class UsersService:
             user_dict = user_data.model_dump()
             user_dict["password"] = hashed_password
             new_user = await self.uow.users.create(user_dict)
-            await self.uow.commit()
             return new_user
         
     async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
         async with self.uow:
             users = await self.uow.users.get_all(pagination)
-            await self.uow.commit()
             return users
 
     async def get_user_by_id(self, user_id: int) -> UserSchema:
         async with self.uow:
             user = await self.uow.users.get_by_id(user_id)
-            await self.uow.commit()
             return user
 
     async def update_user(self, user_id: int, user_data: UserUpdateSchema) -> UserSchema:
@@ -46,14 +43,12 @@ class UsersService:
             if existing_user and existing_user.email != user_data.email:
                 raise CustomExceptions.conflict("Already exists user with this email")
             updated_user = await self.uow.users.update(user_id, user_dict)
-            await self.uow.commit()
             return updated_user
 
 
     async def delete_user(self, user_id: int) -> UserSchema:
         async with self.uow:
             deleted_user = await self.uow.users.delete(user_id)
-            await self.uow.commit()
             return deleted_user
 
     async def authenticate_user(self, email: str, password: str) -> TokenSchema:
@@ -90,14 +85,11 @@ class UsersService:
             if user is None:
                 raise credentials_exception
 
-            await self.uow.commit()
-
             return user
 
     async def get_user_by_email(self, email: str) -> UserSchema:
         async with self.uow:
             user = await self.uow.users.get_by_email(email)
-            await self.uow.commit()
             return user
     
     async def generate_reset_token(self, email: str) -> str:
@@ -117,7 +109,6 @@ class UsersService:
         }
         async with self.uow:
             updated_user = await self.uow.users.update(user.id, password_dict)
-            await self.uow.commit()
             return updated_user
 
     

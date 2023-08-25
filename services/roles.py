@@ -10,13 +10,13 @@ class RolesService:
     async def get_all_roles(self, pagination: Pagination) -> list[RoleSchema]:
         async with self.uow:
             list_of_roles = await self.uow.roles.get_all(pagination)
-            await self.uow.commit()
+            
             return list_of_roles
     
     async def get_role_by_id(self, role_id: int) -> RoleSchema:
         async with self.uow:
             role = await self.uow.roles.get_by_id(role_id)
-            await self.uow.commit()
+            
             return role
     
     async def create_role(self, role_data: CreateRoleSchema) -> RoleSchema:
@@ -28,7 +28,7 @@ class RolesService:
                 raise CustomExceptions.conflict("Role with this name already exists")
             
             created_role = await self.uow.roles.create(role_dict)
-            await self.uow.commit()
+            
             return created_role
 
     async def update_role(self, role_id: int, role_data: UpdateRoleSchema) -> RoleSchema:
@@ -40,13 +40,13 @@ class RolesService:
                 raise CustomExceptions.conflict("Role with this name already exists")
 
             created_role = await self.uow.roles.update(role_id, role_dict)
-            await self.uow.commit()
+            
             return created_role
     
     async def delete_role(self, role_id: int) -> RoleSchema:
         async with self.uow:
             deleted_role = await self.uow.roles.delete(role_id)
-            await self.uow.commit()
+            
             return deleted_role
     
     
@@ -54,5 +54,5 @@ class RolesService:
     async def get_role_permissions(self, role_id: int):
         async with self.uow:
             role = await self.uow.roles.get_by_id(role_id)
-            await self.uow.commit()
+            
             return [perm.permission.to_read_model() for perm in role.role_permissions]

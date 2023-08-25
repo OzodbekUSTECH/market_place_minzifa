@@ -10,14 +10,13 @@ class TravelerManagersService:
     async def get_all_associations_travel_and_manager(self, pagination: Pagination):
         async with self.uow:
             associations = await self.uow.travelers_managers.get_all(pagination)
-            await self.uow.commit()
             return associations
 
 
     async def get_associations_travel_and_manager_by_id(self, association_id: int):
         async with self.uow:
             association = await self.uow.travelers_managers.get_by_id(association_id)
-            await self.uow.commit()
+            
             return association
 
 
@@ -34,19 +33,19 @@ class TravelerManagersService:
         travel_manager_dict = travel_manager_data.model_dump()
         async with self.uow:
             created_association = await self.uow.travelers_managers.create(travel_manager_dict)
-            await self.uow.commit()
+            
             return created_association
     
     async def update_manager_of_traveler_or_traveler_of_manager(self, association_id: int, travel_manager_data: UpdateTravelerAndManagerSchema) -> AssociationTravelAndManagerSchema:
         travel_manager_dict = travel_manager_data.model_dump()
         async with self.uow:
             updated_association = await self.uow.travelers_managers.update(association_id, travel_manager_dict)
-            await self.uow.commit()
+            
             return updated_association
 
 
     async def delete_traveler_and_manager(self, association_id: int) -> AssociationTravelAndManagerSchema:
         async with self.uow:
             deleted_association = await self.uow.travelers_managers.delete(association_id)
-            await self.uow.commit()
+            
             return deleted_association
