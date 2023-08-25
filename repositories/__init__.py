@@ -8,3 +8,4 @@ from repositories.users import UsersRepository
 from repositories.tours import ToursRepository
 from repositories.currencies import CurrenciesRepository
 from repositories.tourprices import TourPricesRepository
+from repositories.tourstatuses import TourStatusesRepository

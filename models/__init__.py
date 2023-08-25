@@ -8,3 +8,4 @@ from models.rolepermissions import RolePermission
 from models.currencies import Currency
 from models.tours import Tour
 from models.tourprices import TourPrice
+from models.tourstatuses import TourStatus

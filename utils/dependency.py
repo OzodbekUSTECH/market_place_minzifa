@@ -8,7 +8,8 @@ from services import (
     TravelerManagersService,
     ToursService,
     CurrenciesService,
-    TourPricesService
+    TourPricesService,
+    TourStatusesService
 )
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -48,6 +49,8 @@ async def get_tour_prices_services(uow: UOWDependency):
 async def get_currencies_services(uow: UOWDependency):
     return CurrenciesService(uow)
 
+async def get_tour_statuses_services(uow: UOWDependency):
+    return TourStatusesService(uow)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/users/login")
 

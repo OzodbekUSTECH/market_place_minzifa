@@ -7,3 +7,4 @@ from services.users import UsersService
 from services.tours import ToursService
 from services.currencies import CurrenciesService
 from services.tourprices import TourPricesService
+from services.tourstatuses import TourStatusesService

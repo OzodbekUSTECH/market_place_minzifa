@@ -3,6 +3,7 @@ from typing import Optional
 
 
 class CreateTourSchema(BaseModel):
+    status_id: int
     name: str
 
 class UpdateTourSchema(CreateTourSchema):
