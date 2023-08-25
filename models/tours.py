@@ -21,6 +21,7 @@ class Tour(Base):
         
         return TourSchema(
             **self.__dict__,
+            prices=self.prices
         )
 
     
