@@ -37,7 +37,7 @@ class ToursService:
             )
             price_dict = create_price_data.model_dump()
             await self.uow.tour_prices.create(price_dict)
-
+        return True
         
     async def get_list_of_tours(self, pagination: Pagination):
         async with self.uow:
