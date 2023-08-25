@@ -13,16 +13,18 @@ class Tour(Base):
     
 
     def to_read_model_with_prices(self):
-        prices = []
+        prices_data = []
         for price in self.prices:
-            prices.append(
+            prices_data.append(
                 TourPriceSchema(
                     **price.__dict__
                 )
             )
         return TourSchema(
             **self.__dict__,
+            prices=prices_data
         )
+    
 class TourPrice(Base):
     __tablename__ = 'tour_prices'
     
