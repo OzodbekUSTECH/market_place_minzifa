@@ -15,7 +15,13 @@ class TourPricesService:
         target_currencies = await self.uow.currencies.get_all()
         response = []        
         for target_currency in target_currencies:
-            converted_price = price_data.price if target_currency == base_currency else price_data.price * target_currency.exchange_rate
+            if target_currency == base_currency:
+                converted_price = price_data.price
+            else:
+                exchange_rate = await CurrencyHandler.get_exchange_rate(target_currency.name)
+                if exchange_rate:
+                    converted_price = price_data.price * exchange_rate
+                converted_price = price_data.price * target_currency.exchange_rate
             
             
             price_dict = {
@@ -56,8 +62,10 @@ class TourPricesService:
                     converted_price = price_data.price
                 else:
                     target_currency = await self.uow.currencies.get_by_id(price.currency_id)
-                    exchange_rate = CurrencyHandler.get_exchange_rate(target_currency.name)
-                    converted_price = price_data.price * exchange_rate
+                    exchange_rate = await CurrencyHandler.get_exchange_rate(target_currency.name)
+                    if exchange_rate:
+                        converted_price = price_data.price * exchange_rate
+                    converted_price = price_data.price * target_currency.exchange_rate
 
                 price_dict = {
                     "price": converted_price,
