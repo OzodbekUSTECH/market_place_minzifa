@@ -6,3 +6,4 @@ from services.travelermanagers import TravelerManagersService
 from services.users import UsersService
 from services.tours import ToursService
 from services.currencies import CurrenciesService
+from services.tourprices import TourPricesService

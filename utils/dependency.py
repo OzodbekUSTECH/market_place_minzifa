@@ -7,7 +7,8 @@ from services import (
     RolePermissionsService, 
     TravelerManagersService,
     ToursService,
-    CurrenciesService
+    CurrenciesService,
+    TourPricesService
 )
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -40,6 +41,9 @@ async def get_travelermanagers_services(uow: UOWDependency):
 
 async def get_tours_services(uow: UOWDependency):
     return ToursService(uow)
+
+async def get_tour_prices_services(uow: UOWDependency):
+    return TourPricesService(uow)
 
 async def get_currencies_services(uow: UOWDependency):
     return CurrenciesService(uow)
