@@ -3,6 +3,8 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from schemas.tours import TourSchema, TourPriceSchema
 
+from sqlalchemy.orm.attributes import InstrumentedAttribute
+
 class Tour(Base):
     __tablename__ = 'tours'
     
@@ -14,16 +16,16 @@ class Tour(Base):
     def to_read_model_with_prices(self):
         prices_data = [
             TourPriceSchema(
-                **price.__dict__
+                **{attr: getattr(price, attr) for attr in price.__class__.__dict__.keys() if isinstance(getattr(price.__class__, attr), InstrumentedAttribute)}
             )
             for price in self.prices
         ]
         
         return TourSchema(
-            id=self.id,
-            name=self.name,
+            **{attr: getattr(self, attr) for attr in self.__class__.__dict__.keys() if isinstance(getattr(self.__class__, attr), InstrumentedAttribute)},
             prices=prices_data
         )
+
 
     
 class TourPrice(Base):
