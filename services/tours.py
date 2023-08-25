@@ -15,6 +15,7 @@ class ToursService:
         }
         async with self.uow:
             created_tour = await self.uow.tours.create(tour_dict)
+            await self.uow.commit()
             await self._create_prices_for_tour(tour_id=created_tour.id, price=tour_data.price)
             await self.uow.commit()
             return created_tour
