@@ -18,7 +18,7 @@ class ToursService:
                 price=tour_data.price
             )
             if prices:
-                tour = self.uow.tours.get_by_id(created_tour.id)
+                tour = await self.uow.tours.get_by_id(created_tour.id)
                 return tour
 
     async def _create_prices_for_tour(self, tour_id: int, price: float):
