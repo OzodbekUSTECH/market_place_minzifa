@@ -1,8 +1,6 @@
-from repositories.maillist import MailListRepository
 from schemas.maillist import CreateMailListSchema, UpdateMailListSchema, MailListSchema
-from fastapi import HTTPException, status
-from repositories.base import Pagination
-from repositories.unitofwork import UnitOfWork
+from repositories import Pagination
+from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 
 

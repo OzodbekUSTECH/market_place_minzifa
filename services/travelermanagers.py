@@ -1,8 +1,6 @@
-from repositories.travelermanagers import TravelerManagersRepository
-from repositories.base import Pagination
-from fastapi import HTTPException, status
+from repositories import Pagination
 from schemas.travelermanagers import ManagersSchema, TravelersSchema, CreateTravelerAndManagerSchema, DeleteTravelerAndManagerSchema, UpdateTravelerAndManagerSchema, AssociationTravelAndManagerSchema
-from repositories.unitofwork import UnitOfWork
+from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 
 class TravelerManagersService:

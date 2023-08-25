@@ -1,15 +1,12 @@
-from repositories.users import UsersRepository
 from schemas.users import UserCreateSchema, UserUpdateSchema, UserSchema, TokenSchema
 from security.password import PasswordHandler
-from repositories.base import Pagination
-from fastapi import HTTPException, status
+from repositories import Pagination
 from datetime import timedelta
-from jose import JWTError, jwt
+from jose import JWTError
 from schemas.users import TokenData
 from datetime import datetime
 from security.jwthandler import JWTHandler
-from repositories.unitofwork import UnitOfWork
-from models import User
+from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 
 class UsersService:

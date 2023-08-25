@@ -1,8 +1,6 @@
-from repositories.permissions import PermissionsRepository
-from repositories.base import Pagination
-from fastapi import HTTPException, status
+from repositories import Pagination
 from schemas.permissions import PermissionSchema, CreatePermissionSchema, UpdatePermissionSchema
-from repositories.unitofwork import UnitOfWork
+from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 from security.permissionhandler import PermissionHandler
 class PermissionsService:

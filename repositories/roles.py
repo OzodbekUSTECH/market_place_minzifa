@@ -1,4 +1,4 @@
-from repositories.base import BaseRepository
+from repositories import BaseRepository
 from schemas.roles import RoleSchema, CreateRoleSchema, UpdateRoleSchema
 from sqlalchemy import func
 

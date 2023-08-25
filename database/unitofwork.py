@@ -1,13 +1,29 @@
 from typing import Type
-from models import User, MailList, Role, Permission, RolePermission, TravelersAndManagersAssociation
+from models import (
+    User, 
+    MailList, 
+    Role, 
+    Permission, 
+    RolePermission, 
+    TravelersAndManagersAssociation,
+    Tour,
+    TourPrice,
+    Currency
+)
 
 from database.db import session_maker
-from repositories.users import UsersRepository
-from repositories.maillist import MailListRepository
-from repositories.roles import RolesRepository
-from repositories.permissions import PermissionsRepository
-from repositories.rolepermissions import RolePermissionsRepository
-from repositories.travelermanagers import TravelerManagersRepository
+from repositories import (
+    UsersRepository, 
+    MailListRepository, 
+    RolesRepository, 
+    PermissionsRepository,
+    RolePermissionsRepository,
+    TravelerManagersRepository,
+    CurrenciesRepository,
+    ToursRepository,
+    TourPricesRepository
+)
+
 
 
 
@@ -21,6 +37,9 @@ class UnitOfWork:
     permissions: Type[PermissionsRepository]
     role_permissions: Type[RolePermissionsRepository]
     travelers_managers: Type[TravelerManagersRepository]
+    tours: Type[ToursRepository]
+    tour_prices: Type[TourPricesRepository]
+    currencies: Type[CurrenciesRepository]
 
     def __init__(self):
         self.session_factory = session_maker
@@ -33,6 +52,9 @@ class UnitOfWork:
         self.permissions = PermissionsRepository(self.session, model=Permission)
         self.role_permissions = RolePermissionsRepository(self.session, model=RolePermission)
         self.travelers_managers = TravelerManagersRepository(self.session, model=TravelersAndManagersAssociation)
+        self.tours = ToursRepository(self.session, model=Tour)
+        self.tour_prices = TourPricesRepository(self.session, model=TourPrice)
+        self.currencies = CurrenciesRepository(self.session, model=Currency)
 
     async def __aexit__(self, *args):
         await self.rollback()

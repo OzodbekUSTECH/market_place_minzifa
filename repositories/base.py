@@ -1,4 +1,3 @@
-from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from fastapi import Query

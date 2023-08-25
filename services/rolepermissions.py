@@ -1,8 +1,6 @@
 from repositories.rolepermissions import RolePermissionsRepository
-from repositories.base import Pagination
-from fastapi import HTTPException, status
 from schemas.rolepermissions import RolePermissionsSchema, CreateRolePermissionsSchema, DeleteRolePermissionsSchema
-from repositories.unitofwork import UnitOfWork
+from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 
 class RolePermissionsService:

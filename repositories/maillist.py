@@ -1,4 +1,4 @@
-from repositories.base import BaseRepository
+from repositories import BaseRepository
 from schemas.maillist import MailListSchema
 
 class MailListRepository(BaseRepository):

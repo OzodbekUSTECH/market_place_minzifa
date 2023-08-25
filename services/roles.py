@@ -1,8 +1,6 @@
-from repositories.roles import RolesRepository
-from repositories.base import Pagination
-from fastapi import HTTPException, status
+from repositories import Pagination
 from schemas.roles import RoleSchema, CreateRoleSchema, UpdateRoleSchema
-from repositories.unitofwork import UnitOfWork
+from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 
 class RolesService:
