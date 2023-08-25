@@ -14,10 +14,7 @@ class Tour(Base):
     def to_read_model_with_prices(self):
         prices_data = [
             TourPriceSchema(
-                id=price.id,
-                tour_id=price.tour_id,
-                currency_id=price.currency_id,
-                price=price.price
+                **price.__dict__
             )
             for price in self.prices
         ]
