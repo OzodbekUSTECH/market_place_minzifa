@@ -33,7 +33,7 @@ class ToursService:
 
             await self.uow.commit()
             
-            return TourSchema(**created_tour.__dict__)
+            return created_tour
 
     async def _create_prices_for_tour(self, tour_id: int, price: float):
         base_currency = await self.uow.currencies.get_by_name('USD')
