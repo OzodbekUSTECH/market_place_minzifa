@@ -26,7 +26,6 @@ class TourPricesService:
         return response
     
     async def create_tour_prices(self, price_data: CreateTourPriceSchema) -> list[TourPriceSchema]:
-        price_data = price_data.model_dump()
         async with self.uow:
             list_of_prices_for_tour = await self._create_prices_for_tour(price_data)
             return list_of_prices_for_tour

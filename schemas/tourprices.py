@@ -3,7 +3,6 @@ from typing import Optional
 
 class CreateTourPriceSchema(BaseModel):
     tour_id: int
-    currency_id: int
     price: float
 
 class UpdateTourPriceSchema(CreateTourPriceSchema):
@@ -11,3 +10,4 @@ class UpdateTourPriceSchema(CreateTourPriceSchema):
 
 class TourPriceSchema(CreateTourPriceSchema):
     id: int
+    currency_id: int
