@@ -65,7 +65,8 @@ class TourPricesService:
                     exchange_rate = CurrencyHandler.get_exchange_rate(target_currency.name)
                     if exchange_rate:
                         converted_price = price_data.price * exchange_rate
-                    converted_price = price_data.price * target_currency.exchange_rate
+                    else:
+                        converted_price = price_data.price * target_currency.exchange_rate
 
                 price_dict = {
                     "price": converted_price,
