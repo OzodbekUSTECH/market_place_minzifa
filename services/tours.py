@@ -25,7 +25,7 @@ class ToursService:
         target_currencies = await self.uow.currencies.get_all()
 
         for target_currency in target_currencies:
-            if target_currency == base_currency:
+            if target_currency.id == base_currency.id:
                 converted_price = price
             else:
                 converted_price = price * target_currency.exchange_rate
