@@ -12,15 +12,15 @@ class Tour(Base):
     prices = relationship("TourPrice", back_populates="tour", lazy="subquery")
 
     def to_read_model_with_prices(self):
-        prices_data = [
-            TourPriceSchema(
-                **price.__dict__
-            )
-            for price in self.prices
-        ]
+        # prices_data = [
+        #     TourPriceSchema(
+        #         **price.__dict__
+        #     )
+        #     for price in self.prices
+        # ]
         
         return TourSchema(
-            **self[0].__dict__,
+            **self.__dict__,
         )
 
     
