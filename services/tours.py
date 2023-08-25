@@ -34,10 +34,10 @@ class ToursService:
                 res_data = TourPriceSchema(
                     id = created_price.id,
                     tour_id=created_tour.id,
-                    currency_id=target_currencies.id,
+                    currency_id=target_currency.id,
                     price=converted_price
                 )
-                res.append(created_price)
+                res.append(res_data)
             await self.uow.commit()
             response = TourSchema(
                 id=created_tour.id,
