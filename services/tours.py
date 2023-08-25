@@ -40,9 +40,10 @@ class ToursService:
                 currency_id=target_currency.id,
                 price=converted_price
             )
-            created_price = await self.uow.tour_prices.create(create_price_data.model_dump())  # Создание цены
+            created_price = await self.uow.tour_prices.create(create_price_data.model_dump())
+            await self.uow.commit()
+              # Создание цены
             prices_to_create.append(TourPriceSchema(**created_price.__dict__))
-        await self.uow.commit()
         
         return prices_to_create
             
