@@ -11,23 +11,26 @@ class ToursService:
 
     # Ваш метод для создания тура с ценами
     async def create_tour(self, tour_data: CreateTourSchema):
+        tour_dict = {
+            "name": tour_data.name
+        }
         async with self.uow:
-            created_tour = await self.uow.tours.create({"name": tour_data.name})
+            created_tour = await self.uow.tours.create(tour_dict)
             await self._create_prices_for_tour(
-                tour_id=created_tour.id,
+                tour_id=created_tour,
                 price=tour_data.price
             )
             tour = await self.uow.tours.get_by_id(created_tour.id)
             return tour
 
-    async def _create_prices_for_tour(self, tour_id: int, price: float):
+    async def _create_prices_for_tour(self, tour: Tour, price: float):
         base_currency = await self.uow.currencies.get_by_name('USD')
         target_currencies = await self.uow.currencies.get_all()        
         for target_currency in target_currencies:
             converted_price = price if target_currency == base_currency else price * target_currency.exchange_rate
             
             create_price_data = CreateTourPriceSchema(
-                tour_id=tour_id,
+                tour_id=tour.id,
                 currency_id=target_currency.id,
                 price=converted_price
             )
