@@ -23,11 +23,11 @@ class BaseRepository:
     async def create(self, data: dict):
         instance = self.model(**data)  # Создаем экземпляр модели с переданными данными
         self.session.add(instance)
+        self.session.commit()
         return instance
     
     async def get_by_id(self, id: int):
         instance = self.session.query(self.model).filter(self.model.id == id).first()
-        
         return instance
     
     async def get_by_email(self, email: str):
@@ -41,6 +41,7 @@ class BaseRepository:
             instances = query.offset(pagination.offset).limit(pagination.limit).all()
         else:
             instances = query.all()
+        self.session.commit()
         
         return instances
 
