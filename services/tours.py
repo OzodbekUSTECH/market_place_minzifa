@@ -18,7 +18,8 @@ class ToursService:
                 price=tour_data.price
             )
             if prices:
-                return created_tour
+                tour = self.uow.tours.get_by_id(created_tour.id)
+                return tour
 
     async def _create_prices_for_tour(self, tour_id: int, price: float):
         base_currency = await self.uow.currencies.get_by_name('USD')
