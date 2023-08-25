@@ -62,7 +62,7 @@ class TourPricesService:
                     converted_price = price_data.price
                 else:
                     target_currency = await self.uow.currencies.get_by_id(price.currency_id)
-                    exchange_rate = CurrencyHandler.get_exchange_rate(target_currency.name)
+                    exchange_rate = await CurrencyHandler.get_exchange_rate(target_currency.name)
                     if exchange_rate:
                         converted_price = price_data.price * exchange_rate
                     else:
