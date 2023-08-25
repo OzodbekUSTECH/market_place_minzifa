@@ -18,6 +18,7 @@ class ToursService:
             
             base_currency = await self.uow.currencies.get_by_name('USD')
             target_currencies = await self.uow.currencies.get_all()
+            res = []
             for target_currency in target_currencies:
                 if target_currency == base_currency:
                     converted_price = tour_data.price
@@ -29,11 +30,21 @@ class ToursService:
                     currency_id=target_currency.id,
                     price=converted_price
                 )
-                await self.uow.tour_prices.create(create_price_data.model_dump())  # Создание цен для тура
-
+                created_price = await self.uow.tour_prices.create(create_price_data.model_dump())  # Создание цен для тура
+                res_data = TourPriceSchema(
+                    id = created_price.id,
+                    tour_id=created_tour.id,
+                    currency_id=target_currencies.id,
+                    price=converted_price
+                )
+                res.append(created_price)
             await self.uow.commit()
-            
-            return created_tour
+            response = TourSchema(
+                id=created_tour.id,
+                name=created_tour.name,
+                prices=res
+            )
+            return response
 
     async def _create_prices_for_tour(self, tour_id: int, price: float):
         base_currency = await self.uow.currencies.get_by_name('USD')
