@@ -6,10 +6,10 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 DATABASE_URL = "postgresql://postgres:77girado@db/postgres"
 
 engine = create_engine(DATABASE_URL, echo=True)
-session_maker = sessionmaker(expire_on_commit=False, bind=engine)
+session_maker = sessionmaker(bind=engine, autoflush=False)
 
 
-Base = declarative_base()
+Base = declarative_base()   
 
 
 def get_db():
