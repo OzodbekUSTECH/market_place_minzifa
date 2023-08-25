@@ -13,7 +13,6 @@ class ToursService:
     async def create_tour(self, tour_data: CreateTourSchema):
         async with self.uow:
             created_tour = await self.uow.tours.create({"name": tour_data.name})
-            await self.uow.commit()
             prices = await self._create_prices_for_tour(
                 tour_id=created_tour.id,
                 price=tour_data.price
@@ -40,8 +39,6 @@ class ToursService:
                 price=converted_price
             )
             created_price = await self.uow.tour_prices.create(create_price_data.model_dump())
-            await self.uow.commit()
-              # Создание цены
             prices_to_create.append(TourPriceSchema(**created_price.__dict__))
         
         return prices_to_create
