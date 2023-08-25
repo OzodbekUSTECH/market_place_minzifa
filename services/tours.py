@@ -34,11 +34,11 @@ class ToursService:
                 res_data = TourPriceSchema(
                     **created_price.__dict__
                 )
-                res.append(created_price)
+                res.append(res_data)
             await self.uow.commit()
             response = TourSchema(
                 **created_tour.__dict__,
-                prices=res
+                prices=created_tour.prices
             )
             return response
 
