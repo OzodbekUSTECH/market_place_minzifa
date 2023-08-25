@@ -16,11 +16,14 @@ class ToursService:
         async with self.uow:
             created_tour = await self.uow.tours.create(tour_dict)
             prices = await self._create_prices_for_tour(tour_id=created_tour.id, price=tour_data.price)
-            
+
             await self.uow.commit()
+            
+            tour_price_schemas = [TourPriceSchema(id=p.id, tour_id=p.tour_id, currency_id=p.currency_id, price=p.price) for p in prices]
             response = TourSchema(
+                id=created_tour.id,
                 name=tour_data.name,
-                prices=prices
+                prices=tour_price_schemas
             )
             return response
 
@@ -41,7 +44,7 @@ class ToursService:
             )
             price_dict = create_price_data.model_dump()
             await self.uow.tour_prices.create(price_dict)
-            res.append(create_price_data)   
+            res.append(price_dict)   
         return res
 
     async def get_list_of_tours(self, pagination: Pagination):
