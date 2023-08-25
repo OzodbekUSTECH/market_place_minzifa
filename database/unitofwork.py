@@ -57,7 +57,7 @@ class UnitOfWork:
         self.currencies = CurrenciesRepository(self.session, model=Currency)
 
     async def __aexit__(self, *args):
-        await self.rollback()
+        # await self.rollback()
         self.session.close()
 
     async def commit(self):
