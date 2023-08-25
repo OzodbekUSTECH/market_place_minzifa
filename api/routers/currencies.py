@@ -8,8 +8,8 @@ from models import User
 from security.permissionhandler import PermissionHandler, Permissions
 
 router = APIRouter(
-    prefix="/tours",
-    tags=["Tours"],
+    prefix="/currencies",
+    tags=["Currencies"],
 )
 
 
