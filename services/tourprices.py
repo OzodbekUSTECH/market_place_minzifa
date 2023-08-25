@@ -11,17 +11,18 @@ class TourPricesService:
         self.uow = uow
 
     async def _create_prices_for_tour(self, price_data: CreateTourPriceSchema):
-        base_currency = await self.uow.currencies.get_by_name('USD')
+        base_currency = await self.uow.currencies.get_by_id(price_data.currency_id)
         target_currencies = await self.uow.currencies.get_all()
         response = []        
         for target_currency in target_currencies:
             if target_currency == base_currency:
                 converted_price = price_data.price
             else:
-                exchange_rate = CurrencyHandler.get_exchange_rate(target_currency.name)
+                exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
                 if exchange_rate:
                     converted_price = price_data.price * exchange_rate
-                converted_price = price_data.price * target_currency.exchange_rate
+                else:
+                    converted_price = price_data.price * target_currency.exchange_rate
             
             
             price_dict = {
@@ -54,7 +55,7 @@ class TourPricesService:
     async def update_tour_prices(self, tour_id: int, price_data: UpdateTourPriceSchema) -> list[TourPriceSchema]:
         async with self.uow:
             prices = await self.uow.tour_prices.get_by_tour_id(tour_id)
-            base_currency = await self.uow.currencies.get_by_name('USD')
+            base_currency = await self.uow.currencies.get_by_id(price_data.currency_id)
 
             response = []
             for price in prices:
@@ -62,7 +63,7 @@ class TourPricesService:
                     converted_price = price_data.price
                 else:
                     target_currency = await self.uow.currencies.get_by_id(price.currency_id)
-                    exchange_rate = await CurrencyHandler.get_exchange_rate(target_currency.name)
+                    exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
                     if exchange_rate:
                         converted_price = price_data.price * exchange_rate
                     else:
