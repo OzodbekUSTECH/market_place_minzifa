@@ -15,7 +15,7 @@ class ToursService:
         }
         async with self.uow:
             created_tour = await self.uow.tours.create(tour_dict)
-
+            
             base_currency = await self.uow.currencies.get_by_name('USD')
             target_currencies = await self.uow.currencies.get_all()
             for target_currency in target_currencies:
