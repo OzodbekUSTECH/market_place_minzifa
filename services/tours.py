@@ -1,6 +1,7 @@
 from schemas.tours import CreateTourPriceSchema, UpdateTourPriceSchema, CreateTourSchema, UpdateTourSchema, TourSchema, TourPriceSchema
 from repositories import Pagination
 from datetime import datetime
+from models import Tour
 from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 
@@ -9,28 +10,32 @@ class ToursService:
         self.uow = uow
 
     async def create_tour(self, tour_data: CreateTourSchema):
-        tour_dict = tour_data.model_dump()
+        tour_dict = {
+            "name": tour_data.name
+        }
         async with self.uow:
             created_tour = await self.uow.tours.create(tour_dict)
-            # await self._create_prices_for_tour(created_tour, tour_data.prices)
+            await self._create_prices_for_tour(created_tour.id, tour_data.price)
             await self.uow.commit()
             return created_tour
 
-    async def _create_prices_for_tour(self, tour, prices_data):
+    async def _create_prices_for_tour(self, tour_id: int, price: float):
         base_currency = await self.uow.currencies.get_by_name('USD')
+        target_currencies = await self.uow.currencies.get_all()
 
-        for price_data in prices_data:
-            base_price = price_data.price
+        for target_currency in target_currencies:
+            if target_currency == base_currency:
+                converted_price = price
+            else:
+                converted_price = price * (target_currency.exchange_rate / base_currency.exchange_rate)
 
-            for target_currency in self.uow.currencies.get_all():
-                converted_price = base_price * (target_currency.exchange_rate / base_currency.exchange_rate)
+            create_price_data = CreateTourPriceSchema(
+                tour_id=tour_id,
+                currency_id=target_currency.id,
+                price=converted_price
+            )
+            await self.uow.tour_prices.create(create_price_data)
 
-                price_to_create = CreateTourPriceSchema(
-                    tour_id=tour.id,
-                    currency_id=target_currency.id,
-                    price=converted_price
-                )
-                await self.uow.tour_prices.create(price_to_create)
         
     async def get_list_of_tours(self, pagination: Pagination):
         async with self.uow:

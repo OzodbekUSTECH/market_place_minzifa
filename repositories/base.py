@@ -34,8 +34,14 @@ class BaseRepository:
         instance = self.session.query(self.model).filter(self.model.email == email).first()
         return instance
     
-    async def get_all(self, pagination: Pagination):
-        instances = self.session.query(self.model).order_by(self.model.id).offset(pagination.offset).limit(pagination.limit).all()
+    async def get_all(self, pagination: Pagination = None):
+        query = self.session.query(self.model).order_by(self.model.id)
+    
+        if pagination:
+            instances = query.offset(pagination.offset).limit(pagination.limit).all()
+        else:
+            instances = query.all()
+        
         return instances
 
 
