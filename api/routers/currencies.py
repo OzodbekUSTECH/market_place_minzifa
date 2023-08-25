@@ -18,8 +18,7 @@ async def create_currency(
     currency_data: CreateCurrencySchema,
     currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
 ):
-    created_currency = await currencies_service.create_currency(currency_data)
-    return created_currency
+    return await currencies_service.create_currency(currency_data)
 
 @router.get('')
 async def get_list_of_tours(

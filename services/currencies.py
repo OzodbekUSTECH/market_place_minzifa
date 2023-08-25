@@ -11,12 +11,12 @@ class CurrenciesService:
     async def create_currency(self, currency_data: CreateCurrencySchema) -> CurrencySchema:
         currency_dict = currency_data.model_dump()
         async with self.uow:
-            created_currency = self.uow.currencies.create(currency_dict)
+            created_currency = await self.uow.currencies.create(currency_dict)
             await self.uow.commit()
             return created_currency
         
     async def get_list_of_currencies(self, pagination: Pagination) -> list[CurrencySchema]:
         async with self.uow:
-            list_of_currencies = self.uow.currencies.get_all(pagination)
+            list_of_currencies = await self.uow.currencies.get_all(pagination)
             await self.uow.commit()
             return list_of_currencies
