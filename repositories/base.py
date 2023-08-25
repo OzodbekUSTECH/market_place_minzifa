@@ -28,10 +28,12 @@ class BaseRepository:
     
     async def get_by_id(self, id: int):
         instance = self.session.query(self.model).filter(self.model.id == id).first()
+        self.session.commit()
         return instance
     
     async def get_by_email(self, email: str):
         instance = self.session.query(self.model).filter(self.model.email == email).first()
+        self.session.commit()
         return instance
     
     async def get_all(self, pagination: Pagination = None):
@@ -52,11 +54,12 @@ class BaseRepository:
 
         for field, value in data.items():
             setattr(instance, field, value)
-
+        self.session.commit()
         return instance
     
     async def delete(self, id: int):
         instance = self.session.query(self.model).filter(self.model.id == id).first()
         self.session.delete(instance)
+        self.session.commit()
         return instance
      
