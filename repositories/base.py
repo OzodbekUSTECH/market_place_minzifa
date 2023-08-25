@@ -23,6 +23,7 @@ class BaseRepository:
     async def create(self, data: dict):
         instance = self.model(**data)  # Создаем экземпляр модели с переданными данными
         self.session.add(instance) 
+        self.session.flush()     # Добавляем экземпляр в сессию
         return instance
     
     async def get_by_id(self, id: int):
