@@ -43,9 +43,10 @@ async def get_list_of_activities_of_tour(
 @router.put('/{tour_activity_id}', response_model=TourActivitySchema)
 async def update_tour_activity(
     tour_activity_id: int,
+    tour_activity_data: UpdateTourActivitySchema,
     tour_activities_service: Annotated[TourActivitiesService, Depends(get_tour_activities_services)]
 ) -> TourActivitySchema:
-    return await tour_activities_service.update_tour_activity(tour_activity_id)
+    return await tour_activities_service.update_tour_activity(tour_activity_id, tour_activity_data)
 
 @router.delete('/{tour_activity_id}', response_model=TourActivitySchema)
 async def delete_tour_activity(

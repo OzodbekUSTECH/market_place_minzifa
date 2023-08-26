@@ -9,46 +9,46 @@ from security.permissionhandler import PermissionHandler, Permissions
 
 router = APIRouter(
     prefix="/status",
-    tags=["Tour Statuses"],
+    tags=["Statuses"],
 )
 
 @router.post('', response_model=TourStatusSchema)
-async def create_tour_status(
+async def create_status(
     tour_status_data: CreateTourStatusSchema,
     tour_status_service: Annotated[TourStatusesService, Depends(get_tour_statuses_services)]
 ) -> TourStatusSchema:
-    return await tour_status_service.create_tour_status(tour_status_data)
+    return await tour_status_service.create_status(tour_status_data)
     
 
 
 @router.get('', response_model=list[TourStatusSchema])
-async def create_tour_status(
+async def get_list_of_statuses(
     pagination: Annotated[Pagination, Depends()],
     tour_status_service: Annotated[TourStatusesService, Depends(get_tour_statuses_services)]
 ) -> list[TourStatusSchema]:
-    return await tour_status_service.get_list_of_tour_statuses(pagination)
+    return await tour_status_service.get_list_of_statuses(pagination)
     
 
 @router.get('/{tour_status_id}', response_model=TourStatusSchema)
-async def create_tour_status(
+async def get_status_by_id(
     tour_status_id: int,
     tour_status_service: Annotated[TourStatusesService, Depends(get_tour_statuses_services)]
 ) -> TourStatusSchema:
-    return await tour_status_service.get_tour_status_by_id(tour_status_id)
+    return await tour_status_service.get_status_by_id(tour_status_id)
     
 
 @router.put('/{tour_status_id}', response_model=TourStatusSchema)
-async def create_tour_status(
+async def update_status(
     tour_status_id: int,
     tour_status_data: UpdateTourStatusSchema,
     tour_status_service: Annotated[TourStatusesService, Depends(get_tour_statuses_services)]
 ) -> TourStatusSchema:
-    return await tour_status_service.update_tour_status(tour_status_id, tour_status_data)
+    return await tour_status_service.update_status(tour_status_id, tour_status_data)
     
 
 @router.delete('/{tour_status_id}', response_model=TourStatusSchema)
-async def create_tour_status(
+async def delete_status(
     tour_status_id: int,
     tour_status_service: Annotated[TourStatusesService, Depends(get_tour_statuses_services)]
 ) -> TourStatusSchema:
-    return await tour_status_service.delete_tour_status(tour_status_id)
+    return await tour_status_service.delete_status(tour_status_id)
