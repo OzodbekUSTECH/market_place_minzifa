@@ -22,7 +22,7 @@ class ToursService:
                 else:
                     exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
                     if exchange_rate:
-                        converted_price = tour_data.price.price * exchange_rate
+                        converted_price = tour_data.price * exchange_rate
                     else:
                         converted_price = tour_data.price * target_currency.exchange_rate
                     
