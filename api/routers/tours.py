@@ -27,19 +27,14 @@ async def get_list_of_tours(
 ) -> list[TourSchema]:
     return await tours_service.get_list_of_tours(pagination)
 
-@router.get('/published', response_model=list[TourSchema])
+@router.get('/status/{status_id}', response_model=list[TourSchema])
 async def  get_list_of_published_tours(
+    status_id: int,
     pagination: Annotated[Pagination, Depends()],
     tours_service: Annotated[ToursService, Depends(get_tours_services)]
 ) -> list[TourSchema]:
-    return await tours_service.get_list_of_published_tours(pagination)
+    return await tours_service.get_list_of_tours_by_status(status_id, pagination)
 
-@router.get('/archived', response_model=list[TourSchema])
-async def  get_list_of_archived_tours(
-    pagination: Annotated[Pagination, Depends()],
-    tours_service: Annotated[ToursService, Depends(get_tours_services)]
-) -> list[TourSchema]:
-    return await tours_service.get_list_of_archived_tours(pagination)
 
 @router.get('/{tour_id}', response_model=TourSchema)
 async def get_tour_by_id(

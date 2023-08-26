@@ -3,9 +3,13 @@ from typing import Optional
 from enum import Enum
 
 class AllowedStatuses(Enum):
-    PUBLISHED = "ОПУБЛИКОВАН"
-    ARCHIVED = "АРХИВ"
-
+    PUBLISHED = "опубликован"
+    ARCHIVED = "черновик"
+    DELETED = "удален"
+    OUTDATED = "прошли даты"
+    CHECKING = "на модерации"
+    UNPUBLISHED = "Снято с публикации"
+    
 allowed_statuses_list = [status.value.lower().replace(" ", "") for status in AllowedStatuses]
 
 class CreateTourStatusSchema(BaseModel):

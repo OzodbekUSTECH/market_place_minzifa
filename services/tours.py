@@ -46,17 +46,9 @@ class ToursService:
         async with self.uow:
             return await self.uow.tours.get_all(pagination)
         
-    async def get_list_of_published_tours(self, pagination: Pagination) -> list[TourSchema]:
+    async def get_list_of_tours_by_status(self, status_id: int, pagination: Pagination) -> list[TourSchema]:
         async with self.uow:
-            published_status_id = await self.uow.tour_statuses.get_id_of_published_status()
-            published_tours = await self.uow.tours.get_list_of_tours_by_status_id(published_status_id, pagination)
-            return published_tours
-    
-    async def get_list_of_archived_tours(self, pagination: Pagination) -> list[TourSchema]:
-        async with self.uow:
-            archived_status_id = await self.uow.tour_statuses.get_id_of_archieved_status()
-            archived_tours = await self.uow.tours.get_list_of_tours_by_status_id(archived_status_id, pagination)
-            return archived_tours
+            return await self.uow.tours.get_list_of_tours_by_status_id(status_id, pagination)
         
     async def get_tour_by_id(self, tour_id: int) -> TourSchema:
         async with self.uow:
