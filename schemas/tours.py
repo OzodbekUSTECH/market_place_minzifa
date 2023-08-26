@@ -5,7 +5,7 @@ from schemas.tourprices import TourPriceSchema, CreateTourPriceSchema
 class CreateTourSchema(BaseModel):
     status_id: int
     name: str
-    currency_id: str
+    currency_id: int
     price: int
 
     @validator('price', pre=True, always=True)
