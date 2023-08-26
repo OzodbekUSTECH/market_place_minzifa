@@ -1,30 +1,39 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 from typing import Optional
-from schemas.tourprices import TourPriceSchema, CreateTourPriceSchema
-from schemas.tourstatuses import TourStatusSchema
-from schemas.tour_activities import TourActivitySchema
+from schemas.tourprices import TourPriceSchema
 
 class CreateTourSchema(BaseModel):
-    name: str
-    currency_id: int
     status_id: int
-    price: int
-    activities_ids: list[int]
-
-    @validator('price', pre=True, always=True)
-    def round_price(cls, value):
-        return int(round(value))
-class CreatedTourSchemaResponse(CreateTourSchema):
-    id: int
+    name: str
 
 class UpdateTourSchema(CreateTourSchema):
     pass
     
 
-class TourSchema(BaseModel):
+class TourSchema(CreateTourSchema):
     id: int
-    name: str
-    status: TourStatusSchema
     prices: list[TourPriceSchema]
-    activities: list[TourActivitySchema]
-    
+    class ConfigDict:
+        from_attributes = True
+
+
+# from schemas.tourprices import TourPriceSchema, CreateTourPriceSchema
+# from schemas.tourstatuses import TourStatusSchema
+# from schemas.tour_activities import TourActivitySchema
+# class TourSchemaDemoTest(BaseModel):
+#     id: int
+#     name: str
+#     status: TourStatusSchema
+#     prices: list[TourPriceSchema]
+#     activities: list[TourActivitySchema]
+
+# class CreateTourSchemaDemoTest(BaseModel):
+#     name: str
+#     currency_id: int
+#     status_id: int
+#     price: int
+#     activities_ids: list[int]
+
+#     @validator('price', pre=True, always=True)
+#     def round_price(cls, value):
+#         return int(round(value))
