@@ -7,7 +7,7 @@ from api.routers.travelermanagers import router as travelermanagers_router
 from api.routers.currencies import router as currency_router
 from api.routers.tours import router as tour_router
 from api.routers.tourprices import router as tour_prices_router
-from api.routers.tourstatuses import router as tour_statuses_router
+from api.routers.tourstatuses import router as statuses_router
 from api.routers.activities import router as activities_router
 from api.routers.tour_activities import router as tour_activities_router
 all_routers = [
@@ -20,7 +20,7 @@ all_routers = [
     currency_router,
     tour_router,
     tour_prices_router,
-    tour_statuses_router,
+    tour_activities_router,
+    statuses_router,
     activities_router,
-    tour_activities_router
 ]
