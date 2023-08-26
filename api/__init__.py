@@ -10,6 +10,7 @@ from api.routers.tourprices import router as tour_prices_router
 from api.routers.tourstatuses import router as statuses_router
 from api.routers.activities import router as activities_router
 from api.routers.tour_activities import router as tour_activities_router
+from api.routers.favorite_tours import router as tour_favorites_router
 all_routers = [
     auth_router,
     maillist_router,
@@ -21,6 +22,7 @@ all_routers = [
     tour_router,
     tour_prices_router,
     tour_activities_router,
+    tour_favorites_router,
     statuses_router,
     activities_router,
 ]
