@@ -22,12 +22,12 @@ class PermissionHandler:
             raise CustomExceptions.forbidden("Access denied. Insufficient privileges.")
         return True
     
-    @staticmethod
-    async def is_allowed_permission_endpoint(
-        endpoint: str
-    ) -> bool:
-        if endpoint.lower() not in permissions_list:
-            raise CustomExceptions.not_found("Not allowed endpoint")
-        return True
+    # @staticmethod
+    # async def is_allowed_permission_endpoint(
+    #     endpoint: str
+    # ) -> bool:
+    #     if endpoint.lower() not in permissions_list:
+    #         raise CustomExceptions.not_found("Not allowed endpoint")
+    #     return True
 
     

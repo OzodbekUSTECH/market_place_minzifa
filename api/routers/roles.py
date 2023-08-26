@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from services.roles import RolesService
+from services import RolesService
 from utils.dependency import get_rolesservices, get_current_user
 from repositories.base import Pagination
 from schemas.roles import RoleSchema, CreateRoleSchema, UpdateRoleSchema, RolePermissionsSchema

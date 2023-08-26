@@ -9,3 +9,5 @@ from repositories.tours import ToursRepository
 from repositories.currencies import CurrenciesRepository
 from repositories.tourprices import TourPricesRepository
 from repositories.tourstatuses import TourStatusesRepository
+from repositories.activities import ActivitiesRepository
+from repositories.tour_activities import TourActivitiesRepository

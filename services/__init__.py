@@ -8,3 +8,5 @@ from services.tours import ToursService
 from services.currencies import CurrenciesService
 from services.tourprices import TourPricesService
 from services.tourstatuses import TourStatusesService
+from services.activities import ActivitiesService
+from services.tour_activities import TourActivitiesService

@@ -9,7 +9,9 @@ from models import (
     Tour,
     TourPrice,
     Currency,
-    TourStatus
+    TourStatus,
+    Activity,
+    TourActivity
 )
 
 from database.db import session_maker
@@ -23,7 +25,9 @@ from repositories import (
     CurrenciesRepository,
     ToursRepository,
     TourPricesRepository,
-    TourStatusesRepository
+    TourStatusesRepository,
+    TourActivitiesRepository,
+    ActivitiesRepository
 )
 
 
@@ -43,6 +47,8 @@ class UnitOfWork:
     tour_prices: Type[TourPricesRepository]
     currencies: Type[CurrenciesRepository]
     tour_statuses: Type[TourStatusesRepository]
+    activities: Type[ActivitiesRepository]
+    TourActivitiesRepository: Type[TourActivitiesRepository]
 
     def __init__(self):
         self.session_factory = session_maker
@@ -59,6 +65,8 @@ class UnitOfWork:
         self.tour_prices = TourPricesRepository(self.session, model=TourPrice)
         self.currencies = CurrenciesRepository(self.session, model=Currency)
         self.tour_statuses = TourStatusesRepository(self.session, model=TourStatus)
+        self.activities = ActivitiesRepository(self.session, model=Activity)
+        self.tour_activities = TourActivitiesRepository(self.session, model=TourActivity)
 
     async def __aexit__(self, *args):
         await self.rollback()

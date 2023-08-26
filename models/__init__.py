@@ -9,3 +9,5 @@ from models.currencies import Currency
 from models.tours import Tour
 from models.tourprices import TourPrice
 from models.tourstatuses import TourStatus
+from models.activities import Activity
+from models.tour_activities import TourActivity
