@@ -12,6 +12,6 @@ class UpdateTourSchema(CreateTourSchema):
 
 class TourSchema(CreateTourSchema):
     id: int
-    prices: list[TourPriceSchema]
+    prices: list[TourPriceSchema] = []
     class ConfigDict:
         from_attributes = True
