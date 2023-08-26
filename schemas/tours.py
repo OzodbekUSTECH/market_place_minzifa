@@ -2,6 +2,7 @@ from pydantic import BaseModel, validator
 from typing import Optional
 from schemas.tourprices import TourPriceSchema, CreateTourPriceSchema
 from schemas.tourstatuses import TourStatusSchema
+from schemas.tour_activities import TourActivitySchema
 
 class CreateTourSchema(BaseModel):
     name: str
@@ -25,4 +26,5 @@ class TourSchema(BaseModel):
     name: str
     status: TourStatusSchema
     prices: list[TourPriceSchema]
+    activities: list[TourActivitySchema]
     
