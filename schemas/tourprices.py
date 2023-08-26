@@ -1,6 +1,7 @@
 from pydantic import BaseModel, validator
 from typing import Optional
 
+
 class CreateTourPriceSchema(BaseModel):
     tour_id: int
     currency_id: int

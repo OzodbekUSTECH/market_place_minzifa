@@ -13,12 +13,12 @@ router = APIRouter(
 )
 
 
-@router.post('', response_model=CreatedTourSchemaResponse)
+@router.post('', response_model=TourSchema)
 async def create_tour(
     tour_data: CreateTourSchema,
     tours_service: Annotated[ToursService, Depends(get_tours_services)]
-) -> CreatedTourSchemaResponse:
-    return await tours_service.create_tour(tour_data)
+) -> TourSchema:
+    return await tours_service.create_full_tour(tour_data)
 
 @router.get('')
 async def get_list_of_tours(

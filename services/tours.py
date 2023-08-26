@@ -4,13 +4,41 @@ from datetime import datetime
 from models import Tour
 from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
+from utils.currency import CurrencyHandler
 
 class ToursService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
+    async def create_full_tour(self, tour_data: CreateTourSchema) -> TourSchema: 
+        tour_dict = tour_data.model_dump(exclude=["price", "currency_id"])
+        async with self.uow:
+            created_tour = await self.uow.tours.create(tour_dict)
+            base_currency = await self.uow.currencies.get_by_id(tour_data.currency_id)
+            target_currencies = await self.uow.currencies.get_all()
+            for target_currency in target_currencies:
+                if target_currency == base_currency:
+                    converted_price = tour_data.price
+                else:
+                    exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
+                    if exchange_rate:
+                        converted_price = tour_data.price.price * exchange_rate
+                    else:
+                        converted_price = tour_data.price * target_currency.exchange_rate
+                    
+                price_dict = {
+                    "tour_id": created_tour.id,
+                    "currency_id": target_currency.id,
+                    "price": converted_price
+                }
+                await self.uow.tour_prices.create(price_dict)
+            
+            
+            return await self.uow.tours.get_by_id(created_tour.id)
+
+
     # Ваш метод для создания тура с ценами
-    async def create_tour(self, tour_data: CreateTourSchema) -> CreatedTourSchemaResponse:
+    async def create_tour(self, tour_data: CreateTourSchema) -> TourSchema:
         # tour_dict = tour_data.model_dump(exclude={"price"})
         tour_dict = tour_data.model_dump()
 
