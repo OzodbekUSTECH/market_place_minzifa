@@ -1,4 +1,4 @@
-from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema
+from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema, CreatedTourSchemaResponse
 from repositories import Pagination
 from datetime import datetime
 from models import Tour
@@ -10,7 +10,7 @@ class ToursService:
         self.uow = uow
 
     # Ваш метод для создания тура с ценами
-    async def create_tour(self, tour_data: CreateTourSchema) -> TourSchema:
+    async def create_tour(self, tour_data: CreateTourSchema) -> CreatedTourSchemaResponse:
         # tour_dict = tour_data.model_dump(exclude={"price"})
         tour_dict = tour_data.model_dump()
 
