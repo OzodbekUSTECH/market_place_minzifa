@@ -4,16 +4,16 @@ from enum import Enum
 
 class AllowedStatuses(Enum):
     PUBLISHED = "ОПУБЛИКОВАН"
-    ARCHIVE = "АРХИВ"
+    ARCHIVED = "АРХИВ"
 
-allowed_statuses_list = [status.value.lower() for status in AllowedStatuses]
+allowed_statuses_list = [status.value.lower().replace(" ", "") for status in AllowedStatuses]
 
 class CreateTourStatusSchema(BaseModel):
     name: str
 
     @field_validator("name")
     def validate_name(cls, v):
-        if v.lower() not in allowed_statuses_list:
+        if v.lower().replace(" ", "") not in allowed_statuses_list:
             raise ValueError("This status is not allowed to be created")
         return v
 
