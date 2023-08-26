@@ -1,4 +1,4 @@
-from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema, CreatedTourSchemaResponse
+from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema
 from repositories import Pagination
 from datetime import datetime
 from models import Tour

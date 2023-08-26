@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from services import ToursService
 from utils.dependency import get_tours_services, get_current_user
 from repositories import Pagination
-from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema, CreatedTourSchemaResponse
+from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema
 from models import User
 from security.permissionhandler import PermissionHandler, Permissions
 
