@@ -22,7 +22,7 @@ class User(Base):
     )
     role_id = Column(Integer, ForeignKey("roles.id"))
     role = relationship("Role", lazy="subquery")
-    
+    favorite_tours = relationship("FavoriteTours", lazy="subquery")
     
     def to_read_model(self):
         return UserSchema(

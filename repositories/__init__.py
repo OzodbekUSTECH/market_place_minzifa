@@ -11,3 +11,4 @@ from repositories.tourprices import TourPricesRepository
 from repositories.tourstatuses import TourStatusesRepository
 from repositories.activities import ActivitiesRepository
 from repositories.tour_activities import TourActivitiesRepository
+from repositories.favorite_tours import FavoriteToursRepository

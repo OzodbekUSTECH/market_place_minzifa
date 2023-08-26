@@ -10,3 +10,4 @@ from services.tourprices import TourPricesService
 from services.tourstatuses import TourStatusesService
 from services.activities import ActivitiesService
 from services.tour_activities import TourActivitiesService
+from services.favorite_tours import FavoriteToursService

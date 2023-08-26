@@ -11,3 +11,4 @@ from models.tourprices import TourPrice
 from models.tourstatuses import TourStatus
 from models.activities import Activity
 from models.tour_activities import TourActivity
+from models.favorite_tours import FavoriteTours
