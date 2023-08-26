@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from typing import Optional
 
 class CreateTourPriceSchema(BaseModel):
@@ -6,10 +6,13 @@ class CreateTourPriceSchema(BaseModel):
     currency_id: int
     price: int
 
+    @validator('price', pre=True, always=True)
+    def round_price(cls, value):
+        return int(round(value))
+
 class UpdateTourPriceSchema(BaseModel):
     currency_id: int
     price: int
-
 
 class TourPriceSchema(CreateTourPriceSchema):
     id: int
