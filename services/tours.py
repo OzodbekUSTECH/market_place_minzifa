@@ -53,8 +53,8 @@ class ToursService:
     
     async def get_list_of_archived_tours(self, pagination: Pagination) -> list[TourSchema]:
         async with self.uow:
-            archived_status_id = self.uow.tour_statuses.get_id_of_archieved_status()
-            archived_tours = self.uow.tours.get_list_of_tours_by_status_id(archived_status_id, pagination)
+            archived_status_id = await self.uow.tour_statuses.get_id_of_archieved_status()
+            archived_tours = await self.uow.tours.get_list_of_tours_by_status_id(archived_status_id, pagination)
             return archived_tours
         
     async def get_tour_by_id(self, tour_id: int) -> TourSchema:
