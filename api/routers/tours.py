@@ -12,7 +12,7 @@ router = APIRouter(
     tags=["Tours"],
 )
 
-@router.get('', response_model=list[TourSchema])
+@router.get('/search', response_model=list[TourSchema])
 async def search_tours_by_title(
     tours_service: Annotated[ToursService, Depends(get_tours_services)],
     query: str = Query(default="")
