@@ -9,7 +9,7 @@ class ToursRepository(BaseRepository):
         matched_tours = []
 
         for tour in all_tours:
-            if not tour_rating or tour.user.tour_rating == tour_rating:
+            if not tour_rating or tour.user.rating == tour_rating:
             
                 if not status_id or tour.status_id == status_id:
                         
