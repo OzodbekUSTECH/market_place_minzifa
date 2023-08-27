@@ -14,10 +14,10 @@ router = APIRouter(
 
 @router.get('/search', response_model=list[TourSchema])
 async def search_tours(
-    query: Annotated[str, Query(default="")],
-    status_id: Annotated[int, Query(None)],
     pagination: Annotated[Pagination, Depends()],
-    tours_service: Annotated[ToursService, Depends(get_tours_services)]
+    tours_service: Annotated[ToursService, Depends(get_tours_services)],
+    query: str = Query(default=""),
+    status_id: int = Query(None),
 ) -> list[TourSchema]:
     return await tours_service.search_tours(query, status_id, pagination)
 
