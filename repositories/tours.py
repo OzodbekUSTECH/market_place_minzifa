@@ -11,17 +11,11 @@ class ToursRepository(BaseRepository):
         for tour in all_tours:
             # Применение фильтров
             if not status_id or tour.status_id == status_id:
-                if not tour_rating or tour.rating == tour_rating:
-                    print(tour.rating)
-                    print(tour.rating)
+                    
+                if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
 
-                    print(tour.rating)
-                    print(tour.rating)
-                    print(tour.rating)
-                    print(tour.rating)
-                    print(tour.rating)
+                    if not tour_rating or tour.rating == tour_rating:
 
-                    if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
                         matched_tours.append(tour)
 
         return matched_tours
