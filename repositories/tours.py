@@ -12,6 +12,16 @@ class ToursRepository(BaseRepository):
             # Применение фильтров
             if not status_id or tour.status_id == status_id:
                 if not user_rating or tour.user.rating == user_rating:
+                    print(tour.user.rating)
+                    print(tour.user.rating)
+                    print(tour.user.rating)
+                    print(tour.user.rating)
+                    print(tour.user.rating)
+                    print(tour.user.rating)
+                    print(tour.user.rating)
+                    print(tour.user.rating)
+                    print(tour.user.rating)
+                    print(tour.user.rating)
                     if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
                         matched_tours.append(tour)
 
