@@ -19,7 +19,7 @@ async def search_tours(
     query: str = Query(default=""),
     status_id: int = Query(None),
     tour_rating: float = Query(None),
-):
+) -> list[TourSchema]:
     return await tours_service.search_tours_second(query, status_id, tour_rating, pagination)
 
 
