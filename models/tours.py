@@ -26,4 +26,4 @@ class Tour(Base):
 
     @hybrid_property
     def rating(self):
-        return self.user.rating
+        return self.user.rating()
