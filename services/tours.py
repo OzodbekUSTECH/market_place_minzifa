@@ -46,10 +46,7 @@ class ToursService:
         async with self.uow:
             return await self.uow.tours.get_all(pagination)
         
-    async def get_list_of_tours_by_status(self, status_id: int, pagination: Pagination) -> list[TourSchema]:
-        async with self.uow:
-            return await self.uow.tours.get_list_of_tours_by_status_id(status_id, pagination)
-        
+    
     async def get_tour_by_id(self, tour_id: int) -> TourSchema:
         async with self.uow:
             return await self.uow.tours.get_by_id(tour_id)
@@ -66,9 +63,9 @@ class ToursService:
         
 
 
-    async def serach_tours_by_title(self, query: str, status_id: int):
+    async def search_tours(self, query: str, status_id: int, pagination: Pagination):
         async with self.uow:
-            return await self.uow.tours.search_tours_by_title(query, status_id)
+            return await self.uow.tours.search_tours(query, status_id, pagination)
 
 
 

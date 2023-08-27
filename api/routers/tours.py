@@ -13,12 +13,13 @@ router = APIRouter(
 )
 
 @router.get('/search', response_model=list[TourSchema])
-async def search_tours_by_title(
-    tours_service: Annotated[ToursService, Depends(get_tours_services)],
-    query: str = Query(default=""),
-    status_id: int = Query(None)
+async def search_tours(
+    query: Annotated[str, Query(default="")],
+    status_id: Annotated[int, Query(None)],
+    pagination: Annotated[Pagination, Depends()],
+    tours_service: Annotated[ToursService, Depends(get_tours_services)]
 ) -> list[TourSchema]:
-    return await tours_service.serach_tours_by_title(query, status_id)
+    return await tours_service.search_tours(query, status_id, pagination)
 
 
 @router.post('', response_model=TourSchema)
@@ -34,14 +35,6 @@ async def get_list_of_tours(
     tours_service: Annotated[ToursService, Depends(get_tours_services)]
 ) -> list[TourSchema]:
     return await tours_service.get_list_of_tours(pagination)
-
-@router.get('/status/{status_id}', response_model=list[TourSchema])
-async def  get_list_of_tours_by_status_id(
-    status_id: int,
-    pagination: Annotated[Pagination, Depends()],
-    tours_service: Annotated[ToursService, Depends(get_tours_services)]
-) -> list[TourSchema]:
-    return await tours_service.get_list_of_tours_by_status(status_id, pagination)
 
 
 @router.get('/{tour_id}', response_model=TourSchema)
