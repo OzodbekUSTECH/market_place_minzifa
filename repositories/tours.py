@@ -7,18 +7,16 @@ class ToursRepository(BaseRepository):
         self.session.commit()
         return tours
     
-    async def search_tours_by_title(self, query: str):
+    async def search_tours_by_title(self, query: str, status_id: int):
         all_tours = await self.get_all()
-        if not query:
-            return all_tours
-        tour_titles = [tour.title for tour in all_tours]
-        results = process.extract(query, tour_titles, scorer=fuzz.partial_ratio)
         matched_tours = []
 
-        for result in results:
-            if result[1] > 60:  # Минимальный порог схожести (можете настроить)
-                matched_tour = all_tours[tour_titles.index(result[0])]
-                matched_tours.append(matched_tour)
+        for tour in all_tours:
+        # Применение фильтров
+            if (not status_id or tour.status_id == status_id):
+                title_similarity = fuzz.partial_ratio(query.lower(), tour.title.lower())
+                if title_similarity > 60:  # Минимальный порог сходства (можете настроить)
+                    matched_tours.append(tour)
 
         return matched_tours
 
