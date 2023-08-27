@@ -12,7 +12,7 @@ class ToursRepository(BaseRepository):
         if not query:
             return all_tours
         tour_titles = [tour.title for tour in all_tours]
-        results = process.extract(query, tour_titles, scorer=fuzz.token_set_ratio)
+        results = process.extract(query, tour_titles, scorer=fuzz.partial_ratio)
         matched_tours = []
 
         for result in results:
