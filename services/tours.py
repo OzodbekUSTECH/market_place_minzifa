@@ -66,8 +66,14 @@ class ToursService:
 
     async def search_tours(self, query: str, status_id: int, tour_rating: float, pagination: Pagination):
         async with self.uow:
-            return await self.uow.tours.search_tours(query, status_id,tour_rating,pagination)
-
+            filtered_tours =  await self.uow.tours.search_tours(query, status_id,tour_rating,pagination)
+            if tour_rating:
+                response = []
+                for tour in filtered_tours:
+                    if tour.tour_rating == tour_rating:
+                        response.append(tour)
+                return response
+            return filtered_tours
 
     async def search_tours_new(self, query: str, status_id: int, tour_rating: float, pagination: Pagination):
         async with self.uow:
