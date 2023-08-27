@@ -63,7 +63,7 @@ class ToursService:
         
 
 
-    async def search_tours(self, query: str, status_id: int, tour_rating: int, pagination: Pagination):
+    async def search_tours(self, query: str, status_id: int, tour_rating: float, pagination: Pagination):
         async with self.uow:
             return await self.uow.tours.search_tours(query, status_id,tour_rating,pagination)
 

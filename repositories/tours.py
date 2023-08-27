@@ -4,7 +4,7 @@ from fuzzywuzzy import fuzz, process
 class ToursRepository(BaseRepository):
    
     
-    async def search_tours(self, query: str, status_id: int, user_rating: int, pagination: Pagination):
+    async def search_tours(self, query: str, status_id: int, user_rating: float, pagination: Pagination):
         all_tours = await self.get_all(pagination)
         matched_tours = []
 

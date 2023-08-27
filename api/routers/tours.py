@@ -18,7 +18,7 @@ async def search_tours(
     tours_service: Annotated[ToursService, Depends(get_tours_services)],
     query: str = Query(default=""),
     status_id: int = Query(None),
-    tour_rating: int = Query(None),
+    tour_rating: float = Query(None),
 ) -> list[TourSchema]:
     return await tours_service.search_tours(query, status_id, tour_rating, pagination)
 
