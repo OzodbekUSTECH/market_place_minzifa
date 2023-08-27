@@ -26,14 +26,17 @@ class User(Base):
     role = relationship("Role", lazy="subquery")
     favorite_tours = relationship("FavoriteTours", lazy="subquery")
     tours = relationship("Tour", lazy="subquery")
-    tour_comments = relationship("TourComment", lazy="subquery")
 
 
     @hybrid_property
     def rating(self):
-        ratings = [comment.rating for comment in self.tour_comments]
-        if ratings:
-            return sum(ratings) / len(ratings)
+        all_ratings = []
+        
+        for tour in self.tours:
+            for comment in tour.tour_comments:
+                all_ratings.append(comment.rating)
+                
+        if all_ratings:
+            return sum(all_ratings) / len(all_ratings)
         return 1
-
     
