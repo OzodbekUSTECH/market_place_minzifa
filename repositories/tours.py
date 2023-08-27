@@ -18,6 +18,7 @@ class ToursRepository(BaseRepository):
 
                         matched_tours.append(tour)
 
+        print(matched_tours)
         return matched_tours
 
 
