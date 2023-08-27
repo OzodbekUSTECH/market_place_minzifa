@@ -21,4 +21,5 @@ class Tour(Base):
 
     activities = relationship("TourActivity", back_populates="tour", lazy="subquery")
     tour_comments = relationship("TourComment", lazy="subquery")
+    user = relationship("User", back_populates="tours", lazy="subquery")
 
