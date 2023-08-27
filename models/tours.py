@@ -14,7 +14,7 @@ class Tour(Base):
     updated_at = Column(
         DateTime(timezone=True), default=datetime.now, onupdate=datetime.now
     )
-
+    user_id = Column(Integer, ForeignKey("users.id"))
     status_id = Column(Integer, ForeignKey('tour_statuses.id'), nullable=False, index=True)
     prices = relationship("TourPrice", back_populates="tour", lazy="subquery")
     status = relationship("TourStatus", back_populates="tours", lazy="subquery")
