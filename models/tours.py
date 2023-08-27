@@ -24,6 +24,6 @@ class Tour(Base):
     tour_comments = relationship("TourComment", lazy="subquery")
     user = relationship("User", back_populates="tours", lazy="subquery")
 
-    @property
-    def rating(self):
+    @hybrid_property
+    def user_rating(self):
         return self.user.rating
