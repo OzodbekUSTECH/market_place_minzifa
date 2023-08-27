@@ -4,7 +4,7 @@ from schemas.tourprices import TourPriceSchema
 
 class CreateTourSchema(BaseModel):
     status_id: int
-    name: str
+    title: str
 
 class UpdateTourSchema(CreateTourSchema):
     pass

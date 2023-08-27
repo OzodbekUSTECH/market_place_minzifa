@@ -7,7 +7,7 @@ class Tour(Base):
     __tablename__ = 'tours'
     
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
+    title = Column(String, nullable=False)
     created_at = Column(
         DateTime(timezone=True), default=datetime.now
     )

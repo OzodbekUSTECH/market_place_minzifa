@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from services import ToursService
 from utils.dependency import get_tours_services, get_current_user
 from repositories import Pagination
@@ -11,6 +11,13 @@ router = APIRouter(
     prefix="/tours",
     tags=["Tours"],
 )
+
+@router.get('', response_model=list[TourSchema])
+async def search_tours_by_title(
+    tours_service: Annotated[ToursService, Depends(get_tours_services)],
+    query: str = Query(default="")
+) -> list[TourSchema]:
+    return await tours_service.serach_tours_by_title(query)
 
 
 @router.post('', response_model=TourSchema)
@@ -28,7 +35,7 @@ async def get_list_of_tours(
     return await tours_service.get_list_of_tours(pagination)
 
 @router.get('/status/{status_id}', response_model=list[TourSchema])
-async def  get_list_of_published_tours(
+async def  get_list_of_tours_by_status_id(
     status_id: int,
     pagination: Annotated[Pagination, Depends()],
     tours_service: Annotated[ToursService, Depends(get_tours_services)]

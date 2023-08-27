@@ -66,7 +66,9 @@ class ToursService:
         
 
 
-
+    async def serach_tours_by_title(self, query: str):
+        async with self.uow:
+            return await self.uow.tours.search_tours_by_title(query)
 
 
 
