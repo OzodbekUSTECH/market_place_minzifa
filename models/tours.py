@@ -2,6 +2,7 @@ from database.db import Base
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
+from sqlalchemy.ext.hybrid import hybrid_property
 
 class Tour(Base):
     __tablename__ = 'tours'
@@ -23,3 +24,6 @@ class Tour(Base):
     tour_comments = relationship("TourComment", lazy="subquery")
     user = relationship("User", back_populates="tours", lazy="subquery")
 
+    @hybrid_property
+    def rating(self):
+        return self.user.rating
