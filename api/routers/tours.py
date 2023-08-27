@@ -20,7 +20,7 @@ async def search_tours(
     status_id: int = Query(None),
     tour_rating: float = Query(None),
 ):
-    return await tours_service.search_tours(query, status_id, tour_rating, pagination)
+    return await tours_service.search_tours_second(query, status_id, tour_rating, pagination)
 
 
 @router.post('', response_model=TourSchema)
