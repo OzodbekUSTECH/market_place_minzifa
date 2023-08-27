@@ -14,7 +14,7 @@ class ToursRepository(BaseRepository):
                     
                 if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
 
-                    if not tour_rating or tour.rating == tour_rating:
+                    if not tour_rating or tour.tour_rating == tour_rating:
 
                         matched_tours.append(tour)
 
