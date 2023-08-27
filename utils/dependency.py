@@ -12,7 +12,8 @@ from services import (
     TourStatusesService,
     TourActivitiesService,
     ActivitiesService,
-    FavoriteToursService
+    FavoriteToursService,
+    TourCommentsService
 )
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -63,6 +64,9 @@ async def get_activities_services(uow: UOWDependency):
 
 async def get_favorites_services(uow: UOWDependency):
     return FavoriteToursService(uow)
+
+async def get_tour_comments_services(uow: UOWDependency):
+    return TourCommentsService(uow)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/users/login")
 

@@ -52,6 +52,7 @@ class UserSchema(BaseModel):
     is_traveler_expert: bool
     is_traveler: bool
     role_id: int
+    rating: float
 
     class ConfigDict:
         from_attributes = True

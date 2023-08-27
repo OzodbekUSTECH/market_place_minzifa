@@ -4,6 +4,8 @@ from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, Forei
 from sqlalchemy.orm import relationship
 from schemas.users import UserSchema
 from datetime import datetime
+from sqlalchemy.ext.hybrid import hybrid_property
+
 class User(Base):
     __tablename__ = 'users'
 
@@ -23,8 +25,15 @@ class User(Base):
     role_id = Column(Integer, ForeignKey("roles.id"))
     role = relationship("Role", lazy="subquery")
     favorite_tours = relationship("FavoriteTours", lazy="subquery")
+    tours = relationship("Tour", lazy="subquery")
+    tour_comments = relationship("TourComment", lazy="subquery")
+
+
+    @hybrid_property
+    def rating(self):
+        ratings = [comment.rating for comment in self.tour_comments]
+        if ratings:
+            return sum(ratings) / len(ratings)
+        return 1
+
     
-    def to_read_model(self):
-        return UserSchema(
-            **self.__dict__
-        )
