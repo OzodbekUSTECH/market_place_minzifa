@@ -5,6 +5,7 @@ from models import Tour
 from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 from utils.currency import CurrencyHandler
+from fuzzywuzzy import fuzz, process
 
 class ToursService:
     def __init__(self, uow: UnitOfWork):
@@ -68,7 +69,24 @@ class ToursService:
             return await self.uow.tours.search_tours(query, status_id,tour_rating,pagination)
 
 
+    async def search_tours_new(self, query: str, status_id: int, tour_rating: float, pagination: Pagination):
+        async with self.uow:
+            users = await self.uow.users.get_all(pagination)
+            matched_tours = []
 
+            for user in users:
+                if not tour_rating or user.rating == tour_rating:
+
+                    for tour in user.tours:
+
+                        # Применение фильтров
+                        if not status_id or tour.status_id == status_id:
+                                
+                            if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
+
+                                matched_tours.append(tour)
+
+            return matched_tours
 
 
         # async def create_full_tour(self, tour_data: CreateTourSchema) -> TourSchema: 

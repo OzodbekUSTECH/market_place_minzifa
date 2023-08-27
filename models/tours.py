@@ -25,5 +25,4 @@ class Tour(Base):
     user = relationship("User", back_populates="tours", lazy="subquery")
 
     
-    def get_tour_rating_by_user(self):
-        return float(self.user.rating)
+    
