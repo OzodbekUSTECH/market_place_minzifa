@@ -13,7 +13,6 @@ class UpdateTourSchema(CreateTourSchema):
 
 class TourSchema(CreateTourSchema):
     id: int
-    rating: float
     # prices: list[TourPriceSchema]
     class ConfigDict:
         from_attributes = True
