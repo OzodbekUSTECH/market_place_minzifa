@@ -7,8 +7,9 @@ from schemas.rolepermissions import RolePermissionsSchema
 class RolePermission(Base):
     __tablename__ = 'role_permissions'
 
-    role_id = Column(Integer, ForeignKey('roles.id'), primary_key=True, index=True)
-    permission_id = Column(Integer, ForeignKey('permissions.id'), primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
+    role_id = Column(Integer, ForeignKey('roles.id'), index=True)
+    permission_id = Column(Integer, ForeignKey('permissions.id'), index=True)
 
     role = relationship("Role", back_populates="role_permissions", lazy="subquery")
     permission = relationship("Permission", back_populates="role_permissions", lazy="subquery")

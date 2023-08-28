@@ -36,41 +36,41 @@ async def get_role_data_by_id(
 ) -> RoleSchema:
     return await roles_service.get_role_by_id(id)
 
-@router.post('', name="Create Role", response_model=RoleSchema)
-async def create_role_data(
+@router.post('',  response_model=RoleSchema)
+async def create_role(
     role_data: CreateRoleSchema,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)],
-    current_user: Annotated[User, Depends(get_current_user)]
+    # current_user: Annotated[User, Depends(get_current_user)]
 ) -> RoleSchema:
     
-    await PermissionHandler.has_permission(
-        required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
-        current_user=current_user
-    )
+    # await PermissionHandler.has_permission(
+    #     required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
+    #     current_user=current_user
+    # )
     return await roles_service.create_role(role_data)
 
-@router.put('/{id}', name="Update Role", response_model=RoleSchema)
-async def update_role_data(
+@router.put('/{id}',  response_model=RoleSchema)
+async def update_role(
     id: int,
     role_data: UpdateRoleSchema,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)],
-    current_user: Annotated[User, Depends(get_current_user)]
+    # current_user: Annotated[User, Depends(get_current_user)]
 ) -> RoleSchema:
-    await PermissionHandler.has_permission(
-        required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
-        current_user=current_user
-    )
+    # await PermissionHandler.has_permission(
+    #     required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
+    #     current_user=current_user
+    # )
     return await roles_service.update_role(id, role_data)
 
 
-@router.delete('/{id}', name="Create Role", response_model=RoleSchema)
-async def delete_role_data(
+@router.delete('/{id}', response_model=RoleSchema)
+async def delete_role(
     id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)],
-    current_user: Annotated[User, Depends(get_current_user)]
+    # current_user: Annotated[User, Depends(get_current_user)]
 ) -> RoleSchema:
-    await PermissionHandler.has_permission(
-        required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
-        current_user=current_user
-    )
+    # await PermissionHandler.has_permission(
+    #     required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
+    #     current_user=current_user
+    # )
     return await roles_service.delete_role(id)

@@ -1,14 +1,17 @@
 from pydantic import BaseModel, EmailStr, field_validator, constr
 
 
-class RolePermissionsSchema(BaseModel):
+class CreateRolePermissionsSchema(BaseModel):
     role_id: int
     permission_id: int
 
     
 
-class CreateRolePermissionsSchema(RolePermissionsSchema):
+class UpdateRolePermissionsSchema(CreateRolePermissionsSchema):
     pass
 
-class DeleteRolePermissionsSchema(RolePermissionsSchema):
+class DeleteRolePermissionsSchema(CreateRolePermissionsSchema):
     pass
+
+class RolePermissionsSchema(CreateRolePermissionsSchema):
+    id: int
