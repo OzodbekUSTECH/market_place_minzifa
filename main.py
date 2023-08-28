@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="Market place by Minzifa Travel")
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/code/static", StaticFiles(directory="/code/static"), name="static")
 
 for router in all_routers:
     app.include_router(router, prefix='/v1')
