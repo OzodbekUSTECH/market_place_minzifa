@@ -3,9 +3,9 @@ from fastapi import UploadFile, File, HTTPException, status, Request
 import os
 
 
-def generate_filename(base_name, extension, counter):
+def generate_filename(base_name, extension, counter, directory):
     new_filename = f"{base_name}_{counter}{extension}"
-    generated_name = MediaHandler.comment_photos_dir + new_filename
+    generated_name = directory + new_filename
 
     if os.path.exists(generated_name):
         return generate_filename(base_name, extension, counter + 1)
@@ -14,11 +14,12 @@ def generate_filename(base_name, extension, counter):
 
 class MediaHandler:
     media_url = "https://api.minzifatravel.ru"
-    comment_photos_dir = "./static/"
+    comment_photos_dir = "./static/comments/media/"
     ALLOWED_PHOTO_CONTENT_TYPES = ["image/jpeg", "image/png"]
     @staticmethod
     async def save_media(
         media_group: list[UploadFile],
+        directory: str,
     ) -> list:
         urls = []
         for media in media_group:
@@ -27,7 +28,7 @@ class MediaHandler:
             media_name = media.filename
             base_name, extension = os.path.splitext(media_name)
             #recursive func
-            generated_name = generate_filename(base_name, extension, 1)                
+            generated_name = generate_filename(base_name, extension, 1, directory)                
             
             file_content = await media.read()
             with open(generated_name, 'wb') as media:
@@ -40,13 +41,14 @@ class MediaHandler:
     @staticmethod
     async def update_media(
         photo: UploadFile,
+        directory: str,
     ):
         if photo.content_type not in MediaHandler.ALLOWED_PHOTO_CONTENT_TYPES:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid file format. Only photo (JPEG/PNG)  is allowed.")
         photo_name = photo.filename
         base_name, extension = os.path.splitext(photo_name)
         #recursive func
-        generated_name = generate_filename(base_name, extension, 1)                
+        generated_name = generate_filename(base_name, extension, 1, directory)                
         
         file_content = await photo.read()
         with open(generated_name, 'wb') as photo:
