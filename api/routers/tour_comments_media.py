@@ -8,7 +8,7 @@ from models import User
 from security.permissionhandler import PermissionHandler, Permissions
 
 router = APIRouter(
-    prefix="/tours/comments/media",
+    prefix="/comments/tours/media",
     tags=["Tour Comments Media"]
 )
 
@@ -23,7 +23,7 @@ async def create_tour_comments_media(
 
 
 
-@router.get('/', response_model=list[TourCommentMediaSchema])
+@router.get('', response_model=list[TourCommentMediaSchema])
 async def get_list_of_tour_comments_media(
     pagination: Annotated[Pagination, Depends()],
     tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
