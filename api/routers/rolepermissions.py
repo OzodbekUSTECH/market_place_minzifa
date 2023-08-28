@@ -64,6 +64,13 @@ async def get_role_permission_by_id(
 ):
     return await roleperms_service.get_role_permission_by_id(id)
 
+@router.get('/role/{role_id}', response_model=list[RolePermissionsSchema])
+async def get_permissions_of_role(
+    role_id: int,
+    roleperms_service: Annotated[RolePermissionsService, Depends(get_rolepermissions)]
+):
+    return await roleperms_service.get_list_of_permissions_of_role(role_id)
+
 @router.delete('/{id}', response_model=RolePermissionsSchema)
 async def delete_role_permission(
     id: int,

@@ -21,6 +21,11 @@ class RolePermissionsService:
         async with self.uow:
             return await self.uow.role_permissions.get_all(pagination)
 
+    async def get_list_of_permissions_of_role(self, role_id: int) -> list[RolePermissionsSchema]:
+        async with self.uow:
+            role = await self.uow.roles.get_by_id(role_id)
+            return role.role_permissions
+
     async def get_role_permission_by_id(self, id: int) -> RolePermissionsSchema:
         async with self.uow:
             return await self.uow.role_permissions.get_by_id(id)

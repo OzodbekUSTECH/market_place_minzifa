@@ -50,9 +50,4 @@ class RolesService:
             return deleted_role
     
     
-    #extends
-    async def get_role_permissions(self, role_id: int):
-        async with self.uow:
-            role = await self.uow.roles.get_by_id(role_id)
-            
-            return role.role_permissions
+    
