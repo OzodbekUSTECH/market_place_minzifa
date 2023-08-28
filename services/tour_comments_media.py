@@ -41,5 +41,17 @@ class TourCommentsMediaService:
             comment_instance = await self.uow.tour_comments.get_by_id(tour_comment_id)
             return comment_instance.media
         
+    async def update_tour_comment_media(
+            self, 
+            tour_comments_media_id: int,
+            media: UploadFile
+    ) -> TourCommentMediaSchema:
+        url = await MediaHandler.update_media(media, MediaHandler.comment_media_dir)
+        async with self.uow:
+            media_dict = {
+                "url": url
+            }
+
+            return await self.uow.tour_comments_media(tour_comments_media_id, media_dict)
         
 
