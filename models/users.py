@@ -26,9 +26,9 @@ class User(Base):
     role = relationship("Role", lazy="subquery")
     favorite_tours = relationship("FavoriteTours", lazy="subquery")
     tours = relationship("Tour", back_populates="user", lazy="subquery")
-    travelers = relationship("TravelersAndManagersAssociation", back_populates="traveler", lazy="subquery")
-    managers = relationship("TravelersAndManagersAssociation", back_populates="manager", lazy="subquery")
-
+    travelers = relationship("TravelersAndManagersAssociation", foreign_keys=["TravelersAndManagersAssociation.traveler_id"], back_populates="traveler", lazy="subquery")
+    managers = relationship("TravelersAndManagersAssociation", foreign_keys=["TravelersAndManagersAssociation.manager_id"], back_populates="manager", lazy="subquery")
+    
     @hybrid_property
     def rating(self):
         all_ratings = []
