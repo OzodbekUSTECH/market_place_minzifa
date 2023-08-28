@@ -55,4 +55,4 @@ class RolesService:
         async with self.uow:
             role = await self.uow.roles.get_by_id(role_id)
             
-            return [perm.permission.to_read_model() for perm in role.role_permissions]
+            return role.role_permissions
