@@ -52,6 +52,8 @@ class TourCommentsMediaService:
                 "url": url
             }
 
-            return await self.uow.tour_comments_media(tour_comments_media_id, media_dict)
+            return await self.uow.tour_comments_media.update(tour_comments_media_id, media_dict)
         
 
+    async def delete_tour_comment_media(self, tour_comment_media_id: int) -> TourCommentMediaSchema:
+        async wit
