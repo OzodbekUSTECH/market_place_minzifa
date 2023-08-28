@@ -13,7 +13,7 @@ def generate_filename(base_name, extension, counter):
     return generated_name
 
 class MediaHandler:
-    comment_photos_dir = "./static/"
+    comment_photos_dir = "/code/static/"
     ALLOWED_PHOTO_CONTENT_TYPES = ["image/jpeg", "image/png"]
     @staticmethod
     async def save_media(
