@@ -13,7 +13,7 @@ current_file_dir = current_file.parent
 project_root = current_file_dir.parent
 project_root_absolute = project_root.resolve()
 static_root_absolute = project_root_absolute / "static"  # or wherever the static folder actually is
-app.mount("/static", StaticFiles(directory=static_root_absolute))
+app.mount(static_root_absolute, StaticFiles(directory=static_root_absolute))
 
 
 for router in all_routers:
