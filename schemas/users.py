@@ -54,8 +54,10 @@ class UserSchema(BaseModel):
     role_id: int
     rating: float
 
-    class ConfigDict:
-        from_attributes = True
+    @validator('rating', pre=True, always=True)
+    def round_rating(cls, value):
+        return float(round(value, 2))
+
 
 
 

@@ -67,10 +67,6 @@ class ToursService:
     async def search_tours(self, query: str, status_id: int, tour_rating: float, pagination: Pagination):
         async with self.uow:
             filtered_tours =  await self.uow.tours.search_tours(query, status_id,tour_rating,pagination)
-            users = await self.uow.users.get_all()
-
-            
-
             return filtered_tours
 
     async def search_tours_second(self, query: str, status_id: int, tour_rating: float, pagination: Pagination):
@@ -79,15 +75,13 @@ class ToursService:
             matched_tours = []
 
             for user in users:
-                    for tour in user.tours:
+                for tour in user.tours:
+                    if not status_id or tour.status_id == status_id:
+                            
+                        if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
+                            if not tour_rating or (user.rating >= tour_rating and user.rating < (tour_rating + 0.5)):
 
-                        # Применение фильтров
-                        if not status_id or tour.status_id == status_id:
-                                
-                            if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
-                                if not tour_rating or user.rating == tour_rating:
-
-                                    matched_tours.append(tour)
+                                matched_tours.append(tour)
 
             return matched_tours
 
