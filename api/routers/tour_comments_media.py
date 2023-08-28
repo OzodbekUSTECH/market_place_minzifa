@@ -9,7 +9,7 @@ from security.permissionhandler import PermissionHandler, Permissions
 
 router = APIRouter(
     prefix="/tours/comments/media",
-    tags=["Tour Comments Photos"]
+    tags=["Tour Comments Media"]
 )
 
 
