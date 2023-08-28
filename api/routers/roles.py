@@ -4,6 +4,7 @@ from services import RolesService
 from utils.dependency import get_rolesservices, get_current_user
 from repositories.base import Pagination
 from schemas.roles import RoleSchema, CreateRoleSchema, UpdateRoleSchema, RolePermissionsSchema
+from schemas.rolepermissions import RolePermissionsSchema
 from models import User
 from security.permissionhandler import PermissionHandler, Permissions
 
