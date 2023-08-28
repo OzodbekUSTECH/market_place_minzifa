@@ -8,7 +8,7 @@ def generate_filename(base_name, extension, counter, directory):
     generated_name = directory + new_filename
 
     if os.path.exists(generated_name):
-        return generate_filename(base_name, extension, counter + 1)
+        return generate_filename(base_name, extension, counter + 1, directory)
     
     return generated_name
 
