@@ -56,4 +56,5 @@ class TourCommentsMediaService:
         
 
     async def delete_tour_comment_media(self, tour_comment_media_id: int) -> TourCommentMediaSchema:
-        async wit
+        async with self.uow:
+            return await self.uow.tour_comments_media.delete(tour_comment_media_id)
