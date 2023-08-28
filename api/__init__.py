@@ -12,7 +12,7 @@ from api.routers.activities import router as activities_router
 from api.routers.tour_activities import router as tour_activities_router
 from api.routers.favorite_tours import router as tour_favorites_router
 from api.routers.tour_comments import router as tour_comments_router
-from api.routers.tour_comments import router as tour_comments_photos_router
+from api.routers.tour_comments_photos import router as tour_comments_photos_router
 all_routers = [
     auth_router,
     maillist_router,
