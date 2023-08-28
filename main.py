@@ -6,12 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="Market place by Minzifa Travel")
-from pathlib import Path
-current_file = Path(__file__)
-current_file_dir = current_file.parent
-project_root = current_file_dir.parent
-static_root_absolute = project_root / "static"
-app.mount("/static", StaticFiles(directory=str(static_root_absolute)), name="static")
+import os
+script_dir = os.path.dirname(__file__)
+st_abs_file_path = os.path.join(script_dir, "static/")
+app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
 
 
 
