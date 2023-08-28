@@ -6,8 +6,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="Market place by Minzifa Travel")
+from pathlib import Path
 
-app.mount("/static", StaticFiles(directory="../static"), name="static")
+current_file = Path(__file__)
+current_file_dir = current_file.parent
+project_root = current_file_dir.parent
+project_root_absolute = project_root.resolve()
+static_root_absolute = project_root_absolute / "static"  # or wherever the static folder actually is
+app.mount("/static", StaticFiles(directory=static_root_absolute))
 
 
 for router in all_routers:
