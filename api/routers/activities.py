@@ -26,24 +26,24 @@ async def get_list_of_activities(
 ) -> list[ActivitySchema]:
     return await activities_service.get_list_of_activities(pagination)
 
-@router.get('/{activity_id}', response_model=ActivitySchema)
+@router.get('/{id}', response_model=ActivitySchema)
 async def get_activity_by_id(
-    activity_id: int,
+    id: int,
     activities_service: Annotated[ActivitiesService, Depends(get_activities_services)]
 ) -> ActivitySchema:
-    return await activities_service.get_activity_by_id(activity_id)
+    return await activities_service.get_activity_by_id(id)
 
-@router.put('/{activity_id}', response_model=ActivitySchema)
+@router.put('/{id}', response_model=ActivitySchema)
 async def update_activity(
-    activity_id: int,
+    id: int,
     activity_data: UpdateActivitySchema,
     activities_service: Annotated[ActivitiesService, Depends(get_activities_services)]
 ) -> ActivitySchema:
-    return await activities_service.update_activity(activity_id, activity_data)
+    return await activities_service.update_activity(id, activity_data)
 
-@router.delete('/{activity_id}', response_model=ActivitySchema)
+@router.delete('/{id}', response_model=ActivitySchema)
 async def delete_activity(
-    activity_id: int,
+    id: int,
     activities_service: Annotated[ActivitiesService, Depends(get_activities_services)]
 ) -> ActivitySchema:
-    return await activities_service.delete_activity(activity_id)
+    return await activities_service.delete_activity(id)

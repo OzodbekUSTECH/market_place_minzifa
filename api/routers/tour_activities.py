@@ -26,12 +26,12 @@ async def get_list_of_tours_and_activities(
 ) -> list[TourActivitySchema]:
     return await tour_activities_service.get_list_of_tours_and_activities(pagination)
 
-@router.get('/{tour_activity_id}', response_model=TourActivitySchema)
+@router.get('/{id}', response_model=TourActivitySchema)
 async def get_tour_and_activity_by_id(
-    tour_activity_id: int,
+    id: int,
     tour_activities_service: Annotated[TourActivitiesService, Depends(get_tour_activities_services)]
 ) -> TourActivitySchema:
-    return await tour_activities_service.get_tour_and_activity_by_id(tour_activity_id)
+    return await tour_activities_service.get_tour_and_activity_by_id(id)
 
 @router.get('/tour/{tour_id}', response_model=list[TourActivitySchema])
 async def get_list_of_activities_of_tour(
@@ -40,17 +40,17 @@ async def get_list_of_activities_of_tour(
 ) -> list[TourActivitySchema]:
     return await tour_activities_service.get_list_of_activities_of_tour(tour_id)
 
-@router.put('/{tour_activity_id}', response_model=TourActivitySchema)
+@router.put('/{id}', response_model=TourActivitySchema)
 async def update_tour_activity(
-    tour_activity_id: int,
+    id: int,
     tour_activity_data: UpdateTourActivitySchema,
     tour_activities_service: Annotated[TourActivitiesService, Depends(get_tour_activities_services)]
 ) -> TourActivitySchema:
-    return await tour_activities_service.update_tour_activity(tour_activity_id, tour_activity_data)
+    return await tour_activities_service.update_tour_activity(id, tour_activity_data)
 
-@router.delete('/{tour_activity_id}', response_model=TourActivitySchema)
+@router.delete('/{id}', response_model=TourActivitySchema)
 async def delete_tour_activity(
-    tour_activity_id: int,
+    id: int,
     tour_activities_service: Annotated[TourActivitiesService, Depends(get_tour_activities_services)]
 ) -> TourActivitySchema:
-    return await tour_activities_service.delete_tour_activity(tour_activity_id)
+    return await tour_activities_service.delete_tour_activity(id)

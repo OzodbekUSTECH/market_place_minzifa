@@ -8,7 +8,7 @@ from models import User
 from security.permissionhandler import PermissionHandler, Permissions
 
 router = APIRouter(
-    prefix="/favorite/tours",
+    prefix="/tours/favorite",
     tags=["Favorite tours"],
 )
 
@@ -34,24 +34,24 @@ async def get_list_of_favorite_tours_of_user(
 ) -> list[FavoriteTourSchema]:
     return await favorite_tours_service.get_list_of_favorite_tours_of_user(user_id, pagination)
 
-@router.get('/{favorite_tour_id}', response_model=FavoriteTourSchema)
+@router.get('/{id}', response_model=FavoriteTourSchema)
 async def get_favorite_tour_by_id(
-    favorite_tour_id: int,
+    id: int,
     favorite_tours_service: Annotated[FavoriteToursService, Depends(get_favorites_services)]
 ) -> FavoriteTourSchema:
-    return await favorite_tours_service.get_favorite_tour_by_id(favorite_tour_id)
+    return await favorite_tours_service.get_favorite_tour_by_id(id)
 
-@router.put('/{favorite_tour_id}', response_model=FavoriteTourSchema)
+@router.put('/{id}', response_model=FavoriteTourSchema)
 async def update_favorite_tour(
-    favorite_tour_id: int,
+    id: int,
     favorite_tour_data: UpdateFavoriteTourSchema,
     favorite_tours_service: Annotated[FavoriteToursService, Depends(get_favorites_services)]
 ) -> FavoriteTourSchema:
-    return await favorite_tours_service.update_favorite_tour(favorite_tour_id, favorite_tour_data)
+    return await favorite_tours_service.update_favorite_tour(id, favorite_tour_data)
 
-@router.delete('/{favorite_tour_id}', response_model=FavoriteTourSchema)
+@router.delete('/{id}', response_model=FavoriteTourSchema)
 async def delete_favorite_tour(
-    favorite_tour_id: int,
+    id: int,
     favorite_tours_service: Annotated[FavoriteToursService, Depends(get_favorites_services)]
 ) -> FavoriteTourSchema:
-    return await favorite_tours_service.delete_favorite_tour(favorite_tour_id)
+    return await favorite_tours_service.delete_favorite_tour(id)

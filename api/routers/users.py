@@ -78,9 +78,9 @@ async def create_user(
 
 
 
-@router.put('/{user_id}', name="Update User Data", response_model=UserSchema) 
+@router.put('/{id}', name="Update User Data", response_model=UserSchema) 
 async def update_user_data(
-    user_id: int, 
+    id: int, 
     user_data: UserUpdateSchema,
     users_service: Annotated[UsersService, Depends(get_users_services)],
     current_user: Annotated[User, Depends(get_current_user)]
@@ -91,12 +91,12 @@ async def update_user_data(
     - return: Updated user data.
     """
     await PermissionHandler.has_permission(
-        user_id=user_id, 
+        user_id=id, 
         required_permission=Permissions.CONTROL_USERS.value, 
         current_user=current_user
     )
 
-    return await users_service.update_user(user_id, user_data)
+    return await users_service.update_user(id, user_data)
 
 
 
@@ -114,9 +114,9 @@ async def get_list_of_users(
     return await users_service.get_list_of_users(pagination)
 
 
-@router.get('/{user_id}', name="get user by ID", response_model=UserSchema)
+@router.get('/{id}', name="get user by ID", response_model=UserSchema)
 async def get_user_by_id(
-    user_id: int,
+    id: int,
     users_service: Annotated[UsersService, Depends(get_users_services)]
 ) -> UserSchema:
     """
@@ -124,12 +124,12 @@ async def get_user_by_id(
     - param user_id: The ID of the user to get.
     - return: User data.
     """
-    return await users_service.get_user_by_id(user_id)
+    return await users_service.get_user_by_id(id)
 
 
-@router.delete('/{user_id}', name="delete user data", response_model=UserSchema)
+@router.delete('/{id}', name="delete user data", response_model=UserSchema)
 async def delete_user_data(
-    user_id: int,
+    id: int,
     users_service: Annotated[UsersService, Depends(get_users_services)],
     current_user: Annotated[User, Depends(get_current_user)]
 ) -> UserSchema:
@@ -139,12 +139,12 @@ async def delete_user_data(
     - return: User data.
     """
     await PermissionHandler.has_permission(
-        user_id=user_id, 
+        user_id=id, 
         required_permission=Permissions.CONTROL_USERS.value, 
         current_user=current_user
     )
 
-    return await users_service.delete_user(user_id)
+    return await users_service.delete_user(id)
 
 
 

@@ -20,21 +20,21 @@ async def get_list_of_roles(
 ) -> list[RoleSchema]:
     return await roles_service.get_all_roles(pagination)
 
-@router.get('/{role_id}/permissions', name="get all permissions of role", response_model=list[RolePermissionsSchema])
+@router.get('/{id}/permissions', name="get all permissions of role", response_model=list[RolePermissionsSchema])
 async def get_permissions(
-    role_id: int,
+    id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]
 ):  
-    return await roles_service.get_role_permissions(role_id)
+    return await roles_service.get_role_permissions(id)
 
 
 
-@router.get('/{role_id}', name="get role by ID", response_model=RoleSchema)
+@router.get('/{id}', name="get role by ID", response_model=RoleSchema)
 async def get_role_data_by_id(
-    role_id: int,
+    id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]
 ) -> RoleSchema:
-    return await roles_service.get_role_by_id(role_id)
+    return await roles_service.get_role_by_id(id)
 
 @router.post('', name="Create Role", response_model=RoleSchema)
 async def create_role_data(
@@ -49,9 +49,9 @@ async def create_role_data(
     )
     return await roles_service.create_role(role_data)
 
-@router.put('/{role_id}', name="Update Role", response_model=RoleSchema)
+@router.put('/{id}', name="Update Role", response_model=RoleSchema)
 async def update_role_data(
-    role_id: int,
+    id: int,
     role_data: UpdateRoleSchema,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)],
     current_user: Annotated[User, Depends(get_current_user)]
@@ -60,12 +60,12 @@ async def update_role_data(
         required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
         current_user=current_user
     )
-    return await roles_service.update_role(role_id, role_data)
+    return await roles_service.update_role(id, role_data)
 
 
-@router.delete('/{role_id}', name="Create Role", response_model=RoleSchema)
+@router.delete('/{id}', name="Create Role", response_model=RoleSchema)
 async def delete_role_data(
-    role_id: int,
+    id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)],
     current_user: Annotated[User, Depends(get_current_user)]
 ) -> RoleSchema:
@@ -73,4 +73,4 @@ async def delete_role_data(
         required_permission=Permissions.CONTROL_ROLES_AND_PERMISSIONS.value,
         current_user=current_user
     )
-    return await roles_service.delete_role(role_id)
+    return await roles_service.delete_role(id)

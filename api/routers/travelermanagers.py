@@ -21,12 +21,12 @@ async def get_all_associations_data(
 ) -> list[AssociationTravelAndManagerSchema]:
     return await travelermanagers_service.get_all_associations_travel_and_manager(pagination)
 
-@router.get("/{association_id}", name="get association by ID", response_model=AssociationTravelAndManagerSchema)
+@router.get("/{id}", name="get association by ID", response_model=AssociationTravelAndManagerSchema)
 async def get_association_by_id(
-    association_id: int,
+    id: int,
     travelermanagers_service: Annotated[TravelerManagersService, Depends(get_travelermanagers_services)]
 ) -> AssociationTravelAndManagerSchema:
-    return await travelermanagers_service.get_associations_travel_and_manager_by_id(association_id)
+    return await travelermanagers_service.get_associations_travel_and_manager_by_id(id)
 
 @router.get('/{manager_id}/travelers', name="get travelers of manager", response_model=list[TravelersSchema])
 async def get_travelers_data_of_manager(
@@ -53,17 +53,17 @@ async def choose_managers_for_traveler(
 ) -> AssociationTravelAndManagerSchema:
     return await travelermanagers_service.connect_traveler_to_manager(travel_manager_data)
 
-@router.put('/{association_id}', name="update manager of traveler or traveler of manager", response_model=AssociationTravelAndManagerSchema)
+@router.put('/{id}', name="update manager of traveler or traveler of manager", response_model=AssociationTravelAndManagerSchema)
 async def update_manager_of_traveler_or_traveler_of_manager_data(
-    association_id: int,
+    id: int,
     travel_manager_data: UpdateTravelerAndManagerSchema,
     travelermanagers_service: Annotated[TravelerManagersService, Depends(get_travelermanagers_services)]
 ) -> AssociationTravelAndManagerSchema:
-    return await travelermanagers_service.update_manager_of_traveler_or_traveler_of_manager(association_id, travel_manager_data)
+    return await travelermanagers_service.update_manager_of_traveler_or_traveler_of_manager(id, travel_manager_data)
 
-@router.delete('/{association_id}', name="delete association travel and manager", response_model=AssociationTravelAndManagerSchema)
+@router.delete('/{id}', name="delete association travel and manager", response_model=AssociationTravelAndManagerSchema)
 async def delete_association_travel_and_manager_data(
-    association_id: int,
+    id: int,
     travelermanagers_service: Annotated[TravelerManagersService, Depends(get_travelermanagers_services)]
 ) -> AssociationTravelAndManagerSchema:
-    return await travelermanagers_service.delete_traveler_and_manager(association_id)
+    return await travelermanagers_service.delete_traveler_and_manager(id)

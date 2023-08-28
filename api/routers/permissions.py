@@ -20,12 +20,12 @@ async def get_list_of_permessions(
     return await perms_service.get_all_permissions(pagination)
 
 
-@router.get('/{permission_id}', name="get permission by ID", response_model=PermissionSchema)
+@router.get('/{id}', name="get permission by ID", response_model=PermissionSchema)
 async def get_permission_data_by_id(
-    permission_id: int,
+    id: int,
     perms_service: Annotated[PermissionsService, Depends(get_permissionsservices)]
 ) -> PermissionSchema:
-    return await perms_service.get_permission_by_id(permission_id)
+    return await perms_service.get_permission_by_id(id)
 
 @router.post('', name="create permission", response_model=PermissionSchema)
 async def create_permission_data(
@@ -42,9 +42,9 @@ async def create_permission_data(
     return await perms_service.create_permission(permission_data)
 
 
-@router.put('/{permission_id}', name="update permission data", response_model=PermissionSchema)
+@router.put('/{id}', name="update permission data", response_model=PermissionSchema)
 async def update_permission_data(
-    permission_id: int,
+    id: int,
     permission_data: UpdatePermissionSchema,
     perms_service: Annotated[PermissionsService, Depends(get_permissionsservices)],
     current_user: Annotated[User, Depends(get_current_user)]
@@ -55,12 +55,12 @@ async def update_permission_data(
         current_user=current_user
     )
 
-    return await perms_service.update_permission(permission_id, permission_data)
+    return await perms_service.update_permission(id, permission_data)
 
 
-@router.delete("/{permission_id}", name="delete permission", response_model=PermissionSchema)
+@router.delete("/{id}", name="delete permission", response_model=PermissionSchema)
 async def delete_permission_data(
-    permission_id: int,
+    id: int,
     perms_service: Annotated[PermissionsService, Depends(get_permissionsservices)],
     current_user: Annotated[User, Depends(get_current_user)]
 ) -> PermissionSchema:
@@ -70,4 +70,4 @@ async def delete_permission_data(
         current_user=current_user
     )
 
-    return await perms_service.delete_permission(permission_id)
+    return await perms_service.delete_permission(id)

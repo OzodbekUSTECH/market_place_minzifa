@@ -31,12 +31,12 @@ async def get_all_mails_data(
 
 
 
-@router.get('/{mail_id}', name="get mail by ID", response_model=MailListSchema)
+@router.get('/{id}', name="get mail by ID", response_model=MailListSchema)
 async def get_mail_data_by_id(
-    mail_id: int,
+    id: int,
     maillist_services: MailListService = Depends(get_maillist_services)
 ):
-    return await maillist_services.get_mail_by_id(mail_id)
+    return await maillist_services.get_mail_by_id(id)
 
 
 
@@ -57,9 +57,9 @@ async def send_message_to_all_subscribed_mails(
     return {"message": "sent for all"}
 
 
-@router.put('/{mail_id}', name="change the email address data", response_model=MailListSchema)
+@router.put('/{id}', name="change the email address data", response_model=MailListSchema)
 async def update_email_data(
-    mail_id: int, 
+    id: int, 
     email_data: UpdateMailListSchema,
     maillist_services: Annotated[MailListService, Depends(get_maillist_services)],
     current_user: Annotated[User, Depends(get_current_user)]
@@ -69,12 +69,12 @@ async def update_email_data(
         current_user=current_user
     )
 
-    return await maillist_services.update_email(mail_id, email_data)
+    return await maillist_services.update_email(id, email_data)
 
 
-@router.delete('/{mail_id}', name="delete mail data", response_model=MailListSchema)
+@router.delete('/{id}', name="delete mail data", response_model=MailListSchema)
 async def update_mail_data(
-    mail_id: int, 
+    id: int, 
     maillist_services: Annotated[MailListService, Depends(get_maillist_services)],
     current_user: Annotated[User, Depends(get_current_user)]
 ):
@@ -83,4 +83,4 @@ async def update_mail_data(
         current_user=current_user
     )
     
-    return await maillist_services.delete_email(mail_id)
+    return await maillist_services.delete_email(id)

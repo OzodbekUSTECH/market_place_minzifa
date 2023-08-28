@@ -27,12 +27,12 @@ async def get_list_of_tour_comments(
 ) -> list[TourCommentSchema]:
     return await tour_comments_service.get_list_of_tour_comments(pagination)
 
-@router.get('/{tour_comment_id}', response_model=TourCommentSchema)
+@router.get('/{id}', response_model=TourCommentSchema)
 async def get_tour_comment_by_id(
-    tour_comment_id: int,
+    id: int,
     tour_comments_service: Annotated[TourCommentsService, Depends(get_tour_comments_services)]
 ) -> TourCommentSchema:
-    return await tour_comments_service.get_tour_comment_by_id(tour_comment_id)
+    return await tour_comments_service.get_tour_comment_by_id(id)
 
 @router.get('/tour/{tour_id}', response_model=list[TourCommentSchema])
 async def get_list_of_comments_of_tour(
@@ -42,10 +42,17 @@ async def get_list_of_comments_of_tour(
 ) -> list[TourCommentSchema]:
     return await tour_comments_service.get_list_of_comments_of_tour(tour_id, pagination)
 
-@router.put('/{tour_comment_id}', response_model=TourCommentSchema)
+@router.put('/{id}', response_model=TourCommentSchema)
 async def update_tour_comment(
-    tour_comment_id: int,
+    id: int,
     tour_comment_data: UpdateTourCommentSchema,
     tour_comments_service: Annotated[TourCommentsService, Depends(get_tour_comments_services)]
 ) -> TourCommentSchema:
-    return await tour_comments_service.update_tour_comment(tour_comment_id, tour_comment_data)
+    return await tour_comments_service.update_tour_comment(id, tour_comment_data)
+
+@router.delete('/{id}', response_model=TourCommentSchema)
+async def delete_tour_comment(
+    id: int,
+    tour_comments_service: Annotated[TourCommentsService, Depends(get_tour_comments_services)]
+):
+    return await tour_comments_service.delete_tour_comment(id)

@@ -27,24 +27,24 @@ async def get_list_of_tours(
 ) -> list[CurrencySchema]:
     return await currencies_service.get_list_of_currencies(pagination)
 
-@router.get('/{currency_id}', response_model=CurrencySchema)
+@router.get('/{id}', response_model=CurrencySchema)
 async def get_currency_by_id(
-    currency_id: int,
+    id: int,
     currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
 ) -> CurrencySchema:
-    return await currencies_service.get_currency_by_id(currency_id)
+    return await currencies_service.get_currency_by_id(id)
 
-@router.put('/{currency_id}', response_model=CurrencySchema)
+@router.put('/{id}', response_model=CurrencySchema)
 async def update_currency(
-    currency_id: int,
+    id: int,
     currency_data: UpdateCurrencySchema,
     currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
 ) -> CurrencySchema:
-    return await currencies_service.update_currency(currency_id, currency_data)
+    return await currencies_service.update_currency(id, currency_data)
 
-@router.delete('/{currency_id}', response_model=CurrencySchema)
+@router.delete('/{id}', response_model=CurrencySchema)
 async def delete_currency(
-    currency_id: int,
+    id: int,
     currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
 ) -> CurrencySchema:
-    return await currencies_service.delete_currency(currency_id)
+    return await currencies_service.delete_currency(id)
