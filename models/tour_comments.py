@@ -13,7 +13,7 @@ class TourComment(Base):
     title = Column(String, nullable=False)
     comment_text = Column(Text, nullable=False)
     rating = Column(Integer, nullable=False, default=1)
-    photos = relationship('CommentPhoto', backref='comment', cascade='all, delete-orphan', lazy='subquery')
+    photos = relationship('TourCommentPhoto', cascade='all, delete-orphan', lazy='subquery')
 
     created_at = Column(
         DateTime(timezone=True), default=datetime.now
