@@ -13,3 +13,4 @@ from models.activities import Activity
 from models.tour_activities import TourActivity
 from models.favorite_tours import FavoriteTours
 from models.tour_comments import TourComment
+from models.tour_comments_photos import TourCommentPhoto

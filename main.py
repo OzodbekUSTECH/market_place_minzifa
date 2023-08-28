@@ -3,8 +3,10 @@ import uvicorn
 from fastapi import FastAPI
 from api import all_routers
 from fastapi.middleware.cors import CORSMiddleware 
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="Market place by Minzifa Travel")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 for router in all_routers:
     app.include_router(router, prefix='/v1')

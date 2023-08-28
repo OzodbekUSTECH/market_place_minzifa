@@ -13,3 +13,4 @@ from repositories.activities import ActivitiesRepository
 from repositories.tour_activities import TourActivitiesRepository
 from repositories.favorite_tours import FavoriteToursRepository
 from repositories.tour_comments import TourCommentsRepository
+from repositories.tour_comments_photos import TourCommentsPhotosRepository

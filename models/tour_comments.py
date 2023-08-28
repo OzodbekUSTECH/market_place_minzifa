@@ -10,9 +10,11 @@ class TourComment(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     tour_id = Column(Integer, ForeignKey('tours.id'), nullable=False)
-    rating = Column(Integer, nullable=False, default=1)
     title = Column(String, nullable=False)
     comment_text = Column(Text, nullable=False)
+    rating = Column(Integer, nullable=False, default=1)
+    photos = relationship('CommentPhoto', backref='comment', cascade='all, delete-orphan')
+
     created_at = Column(
         DateTime(timezone=True), default=datetime.now
     )
