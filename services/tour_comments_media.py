@@ -23,14 +23,23 @@ class TourCommentsMediaService:
                     "tour_comment_id": tour_comment_id,
                     "media_url": url
                 }
-                created_tour_comment_photo = await self.uow.tour_comments_photos.create(tour_comment_dict)
+                created_tour_comment_photo = await self.uow.tour_comments_media.create(tour_comment_dict)
                 response.append(created_tour_comment_photo)
             return response
         
     
     async def get_list_of_tour_comments_media(self, pagination: Pagination) -> list[TourCommentMediaSchema]:
         async with self.uow:
-            return await self.uow.tour_comments_photos.get_all(pagination)
+            return await self.uow.tour_comments_media.get_all(pagination)
+        
+    async def get_tour_comments_media_by_id(self, tour_comments_media_id: int) -> TourCommentMediaSchema:
+        async with self.uow:
+            return await self.uow.tour_comments_media.get_by_id(tour_comments_media_id)
+        
+    async def get_list_of_tour_comments_media_by_tour_comment_id(self, tour_comment_id: int) -> list[TourCommentMediaSchema]:
+        async with self.uow:
+            comment_instance = await self.uow.tour_comments.get_by_id(tour_comment_id)
+            return comment_instance.media
         
         
 
