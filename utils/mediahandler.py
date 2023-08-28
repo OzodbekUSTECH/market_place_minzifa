@@ -13,7 +13,7 @@ def generate_filename(base_name, extension, counter):
     return generated_name
 
 class MediaHandler:
-    media_url = "https://minzifatravel.ru"
+    media_url = "https://api.minzifatravel.ru"
     comment_photos_dir = "./static/"
     ALLOWED_PHOTO_CONTENT_TYPES = ["image/jpeg", "image/png"]
     @staticmethod
