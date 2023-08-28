@@ -1,1 +1,0 @@
-problems with adding folder into github and therefore i added this file to added it in git
