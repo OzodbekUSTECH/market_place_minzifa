@@ -21,6 +21,9 @@ services:
       - 8008:8000
     depends_on:
       - db
+    volumes:
+      - media-volume:/code/media/  # Ваш том (volume) для media
+      # ... Другие объявленные volumes ...
 
   pgadmin:
     container_name: pgadmin_marketplace
@@ -29,9 +32,10 @@ services:
       - PGADMIN_DEFAULT_EMAIL=marketplace@pgadmin.com
       - PGADMIN_DEFAULT_PASSWORD=eshonpir63
     ports:
-      - "8080:80"  # Здесь изменяем порт
+      - "8080:80"
     depends_on:
       - db
 
 volumes:
-  pgdata:
+  pgdata:  # Том для PostgreSQL
+  media-volume:  # Ваш том (volume) для media
