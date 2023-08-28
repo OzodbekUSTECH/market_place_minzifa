@@ -17,10 +17,9 @@ router = APIRouter(
 async def create_tour_comment_photos(
     tour_comment_id: int,
     media_group: list[UploadFile],
-    request: Request,
     tour_comments_photos_service: Annotated[TourCommentsPhotosService, Depends(get_tour_comments_photos_services)]
 ):
-    return await tour_comments_photos_service.create_tour_comment_photos(request, tour_comment_id, media_group)
+    return await tour_comments_photos_service.create_tour_comment_photos(tour_comment_id, media_group)
 
 @router.get('', response_model=list[TourCommentPhotoSchema])
 async def get_list_of_tour_comments_photos(

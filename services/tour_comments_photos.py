@@ -12,11 +12,10 @@ class TourCommentsPhotosService:
 
     async def create_tour_comment_photos(
             self,
-            request: Request,
             tour_comment_id: int,
             media_group: list[UploadFile],
     ) -> list[TourCommentPhotoSchema]:
-        urls = await MediaHandler.save_media(media_group, request)
+        urls = await MediaHandler.save_media(media_group)
         async with self.uow:
             response = []
             for url in urls:

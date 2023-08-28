@@ -13,14 +13,13 @@ def generate_filename(base_name, extension, counter):
     return generated_name
 
 class MediaHandler:
+    media_url = "https://minzifatravel.ru"
     comment_photos_dir = "./static/"
     ALLOWED_PHOTO_CONTENT_TYPES = ["image/jpeg", "image/png"]
     @staticmethod
     async def save_media(
         media_group: list[UploadFile],
-        request: Request
     ) -> list:
-        media_url = str(request.url)
         urls = []
         for media in media_group:
             if media.content_type not in MediaHandler.ALLOWED_PHOTO_CONTENT_TYPES:
@@ -34,16 +33,14 @@ class MediaHandler:
             with open(generated_name, 'wb') as media:
                 media.write(file_content)
             media.close()
-            url = media_url + generated_name[1:]
+            url = MediaHandler.media_url + generated_name[1:]
             urls.append(url)
         return urls
     
     @staticmethod
     async def update_media(
         photo: UploadFile,
-        request: Request
     ):
-        media_url = str(request.url)
         if photo.content_type not in MediaHandler.ALLOWED_PHOTO_CONTENT_TYPES:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid file format. Only photo (JPEG/PNG)  is allowed.")
         photo_name = photo.filename
@@ -55,6 +52,6 @@ class MediaHandler:
         with open(generated_name, 'wb') as photo:
             photo.write(file_content)
         photo.close()
-        photo_url = media_url + generated_name[1:]
+        photo_url = MediaHandler.media_url + generated_name[1:]
 
         return photo_url
