@@ -12,32 +12,32 @@ class TravelersAndManagersAssociation(Base):
     traveler_id = Column(Integer, ForeignKey("users.id"), index=True)
     manager_id = Column(Integer, ForeignKey("users.id"), index=True)
 
-    traveler = relationship(
-        "User",
-        primaryjoin="User.id == TravelersAndManagersAssociation.traveler_id",
-        back_populates="travelers",
-        lazy="subquery"
-    )
+    # traveler = relationship(
+    #     "User",
+    #     primaryjoin="User.id == TravelersAndManagersAssociation.traveler_id",
+    #     back_populates="travelers",
+    #     lazy="subquery"
+    # )
     
-    manager = relationship(
-        "User",
-        primaryjoin="User.id == TravelersAndManagersAssociation.manager_id",
-        back_populates="managers",
-        lazy="subquery"
-    )
-    def to_read_model(self):
-        return AssociationTravelAndManagerSchema(
-            **self.__dict__
-        )
+    # manager = relationship(
+    #     "User",
+    #     primaryjoin="User.id == TravelersAndManagersAssociation.manager_id",
+    #     back_populates="managers",
+    #     lazy="subquery"
+    # )
+    # def to_read_model(self):
+    #     return AssociationTravelAndManagerSchema(
+    #         **self.__dict__
+    #     )
     
-    def to_read_model_of_traveler(self):
-        return TravelersSchema(
-            manager_id=self.manager_id,
-            **self.traveler.__dict__  
-        )
+    # def to_read_model_of_traveler(self):
+    #     return TravelersSchema(
+    #         manager_id=self.manager_id,
+    #         **self.traveler.__dict__  
+    #     )
     
-    def to_read_model_of_manager(self):
-        return ManagersSchema(
-            traveler_id=self.traveler_id,
-            **self.manager.__dict__  
-        )
+    # def to_read_model_of_manager(self):
+    #     return ManagersSchema(
+    #         traveler_id=self.traveler_id,
+    #         **self.manager.__dict__  
+    #     )
