@@ -29,14 +29,14 @@ class User(Base):
     travelers = relationship(
         "TravelersAndManagersAssociation",
         primaryjoin="User.id == TravelersAndManagersAssociation.manager_id",
-        # back_populates="traveler",
+        back_populates="traveler",
         lazy="subquery"
     )
     
     managers = relationship(
         "TravelersAndManagersAssociation",
         primaryjoin="User.id == TravelersAndManagersAssociation.traveler_id",
-        # back_populates="manager",
+        back_populates="manager",
         lazy="subquery"
     )
     @hybrid_property
