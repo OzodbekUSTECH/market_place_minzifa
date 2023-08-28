@@ -28,14 +28,14 @@ class User(Base):
     tours = relationship("Tour", back_populates="user", lazy="subquery")
     travelers = relationship(
         "TravelersAndManagersAssociation",
-        primaryjoin="User.id == TravelersAndManagersAssociation.traveler_id",
+        primaryjoin="User.id == TravelersAndManagersAssociation.manager_id",
         back_populates="traveler",
         lazy="subquery"
     )
     
     managers = relationship(
         "TravelersAndManagersAssociation",
-        primaryjoin="User.id == TravelersAndManagersAssociation.manager_id",
+        primaryjoin="User.id == TravelersAndManagersAssociation.traveler_id",
         back_populates="manager",
         lazy="subquery"
     )
