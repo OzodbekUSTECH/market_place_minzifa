@@ -8,8 +8,8 @@ from repositories.base import Pagination
 from schemas.travelermanagers import ManagersSchema, TravelersSchema, CreateTravelerAndManagerSchema, UpdateTravelerAndManagerSchema, AssociationTravelAndManagerSchema
 
 router = APIRouter(
-    prefix="/travelermanagers",
-    tags=["Travel and Managers"],
+    prefix="/travelers_managers",
+    tags=["Travelers and Managers"],
 )
 
 
@@ -28,13 +28,13 @@ async def get_association_by_id(
 ) -> AssociationTravelAndManagerSchema:
     return await travelermanagers_service.get_associations_travel_and_manager_by_id(id)
 
-@router.get('/{manager_id}/travelers', name="get travelers of manager", response_model=list[TravelersSchema])
+@router.get('/{manager_id}/travelers', name="get travelers of manager", response_model=list[AssociationTravelAndManagerSchema])
 async def get_travelers_data_of_manager(
     manager_id: int,
-    pagination: Annotated[Pagination, Depends()],
+    # pagination: Annotated[Pagination, Depends()],
     travelermanagers_service: Annotated[TravelerManagersService, Depends(get_travelermanagers_services)]
 ) -> list[TravelersSchema]:
-    return await travelermanagers_service.get_travelers_of_manager(manager_id, pagination)
+    return await travelermanagers_service.get_travelers_of_manager_second_way(manager_id)
 
 
 @router.get('/{traveler_id}/managers', response_model=list[ManagersSchema])

@@ -19,6 +19,10 @@ class TravelerManagersService:
             
             return association
 
+    async def get_travelers_of_manager_second_way(self, manager_id: int) -> AssociationTravelAndManagerSchema:
+        async with self.uow:
+            manager = self.uow.users.get_by_id(manager_id)
+            return manager.travelers
 
     async def get_travelers_of_manager(self, manager_id: int, pagination: Pagination) -> list[TravelersSchema]:
         async with self.uow:
