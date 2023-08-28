@@ -14,12 +14,12 @@ router = APIRouter(
 
 
 @router.post('', response_model=list[TourCommentMediaSchema])
-async def create_tour_comment_media(
+async def create_tour_comments_media(
     tour_comment_id: int,
     media_group: list[UploadFile],
     tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
 ):
-    return await tour_comments_photos_service.create_tour_comment_media(tour_comment_id, media_group)
+    return await tour_comments_photos_service.create_tour_comments_media(tour_comment_id, media_group)
 
 @router.get('', response_model=list[TourCommentMediaSchema])
 async def get_list_of_tour_comments_media(
@@ -41,3 +41,19 @@ async def get_tour_comments_media_by_id(
     tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
 ):
     return await tour_comments_photos_service.get_tour_comments_media_by_id(tour_comments_media_id)
+
+
+@router.put('/{tour_comments_media_id}', response_model=TourCommentMediaSchema)
+async def update_tour_comments_media(
+    tour_comments_media_id: int,
+    media: UploadFile,
+    tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
+):
+    return await tour_comments_photos_service.update_tour_comments_media(tour_comments_media_id, media)
+
+@router.delete('/{tour_comments_media_id}', response_model=TourCommentMediaSchema)
+async def delete_tour_comments_media(
+    tour_comments_media_id: int,
+    tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
+):
+    return await tour_comments_photos_service.delete_tour_comments_media(tour_comments_media_id)

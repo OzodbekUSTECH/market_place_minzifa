@@ -10,7 +10,7 @@ class TourCommentsMediaService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
-    async def create_tour_comment_media(
+    async def create_tour_comments_media(
             self,
             tour_comment_id: int,
             media_group: list[UploadFile],
@@ -41,7 +41,7 @@ class TourCommentsMediaService:
             comment_instance = await self.uow.tour_comments.get_by_id(tour_comment_id)
             return comment_instance.media
         
-    async def update_tour_comment_media(
+    async def update_tour_comments_media(
             self, 
             tour_comments_media_id: int,
             media: UploadFile
@@ -55,6 +55,6 @@ class TourCommentsMediaService:
             return await self.uow.tour_comments_media.update(tour_comments_media_id, media_dict)
         
 
-    async def delete_tour_comment_media(self, tour_comment_media_id: int) -> TourCommentMediaSchema:
+    async def delete_tour_comments_media(self, tour_comment_media_id: int) -> TourCommentMediaSchema:
         async with self.uow:
             return await self.uow.tour_comments_media.delete(tour_comment_media_id)
