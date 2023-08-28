@@ -26,6 +26,7 @@ class User(Base):
     role = relationship("Role", lazy="subquery")
     favorite_tours = relationship("FavoriteTours", lazy="subquery")
     tours = relationship("Tour", back_populates="user", lazy="subquery")
+    
     travelers = relationship(
         "TravelersAndManagersAssociation",
         primaryjoin="User.id == TravelersAndManagersAssociation.manager_id",

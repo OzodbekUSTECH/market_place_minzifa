@@ -23,6 +23,11 @@ class TravelerManagersService:
         async with self.uow:
             manager = await self.uow.users.get_by_id(manager_id)
             return manager.travelers
+        
+    async def get_managers_of_traveler_second_way(self, traveler_id: int) -> AssociationTravelAndManagerSchema:
+        async with self.uow:
+            traveler = await self.uow.users.get_by_id(traveler_id)
+            return traveler.managers
 
     async def get_travelers_of_manager(self, manager_id: int, pagination: Pagination) -> list[TravelersSchema]:
         async with self.uow:

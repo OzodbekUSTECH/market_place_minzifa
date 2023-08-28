@@ -28,22 +28,38 @@ async def get_association_by_id(
 ) -> AssociationTravelAndManagerSchema:
     return await travelermanagers_service.get_associations_travel_and_manager_by_id(id)
 
-@router.get('/{manager_id}/travelers', name="get travelers of manager", response_model=list[AssociationTravelAndManagerSchema])
+@router.get('/manager/{manager_id}/travelers', name="get travelers of manager", response_model=list[AssociationTravelAndManagerSchema])
 async def get_travelers_data_of_manager(
     manager_id: int,
-    # pagination: Annotated[Pagination, Depends()],
     travelermanagers_service: Annotated[TravelerManagersService, Depends(get_travelermanagers_services)]
 ) -> list[TravelersSchema]:
     return await travelermanagers_service.get_travelers_of_manager_second_way(manager_id)
 
 
-@router.get('/{traveler_id}/managers', response_model=list[ManagersSchema])
-async def get_managers_data_of_traveler(
+@router.get('/traveler/{traveler_id}/managers', response_model=list[AssociationTravelAndManagerSchema])
+async def get_managers_of_traveler(
     traveler_id: int,
-    pagination: Annotated[Pagination, Depends()],
     travelermanagers_service: Annotated[TravelerManagersService, Depends(get_travelermanagers_services)]
 ) -> list[ManagersSchema]:
-    return await travelermanagers_service.get_managers_of_traveler(traveler_id, pagination)
+    return await travelermanagers_service.get_managers_of_traveler_second_way(traveler_id)
+
+
+# @router.get('/{manager_id}/travelers', name="get travelers of manager", response_model=list[TravelersSchema])
+# async def get_travelers_data_of_manager(
+#     manager_id: int,
+#     pagination: Annotated[Pagination, Depends()],
+#     travelermanagers_service: Annotated[TravelerManagersService, Depends(get_travelermanagers_services)]
+# ) -> list[TravelersSchema]:
+#     return await travelermanagers_service.get_travelers_of_manager(manager_id, pagination)
+
+
+# @router.get('/{traveler_id}/managers', response_model=list[ManagersSchema])
+# async def get_managers_of_traveler(
+#     traveler_id: int,
+#     pagination: Annotated[Pagination, Depends()],
+#     travelermanagers_service: Annotated[TravelerManagersService, Depends(get_travelermanagers_services)]
+# ) -> list[ManagersSchema]:
+#     return await travelermanagers_service.get_managers_of_traveler(traveler_id, pagination)
 
 
 @router.post('', name="choose association traveler and manager", response_model=AssociationTravelAndManagerSchema)
