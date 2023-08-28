@@ -1,5 +1,3 @@
-static/
-media/
 venv/
 .venv/
 __pycache__/
