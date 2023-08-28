@@ -19,6 +19,7 @@ async def create_tour_comments_media(
     tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)],
     tour_comment_id: int = Query()
 ):
+    
     return await tour_comments_photos_service.create_tour_comments_media(tour_comment_id, media_group)
 
 
