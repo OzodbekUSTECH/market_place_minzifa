@@ -1,0 +1,6 @@
+static/
+media/
+venv/
+.venv/
+__pycache__/
+.pytest_cache/
