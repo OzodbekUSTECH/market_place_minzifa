@@ -14,7 +14,7 @@ def generate_filename(base_name, extension, counter, directory):
 
 class MediaHandler:
     media_url = "https://api.minzifatravel.ru"
-    comment_photos_dir = "./static/comments/media/"
+    comment_media_dir = "./media/comments/"
     ALLOWED_PHOTO_CONTENT_TYPES = ["image/jpeg", "image/png"]
     @staticmethod
     async def save_media(

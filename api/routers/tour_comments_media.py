@@ -1,0 +1,29 @@
+from typing import Annotated
+from fastapi import APIRouter, Depends, Request, UploadFile
+from services import TourCommentsMediaService
+from utils.dependency import get_tour_comments_media_services, get_current_user
+from repositories.base import Pagination
+from schemas.tour_comments_media import TourCommentMediaSchema
+from models import User
+from security.permissionhandler import PermissionHandler, Permissions
+
+router = APIRouter(
+    prefix="/tours/comments/media",
+    tags=["Tour Comments Photos"]
+)
+
+
+@router.post('', response_model=list[TourCommentMediaSchema])
+async def create_tour_comment_media(
+    tour_comment_id: int,
+    media_group: list[UploadFile],
+    tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
+):
+    return await tour_comments_photos_service.create_tour_comment_media(tour_comment_id, media_group)
+
+@router.get('', response_model=list[TourCommentMediaSchema])
+async def get_list_of_tour_comments_media(
+    pagination: Annotated[Pagination, Depends()],
+    tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
+):
+    return await tour_comments_photos_service.get_list_of_tour_comments_media(pagination)

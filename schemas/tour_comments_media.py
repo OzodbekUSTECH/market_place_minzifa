@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class TourCommentPhotoSchema(BaseModel):
+class TourCommentMediaSchema(BaseModel):
     id: int
     tour_comment_id: int
-    photo_url: str
+    media_url: str

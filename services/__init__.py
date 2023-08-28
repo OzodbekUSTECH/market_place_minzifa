@@ -12,4 +12,4 @@ from services.activities import ActivitiesService
 from services.tour_activities import TourActivitiesService
 from services.favorite_tours import FavoriteToursService
 from services.tour_comments import TourCommentsService
-from services.tour_comments_photos import TourCommentsPhotosService
+from services.tour_comments_media import TourCommentsMediaService
