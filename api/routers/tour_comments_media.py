@@ -23,12 +23,19 @@ async def create_tour_comments_media(
 
 
 
-@router.get('', response_model=list[TourCommentMediaSchema])
+@router.get('/', response_model=list[TourCommentMediaSchema])
 async def get_list_of_tour_comments_media(
     pagination: Annotated[Pagination, Depends()],
     tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
 ):
     return await tour_comments_photos_service.get_list_of_tour_comments_media(pagination)
+
+@router.get('/comment/{tour_comment_id}', response_model=list[TourCommentMediaSchema])
+async def get_list_of_tour_comments_media_by_tour_comment_id(
+    tour_comment_id: int,
+    tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
+):
+    return await tour_comments_photos_service.get_list_of_tour_comments_media_by_tour_comment_id(tour_comment_id)
 
 
 @router.get('/{tour_comments_media_id}', response_model=TourCommentMediaSchema)
@@ -38,12 +45,6 @@ async def get_tour_comments_media_by_id(
 ):
     return await tour_comments_photos_service.get_tour_comments_media_by_id(tour_comments_media_id)
 
-@router.get('/comment/{tour_comment_id}', response_model=list[TourCommentMediaSchema])
-async def get_list_of_tour_comments_media_by_tour_comment_id(
-    tour_comment_id: int,
-    tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
-):
-    return await tour_comments_photos_service.get_list_of_tour_comments_media_by_tour_comment_id(tour_comment_id)
 
 
 @router.put('/{tour_comments_media_id}', response_model=TourCommentMediaSchema)
@@ -60,3 +61,4 @@ async def delete_tour_comments_media(
     tour_comments_photos_service: Annotated[TourCommentsMediaService, Depends(get_tour_comments_media_services)]
 ):
     return await tour_comments_photos_service.delete_tour_comments_media(tour_comments_media_id)
+
