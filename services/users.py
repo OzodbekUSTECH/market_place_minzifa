@@ -1,10 +1,11 @@
-from schemas.users import UserCreateSchema, UserUpdateSchema, UserSchema, TokenSchema
+from schemas.users import UserCreateSchema, UserUpdateSchema, TokenSchema
 from security.password import PasswordHandler
 from repositories import Pagination
 from datetime import timedelta
 from jose import JWTError
 from schemas.users import TokenData
 from datetime import datetime
+from models import User
 from security.jwthandler import JWTHandler
 from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
@@ -13,7 +14,7 @@ class UsersService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
-    async def register_user(self, user_data: UserCreateSchema) -> UserSchema:
+    async def register_user(self, user_data: UserCreateSchema) -> User:
         async with self.uow:
             existing_user = await self.uow.users.get_by_email(user_data.email)
             if existing_user:
@@ -26,17 +27,17 @@ class UsersService:
             new_user = await self.uow.users.create(user_dict)
             return new_user
         
-    async def get_list_of_users(self, pagination: Pagination) -> list[UserSchema]:
+    async def get_list_of_users(self, pagination: Pagination) -> list[User]:
         async with self.uow:
             users = await self.uow.users.get_all(pagination)
             return users
 
-    async def get_user_by_id(self, user_id: int) -> UserSchema:
+    async def get_user_by_id(self, user_id: int) -> User:
         async with self.uow:
             user = await self.uow.users.get_by_id(user_id)
             return user
 
-    async def update_user(self, user_id: int, user_data: UserUpdateSchema) -> UserSchema:
+    async def update_user(self, user_id: int, user_data: UserUpdateSchema) -> User:
         user_dict = user_data.model_dump()
         async with self.uow:
             existing_user = await self.uow.users.get_by_email(user_data.email)
@@ -46,7 +47,7 @@ class UsersService:
             return updated_user
 
 
-    async def delete_user(self, user_id: int) -> UserSchema:
+    async def delete_user(self, user_id: int) -> User:
         async with self.uow:
             deleted_user = await self.uow.users.delete(user_id)
             return deleted_user
@@ -68,7 +69,7 @@ class UsersService:
 
     
     
-    async def get_current_user(self, token: str) -> UserSchema:
+    async def get_current_user(self, token: str) -> User:
         credentials_exception = CustomExceptions.unauthorized("Could not validate credentials")
         try:
             payload = await JWTHandler.decode(token)
@@ -87,7 +88,7 @@ class UsersService:
 
             return user
 
-    async def get_user_by_email(self, email: str) -> UserSchema:
+    async def get_user_by_email(self, email: str) -> User:
         async with self.uow:
             user = await self.uow.users.get_by_email(email)
             return user
@@ -100,7 +101,7 @@ class UsersService:
         token = await JWTHandler.encode(payload)
         return token
     
-    async def reset_password(self, token: str, password: str) -> UserSchema:
+    async def reset_password(self, token: str, password: str) -> User:
         
         user = await self.get_current_user(token)
         hashed_password = PasswordHandler.hash(password)

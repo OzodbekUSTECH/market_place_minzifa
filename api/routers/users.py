@@ -39,7 +39,7 @@ async def get_own_user_data(
     """
     return current_user
 
-@router.post('/forgot/password', name="forgot password")
+@router.post('/forgot/password', name="forgot password") #forgot what to use get or post or put)
 async def forgot_password(
     email: str, 
     email_sender: EmailSender = Depends()
@@ -52,7 +52,7 @@ async def forgot_password(
     """
     return await email_sender.send_reset_password_link(email)
 
-@router.post('/reset/password', name="reset password", response_model=UserSchema)
+@router.put('/reset/password', name="reset password", response_model=UserSchema)
 async def reset_password(
     token: str, 
     user_password: ResetPasswordSchema,

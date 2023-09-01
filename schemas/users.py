@@ -76,7 +76,7 @@ class ResetPasswordSchema(BaseModel):
 
     @validator("password2")
     def passwords_match(cls, v, values):
-        if v != values['password1']:
+        if 'password1' in values and v != values['password1']:
             raise ValueError('passwords do not match')
         return v
     

@@ -15,7 +15,7 @@ class TourCommentsMediaService:
             tour_comment_id: int,
             media_group: list[UploadFile],
     ) -> list[TourCommentMediaSchema]:
-        if len(media_group) > 1:
+        if len(media_group) > 3:
             raise CustomExceptions.forbidden("Maximum number of media is 3")
         urls = await MediaHandler.save_media(media_group, MediaHandler.comment_media_dir)
         async with self.uow:

@@ -20,14 +20,14 @@ RUN pip install -r requirements.txt
 # copy project
 COPY . .
 
-# RUN apt-get update && \
-#     apt-get install -y nginx && \
-#     rm -rf /etc/nginx/sites-enabled/default
-# COPY nginx.conf /etc/nginx/sites-enabled/
+RUN apt-get update && \
+    apt-get install -y nginx && \
+    rm -rf /etc/nginx/sites-enabled/default
+COPY nginx.conf /etc/nginx/sites-enabled/
 
 EXPOSE 80
 
 # Запускаем Nginx и Gunicorn для приложения FastAPI
-# CMD service nginx start && alembic upgrade head && gunicorn -b 0.0.0.0:8000 -w 2 -k uvicorn.workers.UvicornWorker main:app
+CMD service nginx start && alembic upgrade head && gunicorn -b 0.0.0.0:8000 -w 2 -k uvicorn.workers.UvicornWorker main:app
 
-CMD alembic upgrade head && gunicorn -b 0.0.0.0:8000 -w 2 -k uvicorn.workers.UvicornWorker main:app
+# CMD alembic upgrade head && gunicorn -b 0.0.0.0:8000 -w 2 -k uvicorn.workers.UvicornWorker main:app

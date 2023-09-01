@@ -2,12 +2,13 @@ from repositories import Pagination
 from schemas.travelermanagers import ManagersSchema, TravelersSchema, CreateTravelerAndManagerSchema, DeleteTravelerAndManagerSchema, UpdateTravelerAndManagerSchema, AssociationTravelAndManagerSchema
 from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
+from models import TravelersAndManagersAssociation
 
 class TravelerManagersService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
-    async def get_all_associations_travel_and_manager(self, pagination: Pagination):
+    async def get_all_associations_travel_and_manager(self, pagination: Pagination) -> list[TravelersAndManagersAssociation]:
         async with self.uow:
             associations = await self.uow.travelers_managers.get_all(pagination)
             return associations
@@ -19,12 +20,12 @@ class TravelerManagersService:
             
             return association
 
-    async def get_travelers_of_manager_second_way(self, manager_id: int) -> AssociationTravelAndManagerSchema:
+    async def get_travelers_of_manager_second_way(self, manager_id: int) -> TravelersAndManagersAssociation:
         async with self.uow:
             manager = await self.uow.users.get_by_id(manager_id)
             return manager.travelers
         
-    async def get_managers_of_traveler_second_way(self, traveler_id: int) -> AssociationTravelAndManagerSchema:
+    async def get_managers_of_traveler_second_way(self, traveler_id: int) -> TravelersAndManagersAssociation:
         async with self.uow:
             traveler = await self.uow.users.get_by_id(traveler_id)
             return traveler.managers
@@ -38,14 +39,14 @@ class TravelerManagersService:
         async with self.uow:
             return await self.uow.travelers_managers.get_managers(traveler_id, pagination)
     
-    async def connect_traveler_to_manager(self, travel_manager_data: CreateTravelerAndManagerSchema) -> AssociationTravelAndManagerSchema:
+    async def connect_traveler_to_manager(self, travel_manager_data: CreateTravelerAndManagerSchema) -> TravelersAndManagersAssociation:
         travel_manager_dict = travel_manager_data.model_dump()
         async with self.uow:
             created_association = await self.uow.travelers_managers.create(travel_manager_dict)
             
             return created_association
     
-    async def update_manager_of_traveler_or_traveler_of_manager(self, association_id: int, travel_manager_data: UpdateTravelerAndManagerSchema) -> AssociationTravelAndManagerSchema:
+    async def update_manager_of_traveler_or_traveler_of_manager(self, association_id: int, travel_manager_data: UpdateTravelerAndManagerSchema) -> TravelersAndManagersAssociation:
         travel_manager_dict = travel_manager_data.model_dump()
         async with self.uow:
             updated_association = await self.uow.travelers_managers.update(association_id, travel_manager_dict)
@@ -53,7 +54,7 @@ class TravelerManagersService:
             return updated_association
 
 
-    async def delete_traveler_and_manager(self, association_id: int) -> AssociationTravelAndManagerSchema:
+    async def delete_traveler_and_manager(self, association_id: int) -> TravelersAndManagersAssociation:
         async with self.uow:
             deleted_association = await self.uow.travelers_managers.delete(association_id)
             
