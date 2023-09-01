@@ -25,7 +25,7 @@ class User(Base):
     role_id = Column(Integer, ForeignKey("roles.id"))
     # role = relationship("Role", lazy="subquery")
     # favorite_tours = relationship("FavoriteTours", lazy="subquery")
-    # tours = relationship("Tour", back_populates="user", lazy="subquery")
+    tours = relationship("Tour", back_populates="user", lazy="subquery")
     
     # travelers = relationship(
     #     "TravelersAndManagersAssociation",
