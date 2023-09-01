@@ -23,33 +23,32 @@ class User(Base):
         DateTime(timezone=True), default=datetime.now, onupdate=datetime.now
     )
     role_id = Column(Integer, ForeignKey("roles.id"))
-    # role = relationship("Role", lazy="subquery")
-    # favorite_tours = relationship("FavoriteTours", lazy="subquery")
+    role = relationship("Role", lazy="subquery")
+    favorite_tours = relationship("FavoriteTours", lazy="subquery")
     tours = relationship("Tour", back_populates="user", lazy="subquery")
     
-    # travelers = relationship(
-    #     "TravelersAndManagersAssociation",
-    #     primaryjoin="User.id == TravelersAndManagersAssociation.manager_id",
-    #     back_populates="traveler",
-    #     lazy="subquery"
-    # )
+    travelers = relationship(
+        "TravelersAndManagersAssociation",
+        primaryjoin="User.id == TravelersAndManagersAssociation.manager_id",
+        # back_populates="traveler",
+        lazy="subquery"
+    )
     
-    # managers = relationship(
-    #     "TravelersAndManagersAssociation",
-    #     primaryjoin="User.id == TravelersAndManagersAssociation.traveler_id",
-    #     back_populates="manager",
-    #     lazy="subquery"
-    # )
+    managers = relationship(
+        "TravelersAndManagersAssociation",
+        primaryjoin="User.id == TravelersAndManagersAssociation.traveler_id",
+        # back_populates="manager",
+        lazy="subquery"
+    )
     @hybrid_property
     def rating(self):
-        ...
-        # all_ratings = []
+        all_ratings = []
         
-        # for tour in self.tours:
-        #     for comment in tour.tour_comments:
-        #         all_ratings.append(comment.rating)
+        for tour in self.tours:
+            for comment in tour.tour_comments:
+                all_ratings.append(comment.rating)
                 
-        # if all_ratings:
-        #     return sum(all_ratings) / len(all_ratings)
-        # return 1
+        if all_ratings:
+            return sum(all_ratings) / len(all_ratings)
+        return 1
     
