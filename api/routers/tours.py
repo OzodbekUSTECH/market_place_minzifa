@@ -24,6 +24,8 @@ async def search_tours(
     end_date: date = Query(None),
     country: str = Query(None),
     region: str = Query(None),
+    currency_id: int = Query(None),
+    price: int = Query(None),
 ) -> list[TourSchema]:
     return await tours_service.search_tours_second(
         query, 
@@ -32,7 +34,9 @@ async def search_tours(
         start_date,
         end_date,
         country,
-        region, 
+        region,
+        currency_id,
+        price,
         pagination
     )
 
