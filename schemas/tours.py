@@ -1,7 +1,7 @@
 from pydantic import BaseModel, validator
 from typing import Optional
 from schemas.tourprices import TourPriceSchema
-from datetime import date
+from datetime import date, datetime
 class CreateTourSchema(BaseModel):
     status_id: int
     user_id: int
@@ -23,6 +23,8 @@ class TourSchema(CreateTourSchema):
     id: int
     amount_comments: int
     view_count: int
+    created_at: datetime
+    updated_at: datetime
     class ConfigDict:
         from_attributes = True
 

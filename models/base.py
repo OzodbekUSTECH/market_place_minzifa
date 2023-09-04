@@ -8,10 +8,10 @@ class BaseTable(Base):
     id = Column(Integer, primary_key=True, index=True)
     
     created_at = Column(
-        DateTime(timezone=True), default=datetime.now
+        DateTime, default=datetime.now
     )
     updated_at = Column(
-        DateTime(timezone=True), default=datetime.now, onupdate=datetime.now
+        DateTime, default=datetime.now, onupdate=datetime.now
     )
     
     
