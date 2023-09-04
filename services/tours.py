@@ -76,6 +76,8 @@ class ToursService:
             tour_rating: float, 
             start_date: date,
             end_date: date,
+            country: str,
+            region: str,
             pagination: Pagination
         ):
         async with self.uow:
@@ -90,7 +92,9 @@ class ToursService:
                             if not tour_rating or (user.rating >= tour_rating and user.rating < (tour_rating + 0.5)):
                                 if not start_date or start_date == tour.start_date:
                                     if not end_date or end_date == tour.end_date:
-                                        matched_tours.append(tour)
+                                        if not country or country == tour.country:
+                                            if not region or region == tour.region:
+                                                matched_tours.append(tour)
 
             return matched_tours
 
