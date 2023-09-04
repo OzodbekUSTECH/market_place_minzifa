@@ -74,11 +74,6 @@ class ResetPasswordSchema(BaseModel):
     password1: constr(min_length=8, max_length=64)
     password2: constr(min_length=8, max_length=64)
 
-    @validator("password2")
-    def passwords_match(cls, v, values):
-        if 'password1' in values and v != values['password1']:
-            raise ValueError('passwords do not match')
-        return v
     
     
     @field_validator("password1")
@@ -104,3 +99,10 @@ class ResetPasswordSchema(BaseModel):
         if not re.search(r"[a-z]", v):
             raise ValueError("Password must contain lowercase characters")
         return v
+    
+    @validator("password2")
+    def passwords_match(cls, v, values):
+        if 'password1' in values and v != values['password1']:
+            raise ValueError('passwords do not match')
+        return v
+    
