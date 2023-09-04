@@ -19,19 +19,22 @@ class Tour(BaseTable):
     region = Column(String, nullable=False)
     total_places = Column(Integer, nullable=False)
     free_places = Column(Integer, nullable=False)
-    view_count = Column(Integer, default=0)  # Добавляем поле для счетчика просмотров
-
+    # view_count = Column(Integer, default=0)  # Добавляем поле для счетчика просмотров
+    views = relationship("IPTourView", lazy="subquery")
     activities = relationship("TourActivity", back_populates="tour", lazy="subquery")
     tour_comments = relationship("TourComment", lazy="subquery")
     user = relationship("User", back_populates="tours", lazy="subquery")
-
+    
     
     @hybrid_property
     def amount_comments(self):
         return len(self.tour_comments)
     
-    def increment_view_count(self):
-        self.view_count += 1
+    @hybrid_property
+    def amount_views(self):
+        return len(self.views)
+    # def increment_view_count(self):
+    #     self.view_count += 1
 
 
 class IPTourView(BaseTable):
