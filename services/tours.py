@@ -88,8 +88,8 @@ class ToursService:
                             
                         if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
                             if not tour_rating or (user.rating >= tour_rating and user.rating < (tour_rating + 0.5)):
-                                if not start_date or start_date >= tour.start_date:
-                                    if not end_date or end_date <= tour.end_date:
+                                if not start_date or start_date == tour.start_date:
+                                    if not end_date or end_date == tour.end_date:
                                         matched_tours.append(tour)
 
             return matched_tours
