@@ -40,7 +40,7 @@ class FilterTours:
         self.currency_id = currency_id
         self.price = price
 
-    def _filter_tour(self, tour):
+    def filter_tour(self, tour):
         if self.status_id and tour.status_id != self.status_id:
             return False
 
