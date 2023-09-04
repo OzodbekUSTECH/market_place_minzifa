@@ -1,12 +1,11 @@
-from database.db import Base
+from models import BaseTable
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
     
-class TourPrice(Base):
+class TourPrice(BaseTable):
     __tablename__ = 'tour_prices'
     
-    id = Column(Integer, primary_key=True)
     tour_id = Column(Integer, ForeignKey('tours.id'))
     currency_id = Column(Integer, ForeignKey('currencies.id'))
     price = Column(Float, nullable=False)

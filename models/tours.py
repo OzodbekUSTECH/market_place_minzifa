@@ -1,20 +1,14 @@
-from database.db import Base
+from models import BaseTable
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
 
-class Tour(Base):
+class Tour(BaseTable):
     __tablename__ = 'tours'
     
-    id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
-    created_at = Column(
-        DateTime(timezone=True), default=datetime.now
-    )
-    updated_at = Column(
-        DateTime(timezone=True), default=datetime.now, onupdate=datetime.now
-    )
+    
     user_id = Column(Integer, ForeignKey("users.id"))
     status_id = Column(Integer, ForeignKey('tour_statuses.id'), nullable=False, index=True)
     prices = relationship("TourPrice", back_populates="tour", lazy="subquery")

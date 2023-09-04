@@ -1,12 +1,11 @@
-from database.db import Base
+from models import BaseTable
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
     
-class Activity(Base):
+class Activity(BaseTable):
     __tablename__ = 'activities'
     
-    id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     
 

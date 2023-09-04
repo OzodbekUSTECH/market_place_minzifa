@@ -1,4 +1,5 @@
 from database.db import Base
+from models.base import BaseTable
 from models.users import User
 from models.travelsmanagers import TravelersAndManagersAssociation
 from models.maillist import MailList

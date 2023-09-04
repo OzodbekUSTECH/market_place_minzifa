@@ -1,13 +1,12 @@
-from database.db import Base
+from models import BaseTable
 from enum import Enum as PyEnum
 from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, JSON, ForeignKey
 from sqlalchemy.orm import relationship
 from schemas.roles import RolePermissionsSchema
 
-class Permission(Base):
+class Permission(BaseTable):
     __tablename__ = 'permissions'
 
-    id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     endpoint = Column(String)
     role_permissions = relationship("RolePermission", back_populates="permission", lazy="subquery")

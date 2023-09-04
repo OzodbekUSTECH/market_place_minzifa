@@ -1,13 +1,12 @@
-from database.db import Base
+from models import BaseTable
 from enum import Enum as PyEnum
 from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, JSON, ForeignKey
 from sqlalchemy.orm import relationship
 from schemas.rolepermissions import RolePermissionsSchema
 
-class RolePermission(Base):
+class RolePermission(BaseTable):
     __tablename__ = 'role_permissions'
 
-    id = Column(Integer, primary_key=True, index=True)
     role_id = Column(Integer, ForeignKey('roles.id'), index=True)
     permission_id = Column(Integer, ForeignKey('permissions.id'), index=True)
 
