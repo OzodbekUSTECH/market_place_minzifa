@@ -1,6 +1,6 @@
 import re
 from pydantic import BaseModel, EmailStr, field_validator, constr, validator
-from typing import Optional
+from typing import Optional, Text
 
 
 class UserCreateSchema(BaseModel):
@@ -12,7 +12,7 @@ class UserCreateSchema(BaseModel):
     is_traveler: bool = False
     role_id: int
     link: str = None
-    about: str = None
+    about: Text = None
     
 
     @field_validator("password")
@@ -47,7 +47,7 @@ class UserUpdateSchema(BaseModel):
     is_traveler: bool = False
     role_id: int
     link: str = None
-    about: str = None
+    about: Text = None
 
 class UserSchema(BaseModel):
     id: int
@@ -59,7 +59,7 @@ class UserSchema(BaseModel):
     role_id: int
     rating: float
     link: str
-    about: str
+    about: Text
 
     @validator('rating', pre=True, always=True)
     def round_rating(cls, value):
