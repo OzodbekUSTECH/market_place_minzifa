@@ -11,8 +11,8 @@ class UserCreateSchema(BaseModel):
     is_traveler_expert: bool = False
     is_traveler: bool = False
     role_id: int
-    link: str
-    about: str
+    link: str = None
+    about: str = None
     
 
     @field_validator("password")
