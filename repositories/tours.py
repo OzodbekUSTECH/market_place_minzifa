@@ -35,7 +35,11 @@ class ToursRepository(BaseRepository):
 
 
 
-
+class IPTourViewRepository(BaseRepository):
+    async def get_by_ip_address(self, ip_address: str):
+        ip_tour_view = self.session.query(self.model).filter(self.model.ip_address == ip_address).first()
+        self.session.commit()
+        return ip_tour_view
 
 
 

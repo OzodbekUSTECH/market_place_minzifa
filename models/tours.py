@@ -33,3 +33,14 @@ class Tour(BaseTable):
     def increment_view_count(self):
         self.view_count += 1
 
+
+class IPTourView(BaseTable):
+    __tablename__ = 'ip_tour_views'
+
+    ip_address = Column(String, nullable=False)
+    tour_id = Column(Integer, ForeignKey('tours.id'), nullable=False)  
+
+    
+    
+
+   

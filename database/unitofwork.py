@@ -15,6 +15,7 @@ from models import (
     FavoriteTours,
     TourComment,
     TourCommentMedia,
+    IPTourView,
 )
 
 from database.db import session_maker
@@ -34,6 +35,7 @@ from repositories import (
     FavoriteToursRepository,
     TourCommentsRepository,
     TourCommentsMediaRepository,
+    IPTourViewRepository,
 )
 
 
@@ -58,6 +60,7 @@ class UnitOfWork:
     favorite_tours: Type[FavoriteToursRepository]
     tour_comments: Type[TourCommentsRepository]
     tour_comments_media: Type[TourCommentsMediaRepository]
+    ip_tour_view: Type[IPTourViewRepository]
 
     def __init__(self):
         self.session_factory = session_maker
@@ -79,6 +82,7 @@ class UnitOfWork:
         self.favorite_tours = FavoriteToursRepository(self.session, model=FavoriteTours)
         self.tour_comments = TourCommentsRepository(self.session, model=TourComment)
         self.tour_comments_media = TourCommentsMediaRepository(self.session, model=TourCommentMedia)
+        self.ip_tour_view = IPTourViewRepository(self.session, model=IPTourView)
 
     async def __aexit__(self, *args):
         await self.rollback()
