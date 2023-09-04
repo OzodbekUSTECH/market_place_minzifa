@@ -22,8 +22,10 @@ class Tour(BaseTable):
     
     @hybrid_property
     def rating(self):
-        print(self.user.rating)
-        print(self.user.rating)
-        print(self.user.rating)
-        print(self.user.rating)
+        print(f"dawdawdaw {self.user.rating}")
+        print(f"dawdawdaw {self.user.rating}")
+        print(f"dawdawdaw {self.user.rating}")
+        print(f"dawdawdaw {self.user.rating}")
+        print(f"dawdawdaw {self.user.rating}")
+        
         return self.user.rating
