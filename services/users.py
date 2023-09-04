@@ -24,8 +24,7 @@ class UsersService:
 
             user_dict = user_data.model_dump()
             user_dict["password"] = hashed_password
-            new_user = await self.uow.users.create(user_dict)
-            return new_user
+            return await self.uow.users.create(user_dict)
         
     async def get_list_of_users(self, pagination: Pagination) -> list[User]:
         async with self.uow:
