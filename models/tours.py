@@ -20,12 +20,4 @@ class Tour(BaseTable):
     user = relationship("User", back_populates="tours", lazy="subquery")
 
     
-    @hybrid_property
-    def rating(self):
-        print(f"dawdawdaw {self.user.rating}")
-        print(f"dawdawdaw {self.user.rating}")
-        print(f"dawdawdaw {self.user.rating}")
-        print(f"dawdawdaw {self.user.rating}")
-        print(f"dawdawdaw {self.user.rating}")
-        
-        return self.user.rating
+   
