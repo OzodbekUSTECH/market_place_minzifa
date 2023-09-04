@@ -15,9 +15,9 @@ class User(BaseTable):
     phone_number = Column(String, nullable=True)
     is_traveler_expert = Column(Boolean, default=False)
     is_traveler = Column(Boolean, default=False)    
+    role_id = Column(Integer, ForeignKey("roles.id"))
     link = Column(String, nullable=True)
     about = Column(Text, nullable=True)
-    role_id = Column(Integer, ForeignKey("roles.id"))
 
     role = relationship("Role", lazy="subquery")
     favorite_tours = relationship("FavoriteTours", lazy="subquery")

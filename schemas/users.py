@@ -12,7 +12,7 @@ class UserCreateSchema(BaseModel):
     is_traveler: bool = False
     role_id: int
     link: str = None
-    about: Text = None
+    about: str = None
     
 
     @field_validator("password")
@@ -47,7 +47,7 @@ class UserUpdateSchema(BaseModel):
     is_traveler: bool = False
     role_id: int
     link: str = None
-    about: Text = None
+    about: str = None
 
 class UserSchema(BaseModel):
     id: int
@@ -59,15 +59,12 @@ class UserSchema(BaseModel):
     role_id: int
     rating: float
     link: Optional[str]
-    about: Optional[Text]
+    about: Optional[str]
 
     @validator('rating', pre=True, always=True)
     def round_rating(cls, value):
         return float(round(value, 2))
 
-
-    class ConfigDict:
-        from_attributes = True
 
 
 class TokenSchema(BaseModel):
