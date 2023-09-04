@@ -1,10 +1,12 @@
 from pydantic import BaseModel
 from typing import Optional
 from schemas.tourprices import TourPriceSchema
-
+from datetime import date
 class CreateTourSchema(BaseModel):
     status_id: int
     user_id: int
+    start_date: date = None
+    end_date: date = None
     title: str
 
 class UpdateTourSchema(CreateTourSchema):

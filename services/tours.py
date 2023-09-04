@@ -1,6 +1,6 @@
 from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema
 from repositories import Pagination
-from datetime import datetime
+from datetime import datetime, date
 from models import Tour
 from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
@@ -69,7 +69,15 @@ class ToursService:
             filtered_tours =  await self.uow.tours.search_tours(query, status_id,tour_rating,pagination)
             return filtered_tours
 
-    async def search_tours_second(self, query: str, status_id: int, tour_rating: float, pagination: Pagination):
+    async def search_tours_second(
+            self, 
+            query: str, 
+            status_id: int, 
+            tour_rating: float, 
+            start_date: date,
+            end_date: date,
+            pagination: Pagination
+        ):
         async with self.uow:
             users = await self.uow.users.get_all(pagination)
             matched_tours = []
@@ -80,8 +88,9 @@ class ToursService:
                             
                         if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
                             if not tour_rating or (user.rating >= tour_rating and user.rating < (tour_rating + 0.5)):
-
-                                matched_tours.append(tour)
+                                if not start_date or start_date >= tour.start_date:
+                                    if not end_date or end_date <= tour.end_date:
+                                        matched_tours.append(tour)
 
             return matched_tours
 
