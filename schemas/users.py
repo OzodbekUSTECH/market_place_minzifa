@@ -11,6 +11,9 @@ class UserCreateSchema(BaseModel):
     is_traveler_expert: bool = False
     is_traveler: bool = False
     role_id: int
+    link: str
+    about: str
+    
 
     @field_validator("password")
     def password_must_contain_special_characters(cls, v):
