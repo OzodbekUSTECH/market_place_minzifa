@@ -46,5 +46,5 @@ class User(BaseTable):
                 
         if all_ratings:
             return sum(all_ratings) / len(all_ratings)
-        return 1
+        return 1.00
     
