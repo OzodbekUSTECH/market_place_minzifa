@@ -2,6 +2,8 @@ import re
 from pydantic import BaseModel, EmailStr, field_validator, constr, validator
 from typing import Optional, Text
 
+class UserCreatedResponseSchema(BaseModel):
+    id: int
 
 class UserCreateSchema(BaseModel):
     email: EmailStr
@@ -61,7 +63,7 @@ class UserSchema(BaseModel):
     link: Optional[str]
     about: Optional[str]
 
-    @validator('rating',  always=True)
+    @validator('rating', pre=True, always=True)
     def round_rating(cls, value):
         return round(value, 2)
 
