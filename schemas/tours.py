@@ -10,6 +10,8 @@ class CreateTourSchema(BaseModel):
     title: str
     country: str
     region: str
+    total_places: int
+    free_places: int
 
 class CreatedTourResponseSchema(BaseModel):
     id: int

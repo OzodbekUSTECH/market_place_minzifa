@@ -17,6 +17,9 @@ class Tour(BaseTable):
     end_date = Column(Date, nullable=False)
     country = Column(String, nullable=False)
     region = Column(String, nullable=False)
+    total_places = Column(Integer, nullable=False)
+    free_places = Column(Integer, nullable=False)
+    
     activities = relationship("TourActivity", back_populates="tour", lazy="subquery")
     tour_comments = relationship("TourComment", lazy="subquery")
     user = relationship("User", back_populates="tours", lazy="subquery")
