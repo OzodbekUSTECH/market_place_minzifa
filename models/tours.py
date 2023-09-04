@@ -24,6 +24,7 @@ class Tour(BaseTable):
     def rating(self):
 
         all_ratings = []
+        print(f"ratingggg - {all_ratings}")
         
         for tour in self.user.tours:
             for comment in tour.tour_comments:
