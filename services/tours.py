@@ -62,8 +62,8 @@ class ToursService:
                     "tour_id": tour_id
                 }
                 await self.uow.ip_tour_view.create(ip_tour_view_dict)
-                tour.increment_view_count()
-                await self.uow.commit()
+                # tour.increment_view_count()
+                # await self.uow.commit()
             return tour
         
     async def update_tour(self, tour_id: int, tour_data: UpdateTourSchema) -> TourSchema:
