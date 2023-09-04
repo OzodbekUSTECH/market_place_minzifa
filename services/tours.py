@@ -53,11 +53,14 @@ class ToursService:
     async def get_tour_by_id(self, tour_id: int, request: Request) -> TourSchema:
         
         async with self.uow:
-            ip_address = await self.uow.ip_tour_view.get_by_ip_address(request.client.host)
+            print(request.client.host)
+            print(request.client.host)
+            print(request.client.host)
+            ip_address = await self.uow.ip_tour_view.get_by_ip_address(str(request.client.host))
             tour = await self.uow.tours.get_by_id(tour_id)
             if not ip_address or ip_address.tour_id != tour_id:
                 ip_tour_view_dict = {
-                    "ip_address": ip_address,
+                    "ip_address": str(ip_address),
                     "tour_id": tour_id
                 }
                 await self.uow.ip_tour_view.create(ip_tour_view_dict)
