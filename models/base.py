@@ -1,5 +1,5 @@
 from database.db import Base
-from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, ForeignKey, DateTime
+from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, ForeignKey, DateTime, func
 from datetime import datetime
 
 class BaseTable(Base):
@@ -8,10 +8,10 @@ class BaseTable(Base):
     id = Column(Integer, primary_key=True, index=True)
     
     created_at = Column(
-        DateTime, default=datetime.now
+        DateTime, default=func.now()
     )
     updated_at = Column(
-        DateTime, default=datetime.now, onupdate=datetime.now
+        DateTime, default=func.now(), onupdate=func.now()
     )
     
     
