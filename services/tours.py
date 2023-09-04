@@ -83,7 +83,7 @@ class ToursService:
 
             for user in users:
                 for tour in user.tours:
-                    if filters.filter_tour(tour):
+                    if filters._filter_tour(tour):
                         matched_tours.append(tour)
 
             return matched_tours
