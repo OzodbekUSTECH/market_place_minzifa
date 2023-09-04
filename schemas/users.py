@@ -57,13 +57,13 @@ class UserSchema(BaseModel):
     is_traveler_expert: bool
     is_traveler: bool
     role_id: int
-    rating: float
+    rating: Optional[float]
     link: Optional[str]
     about: Optional[str]
 
-    # @validator('rating', pre=True, always=True)
-    # def round_rating(cls, value):
-    #     return round(value, 2)
+    @validator('rating', pre=True, always=True)
+    def round_rating(cls, value):
+        return round(value, 2)
 
 
 
