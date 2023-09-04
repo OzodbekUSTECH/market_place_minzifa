@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query
 from services import ToursService
 from utils.dependency import get_tours_services, get_current_user
-from repositories import Pagination
+from repositories import Pagination, FilterTours
 from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema, CreatedTourResponseSchema
 from models import User
 from datetime import date
@@ -17,26 +17,10 @@ router = APIRouter(
 async def search_tours(
     pagination: Annotated[Pagination, Depends()],
     tours_service: Annotated[ToursService, Depends(get_tours_services)],
-    query: str = Query(default=""),
-    status_id: int = Query(None),
-    tour_rating: float = Query(None),
-    start_date: date = Query(None),
-    end_date: date = Query(None),
-    country: str = Query(None),
-    region: str = Query(None),
-    currency_id: int = Query(None),
-    price: int = Query(None),
+    filters: Annotated[FilterTours, Depends()]
 ) -> list[TourSchema]:
     return await tours_service.search_tours_second(
-        query, 
-        status_id, 
-        tour_rating, 
-        start_date,
-        end_date,
-        country,
-        region,
-        currency_id,
-        price,
+        filters,
         pagination
     )
 

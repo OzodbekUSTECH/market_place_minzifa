@@ -1,5 +1,5 @@
 from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema
-from repositories import Pagination
+from repositories import Pagination, FilterTours
 from datetime import datetime, date
 from models import Tour
 from database.unitofwork import UnitOfWork
@@ -74,15 +74,7 @@ class ToursService:
 
     async def search_tours_second(
             self, 
-            query: str, 
-            status_id: int, 
-            tour_rating: float, 
-            start_date: date,
-            end_date: date,
-            country: str,
-            region: str,
-            currency_id: int,
-            price: int,
+            filters: FilterTours,
             pagination: Pagination
         ):
         async with self.uow:
@@ -90,24 +82,68 @@ class ToursService:
             matched_tours = []
             for user in users:
                 for tour in user.tours:
-                    if not status_id or tour.status_id == status_id:
+                    if not filters.status_id or tour.status_id == filters.status_id:
                             
-                        if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
-                            if not tour_rating or (user.rating >= tour_rating and user.rating < (tour_rating + 0.5)):
-                                if not start_date or start_date == tour.start_date:
-                                    if not end_date or end_date == tour.end_date:
-                                        if not country or country == tour.country:
-                                            if not region or region == tour.region:
-                                                if currency_id is None or price is None:
+                        if not filters.query or fuzz.partial_ratio(filters.query.lower(), tour.title.lower()) > 60:
+                            if not filters.tour_rating or (user.rating >= filters.tour_rating and user.rating < (filters.tour_rating + 0.5)):
+                                if not filters.start_date or filters.start_date == tour.start_date:
+                                    if not filters.end_date or filters.end_date == tour.end_date:
+                                        if not filters.country or filters.country == tour.country:
+                                            if not filters.region or filters.region == tour.region:
+                                                if filters.currency_id is None or filters.price is None:
                                                     matched_tours.append(tour)
                                                 else:
                                                     # Получаем цену тура в указанной валюте
                                                     for tour_price in tour.prices:
-                                                        if tour_price.currency_id == currency_id and tour_price.price >= price:
+                                                        if tour_price.currency_id == filters.currency_id and tour_price.price >= filters.price:
                                                             matched_tours.append(tour)
 
             return matched_tours
+    async def filter_tours(self, query: str, status_id: int, tour_rating: float,
+                        start_date: date, end_date: date, country: str, region: str,
+                        currency_id: int, price: int, pagination):
+        async with self.uow:
+            users = await self.uow.users.get_all(pagination)
+            matched_tours = []
 
+            for user in users:
+                for tour in user.tours:
+                    if self._filter_tour(tour, query, status_id, tour_rating,
+                                            start_date, end_date, country, region, currency_id, price):
+                        matched_tours.append(tour)
+
+            return matched_tours
+
+    def _filter_tour(self, tour, query, status_id, tour_rating,
+                     start_date, end_date, country, region, currency_id, price):
+        if status_id and tour.status_id != status_id:
+            return False
+
+        if query and fuzz.partial_ratio(query.lower(), tour.title.lower()) <= 60:
+            return False
+
+        if tour_rating and (tour.user.rating < tour_rating or tour.user.rating >= tour_rating + 0.5):
+            return False
+
+        if start_date and tour.start_date != start_date:
+            return False
+
+        if end_date and tour.end_date != end_date:
+            return False
+
+        if country and tour.country != country:
+            return False
+
+        if region and tour.region != region:
+            return False
+
+        if currency_id is not None and price is not None:
+            for tour_price in tour.prices:
+                if tour_price.currency_id == currency_id and tour_price.price >= price:
+                    return True
+            return False
+
+        return True
 
         # async def create_full_tour(self, tour_data: CreateTourSchema) -> TourSchema: 
     #     tour_dict = tour_data.model_dump(exclude=["price", "currency_id", "activities_ids"])
