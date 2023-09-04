@@ -18,36 +18,6 @@ class Pagination:
         return self.page_size
 
 
-
-    def filter_tour(self, tour):
-        if self.status_id and tour.status_id != self.status_id:
-            return False
-
-        if self.query and fuzz.partial_ratio(self.query.lower(), tour.title.lower()) <= 60:
-            return False
-
-        if self.tour_rating and (tour.user.rating < self.tour_rating or tour.user.rating >= self.tour_rating + 0.5):
-            return False
-
-        if self.start_date and tour.start_date != self.start_date:
-            return False
-
-        if self.end_date and tour.end_date != self.end_date:
-            return False
-
-        if self.country and tour.country != self.country:
-            return False
-
-        if self.region and tour.region != self.region:
-            return False
-
-        if self.currency_id is not None and self.price is not None:
-            for tour_price in tour.prices:
-                if tour_price.currency_id == self.currency_id and tour_price.price >= self.price:
-                    return True
-            return False
-
-        return True
     
 class BaseRepository:
     def __init__(self, session: Session, model:DeclarativeMeta):

@@ -1,6 +1,7 @@
 from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema
 from repositories import Pagination
 from utils.filter_tours import FilterTours
+from fastapi import Request
 from datetime import datetime, date
 from models import Tour
 from database.unitofwork import UnitOfWork
@@ -49,11 +50,16 @@ class ToursService:
             return await self.uow.tours.get_all(pagination)
         
     
-    async def get_tour_by_id(self, tour_id: int) -> TourSchema:
+    async def get_tour_by_id(self, tour_id: int, request: Request) -> TourSchema:
+        viewed = []
+        user_ip = request.client.host
         async with self.uow:
+            
             tour = await self.uow.tours.get_by_id(tour_id)
-            tour.increment_view_count()
-            await self.uow.commit()
+            if user_ip not in viewed:
+                tour.increment_view_count()
+                await self.uow.commit()
+                viewed.append(user_ip)
             return tour
         
     async def update_tour(self, tour_id: int, tour_data: UpdateTourSchema) -> TourSchema:

@@ -32,3 +32,4 @@ class Tour(BaseTable):
     
     def increment_view_count(self):
         self.view_count += 1
+
