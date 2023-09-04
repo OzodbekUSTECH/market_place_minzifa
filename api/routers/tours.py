@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Query
 from services import ToursService
 from utils.dependency import get_tours_services, get_current_user
 from repositories import Pagination
-from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema
+from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema, CreatedTourResponseSchema
 from models import User
 from datetime import date
 from security.permissionhandler import PermissionHandler, Permissions
@@ -37,7 +37,7 @@ async def search_tours(
     )
 
 
-@router.post('', response_model=TourSchema)
+@router.post('', response_model=CreatedTourResponseSchema)
 async def create_tour(
     tour_data: CreateTourSchema,
     tours_service: Annotated[ToursService, Depends(get_tours_services)]

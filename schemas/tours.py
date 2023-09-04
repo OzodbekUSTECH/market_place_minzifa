@@ -11,6 +11,8 @@ class CreateTourSchema(BaseModel):
     country: str
     region: str
 
+class CreatedTourResponseSchema(BaseModel):
+    id: int
 class UpdateTourSchema(CreateTourSchema):
     pass
     
