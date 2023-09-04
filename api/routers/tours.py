@@ -23,7 +23,7 @@ async def search_tours(
     start_date: date = Query(None),
     end_date: date = Query(None)
 ) -> list[TourSchema]:
-    return await tours_service.search_tours_second(query, status_id, tour_rating, pagination)
+    return await tours_service.search_tours_second(query, status_id, tour_rating, start_date, end_date, pagination)
 
 
 @router.post('', response_model=TourSchema)
