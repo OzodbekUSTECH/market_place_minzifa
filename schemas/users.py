@@ -46,6 +46,8 @@ class UserUpdateSchema(BaseModel):
     is_traveler_expert: bool = False
     is_traveler: bool = False
     role_id: int
+    link: str = None
+    about: str = None
 
 class UserSchema(BaseModel):
     id: int
@@ -56,6 +58,8 @@ class UserSchema(BaseModel):
     is_traveler: bool
     role_id: int
     rating: float
+    link: str
+    about: str
 
     @validator('rating', pre=True, always=True)
     def round_rating(cls, value):
