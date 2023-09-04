@@ -53,6 +53,11 @@ class ToursService:
     async def get_tour_by_id(self, tour_id: int, request: Request) -> TourSchema:
         viewed = []
         user_ip = request.client.host
+        print(viewed)
+        print(user_ip)
+        print(user_ip)
+        print(user_ip)
+        print(user_ip)
         async with self.uow:
             
             tour = await self.uow.tours.get_by_id(tour_id)
