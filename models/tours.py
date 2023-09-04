@@ -9,12 +9,13 @@ class Tour(BaseTable):
     
     title = Column(String, nullable=False)
     
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     status_id = Column(Integer, ForeignKey('tour_statuses.id'), nullable=False, index=True)
     prices = relationship("TourPrice", back_populates="tour", lazy="subquery")
     status = relationship("TourStatus", back_populates="tours", lazy="subquery")
-    start_date = Column(Date, nullable=True)
-    end_date = Column(Date, nullable=True)
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=False)
+    country = Column(String, nullable=False)
     activities = relationship("TourActivity", back_populates="tour", lazy="subquery")
     tour_comments = relationship("TourComment", lazy="subquery")
     user = relationship("User", back_populates="tours", lazy="subquery")

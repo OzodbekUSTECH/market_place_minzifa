@@ -8,6 +8,7 @@ class CreateTourSchema(BaseModel):
     start_date: date = None
     end_date: date = None
     title: str
+    country: str
 
 class UpdateTourSchema(CreateTourSchema):
     pass
