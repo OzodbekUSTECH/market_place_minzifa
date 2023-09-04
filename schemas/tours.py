@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from typing import Optional
 from schemas.tourprices import TourPriceSchema
 from datetime import date
@@ -15,9 +15,13 @@ class UpdateTourSchema(CreateTourSchema):
 
 class TourSchema(CreateTourSchema):
     id: int
+    rating: float
     class ConfigDict:
         from_attributes = True
-
+        
+    @validator('rating', pre=True, always=True)
+    def round_rating(cls, value):
+        return round(value, 2)
 
 # from schemas.tourprices import TourPriceSchema, CreateTourPriceSchema
 # from schemas.tourstatuses import TourStatusSchema

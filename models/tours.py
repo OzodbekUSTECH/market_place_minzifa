@@ -20,4 +20,15 @@ class Tour(BaseTable):
     user = relationship("User", back_populates="tours", lazy="subquery")
 
     
-    
+    @hybrid_property
+    def rating(self):
+
+        all_ratings = []
+        
+        for tour in self.user.tours:
+            for comment in tour.tour_comments:
+                all_ratings.append(comment.rating)
+                
+        if all_ratings:
+            return sum(all_ratings) / len(all_ratings)
+        return 1

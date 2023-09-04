@@ -38,15 +38,15 @@ class User(BaseTable):
     )
     @hybrid_property
     def rating(self):
-        if self.tours:
+        
 
-            all_ratings = []
-            
-            for tour in self.tours:
-                for comment in tour.tour_comments:
-                    all_ratings.append(comment.rating)
-                    
-            if all_ratings:
-                return sum(all_ratings) / len(all_ratings)
+        all_ratings = []
+        
+        for tour in self.tours:
+            for comment in tour.tour_comments:
+                all_ratings.append(comment.rating)
+                
+        if all_ratings:
+            return sum(all_ratings) / len(all_ratings)
         return 1
     
