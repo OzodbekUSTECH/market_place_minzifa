@@ -23,6 +23,6 @@ class Tour(BaseTable):
 
 
     
-    @hybrid_property
+    @property
     def amount_comments(self):
         return len(self.tour_comments)
