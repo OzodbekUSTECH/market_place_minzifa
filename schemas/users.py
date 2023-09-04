@@ -66,6 +66,8 @@ class UserSchema(BaseModel):
         return float(round(value, 2))
 
 
+    class ConfigDict:
+        from_attributes = True
 
 
 class TokenSchema(BaseModel):
