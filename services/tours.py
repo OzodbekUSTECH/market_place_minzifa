@@ -81,12 +81,13 @@ class ToursService:
             end_date: date,
             country: str,
             region: str,
+            currency_id: int,
+            price: int,
             pagination: Pagination
         ):
         async with self.uow:
             users = await self.uow.users.get_all(pagination)
             matched_tours = []
-
             for user in users:
                 for tour in user.tours:
                     if not status_id or tour.status_id == status_id:
@@ -97,7 +98,13 @@ class ToursService:
                                     if not end_date or end_date == tour.end_date:
                                         if not country or country == tour.country:
                                             if not region or region == tour.region:
-                                                matched_tours.append(tour)
+                                                if currency_id is None or price is None:
+                                                    matched_tours.append(tour)
+                                                else:
+                                                    # Получаем цену тура в указанной валюте
+                                                    for tour_price in tour.prices:
+                                                        if tour_price.currency_id == currency_id and tour_price.price >= price:
+                                                            matched_tours.append(tour)
 
             return matched_tours
 
