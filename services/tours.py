@@ -50,7 +50,10 @@ class ToursService:
     
     async def get_tour_by_id(self, tour_id: int) -> TourSchema:
         async with self.uow:
-            return await self.uow.tours.get_by_id(tour_id)
+            tour = await self.uow.tours.get_by_id(tour_id)
+            tour.increment_view_count()
+            await self.uow.commit()
+            return tour
         
     async def update_tour(self, tour_id: int, tour_data: UpdateTourSchema) -> TourSchema:
         tour_dict = tour_data.model_dump()
