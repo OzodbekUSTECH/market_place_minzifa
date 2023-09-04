@@ -16,6 +16,7 @@ class Tour(BaseTable):
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
     country = Column(String, nullable=False)
+    region = Column(String, nullable=False)
     activities = relationship("TourActivity", back_populates="tour", lazy="subquery")
     tour_comments = relationship("TourComment", lazy="subquery")
     user = relationship("User", back_populates="tours", lazy="subquery")
