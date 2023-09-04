@@ -15,6 +15,7 @@ class UpdateTourSchema(CreateTourSchema):
 
 class TourSchema(CreateTourSchema):
     id: int
+    amount_comments: int
     class ConfigDict:
         from_attributes = True
 

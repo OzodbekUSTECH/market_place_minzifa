@@ -19,5 +19,8 @@ class Tour(BaseTable):
     tour_comments = relationship("TourComment", lazy="subquery")
     user = relationship("User", back_populates="tours", lazy="subquery")
 
+
     
-   
+    @hybrid_property
+    def amount_comments(self):
+        return len(self.tour_comments)
