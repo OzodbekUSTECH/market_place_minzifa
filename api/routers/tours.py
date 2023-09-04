@@ -2,11 +2,12 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query
 from services import ToursService
 from utils.dependency import get_tours_services, get_current_user
-from repositories import Pagination, FilterTours
+from repositories import Pagination
 from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema, CreatedTourResponseSchema
 from models import User
 from datetime import date
 from security.permissionhandler import PermissionHandler, Permissions
+from utils.filter_tours import FilterTours
 
 router = APIRouter(
     prefix="/tours",
@@ -19,7 +20,7 @@ async def search_tours(
     tours_service: Annotated[ToursService, Depends(get_tours_services)],
     filters: Annotated[FilterTours, Depends()]
 ) -> list[TourSchema]:
-    return await tours_service.search_tours_second(
+    return await tours_service.search_tours(
         filters,
         pagination
     )

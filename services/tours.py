@@ -1,5 +1,6 @@
 from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema
-from repositories import Pagination, FilterTours
+from repositories import Pagination
+from utils.filter_tours import FilterTours
 from datetime import datetime, date
 from models import Tour
 from database.unitofwork import UnitOfWork
@@ -66,13 +67,7 @@ class ToursService:
             return await self.uow.tours.delete(tour_id)
         
 
-
-    async def search_tours(self, query: str, status_id: int, tour_rating: float, pagination: Pagination):
-        async with self.uow:
-            filtered_tours =  await self.uow.tours.search_tours(query, status_id,tour_rating,pagination)
-            return filtered_tours
-
-    async def search_tours_second(
+    async def search_tours(
             self, 
             filters: FilterTours,
             pagination: Pagination

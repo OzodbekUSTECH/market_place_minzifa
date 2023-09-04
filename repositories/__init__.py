@@ -1,4 +1,4 @@
-from repositories.base import BaseRepository, Pagination, FilterTours
+from repositories.base import BaseRepository, Pagination
 from repositories.maillist import MailListRepository
 from repositories.permissions import PermissionsRepository
 from repositories.rolepermissions import RolePermissionsRepository
