@@ -67,8 +67,8 @@ class ToursService:
                     "ip_id": ip_address.id,
                     "tour_id": tour_id
                 }
-                await self.uow.ip_and_tours_view.create(ip_and_tour_dict)
-                ip_and_tour_view.increase_visited_times()
+                created_ip_and_tour = await self.uow.ip_and_tours_view.create(ip_and_tour_dict)
+                created_ip_and_tour.increase_visited_times()
                 await self.uow.commit()
 
             ip_and_tour_view = self.uow.ip_and_tours_view.get_by_ip_id_and_tour_id(ip_address.id, tour_id)
