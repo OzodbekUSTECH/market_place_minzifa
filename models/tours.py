@@ -40,7 +40,7 @@ class Tour(BaseTable):
 class IPTourView(BaseTable):
     __tablename__ = 'ip_tour_views'
 
-    ip_addresses = Column(ARRAY(String), server_default="{}")
+    ip_addresses = Column(ARRAY(String), default=[])
     tour_id = Column(Integer, ForeignKey("tours.id"), nullable=False)  
 
     def add_ip_address(self, ip):
