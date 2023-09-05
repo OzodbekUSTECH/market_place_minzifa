@@ -46,6 +46,7 @@ class TourPricesService:
             if price_data.new_price:
                 if target_currency == base_currency:
                     discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
+                    converted_new_price = price_data.new_price
                 else:
                     exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
                     converted_new_price = price_data.new_price * exchange_rate
@@ -113,6 +114,7 @@ class TourPricesService:
                 if price_data.new_price:
                     if price.currency_id == base_currency.id:
                         discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
+                        converted_new_price = price_data.new_price
                     else:
                         target_currency = await self.uow.currencies.get_by_id(price.currency_id)
                         exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)

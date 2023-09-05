@@ -24,10 +24,10 @@ class TourPriceSchema(CreateTourPriceSchema):
     id: int
     currency_id: int
 
-    # @validator('price', pre=True, always=True)
-    # def round_price(cls, value):
-    #     return int(round(value))
+    @validator('price', pre=True, always=True)
+    def round_price(cls, value):
+        return int(round(value))
     
-    # @validator('new_price', pre=True, always=True)
-    # def round_price(cls, value):
-    #     return int(round(value))
+    @validator('new_price', pre=True, always=True)
+    def round_price(cls, value):
+        return int(round(value))
