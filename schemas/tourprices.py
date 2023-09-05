@@ -13,11 +13,7 @@ class CreateTourPriceSchema(BaseModel):
     def round_price(cls, value):
         return int(round(value))
     
-    @validator('new_price', pre=True, always=True)
-    def round_price(cls, value):
-        if value is None:
-            return
-        return int(round(value))
+    
     
 class UpdateTourPriceSchema(CreateTourPriceSchema):
     pass
@@ -26,4 +22,6 @@ class TourPriceSchema(CreateTourPriceSchema):
     id: int
     currency_id: int
 
-    
+    @validator('new_price', pre=True, always=True)
+    def round_price(cls, value):
+        return int(round(value))
