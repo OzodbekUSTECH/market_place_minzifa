@@ -1,8 +1,7 @@
 from pydantic import BaseModel
 
 class CreateLanguageSchema(BaseModel):
-    tour_id: int
-    language_id: int
+    name: str
 
 class UpdateLanguageSchema(CreateLanguageSchema):
     pass
