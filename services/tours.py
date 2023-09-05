@@ -49,40 +49,53 @@ class ToursService:
         async with self.uow:
             return await self.uow.tours.get_all(pagination)
         
-    
+    ###################################################################################
+    ###################################################################################
+    ###################################################################################
     async def get_tour_by_id(self, tour_id: int, request: Request) -> TourSchema:
-
         async with self.uow:
             ip_of_user = request.client.host
-            ip_address = await self.uow.ip_tour_view.get_by_ip_address(ip_of_user)
-            if not ip_address:
-                ip_address_dict = {
-                    "ip_address": ip_of_user,
-                }
-                ip_address = await self.uow.ip_tour_view.create(ip_address_dict)
-
+            ip_address = await self._get_or_create_ip_address(ip_of_user)
+            
             list_of_tour_ids = ip_address.get_list_of_tour_ids()
-            if ip_address and tour_id not in list_of_tour_ids:
-                ip_and_tour_dict = {
-                    "ip_id": ip_address.id,
-                    "tour_id": tour_id
-                }
-                created_ip_and_tour = await self.uow.ip_and_tours_view.create(ip_and_tour_dict)
-                created_ip_and_tour.increase_visited_times()
-                await self.uow.commit()
-
-            ip_and_tour_view = await self.uow.ip_and_tours_view.get_by_ip_id_and_tour_id(ip_address.id, tour_id)
-            ip_and_tour_viewed_date = ip_and_tour_view.updated_at.date() if ip_and_tour_view else None
-            current_date = datetime.now().date()
-            if ip_address and tour_id in list_of_tour_ids and ip_and_tour_viewed_date != current_date:
-                ip_and_tour_view.increase_visited_times()
-                await self.uow.commit()
-
-            # Извлекаем только дату из updated_at
+            
+            if tour_id not in list_of_tour_ids:
+                await self._add_tour_view(ip_address, tour_id)
+            
+            await self._update_tour_view(ip_address, tour_id)
             
             tour = await self.uow.tours.get_by_id(tour_id)
             return tour
-        
+
+    async def _get_or_create_ip_address(self, ip_address: str):
+        existing_ip_address = await self.uow.ip_tour_view.get_by_ip_address(ip_address)
+        if not existing_ip_address:
+            ip_address_dict = {
+                "ip_address": ip_address,
+            }
+            existing_ip_address = await self.uow.ip_tour_view.create(ip_address_dict)
+        return existing_ip_address
+
+    async def _add_tour_view(self, ip_address, tour_id: int):
+        ip_and_tour_dict = {
+            "ip_id": ip_address.id,
+            "tour_id": tour_id
+        }
+        created_ip_and_tour = await self.uow.ip_and_tours_view.create(ip_and_tour_dict)
+        created_ip_and_tour.increase_visited_times()
+        await self.uow.commit()
+
+    async def _update_tour_view(self, ip_address, tour_id: int):
+        ip_and_tour_view = await self.uow.ip_and_tours_view.get_by_ip_id_and_tour_id(ip_address.id, tour_id)
+        ip_and_tour_viewed_date = ip_and_tour_view.updated_at.date() if ip_and_tour_view else None
+        current_date = datetime.now().date()
+        if ip_address and tour_id in ip_address.get_list_of_tour_ids() and ip_and_tour_viewed_date != current_date:
+            ip_and_tour_view.increase_visited_times()
+            await self.uow.commit()
+    ###################################################################################
+    ###################################################################################
+    ###################################################################################
+    
     async def update_tour(self, tour_id: int, tour_data: UpdateTourSchema) -> TourSchema:
         tour_dict = tour_data.model_dump()
         async with self.uow:
