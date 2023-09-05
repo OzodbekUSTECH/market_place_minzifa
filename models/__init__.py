@@ -15,3 +15,5 @@ from models.tour_activities import TourActivity
 from models.favorite_tours import FavoriteTours
 from models.tour_comments import TourComment
 from models.tour_comments_media import TourCommentMedia
+from models.languages import Language
+from models.tour_languages import TourLanguage

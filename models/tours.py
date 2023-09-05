@@ -22,7 +22,7 @@ class Tour(BaseTable):
     age_group = Column(String, nullable=False)
     children_age = Column(String, nullable=False)
     level_of_activity = Column(String, nullable=False)
-    
+    languages = relationship("TourLanguage", lazy="subquery")
     # view_count = Column(Integer, default=0)  # Добавляем поле для счетчика просмотров
     views = relationship("IPAndToursView", lazy="subquery")
     activities = relationship("TourActivity", back_populates="tour", lazy="subquery")
@@ -40,6 +40,8 @@ class Tour(BaseTable):
         for view in self.views:
             amount += view.visited_times
         return amount
+    
+    
     # def increment_view_count(self):
     #     self.view_count += 1
 

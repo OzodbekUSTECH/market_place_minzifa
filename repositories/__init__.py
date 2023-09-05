@@ -14,3 +14,5 @@ from repositories.tour_activities import TourActivitiesRepository
 from repositories.favorite_tours import FavoriteToursRepository
 from repositories.tour_comments import TourCommentsRepository
 from repositories.tour_comments_media import TourCommentsMediaRepository
+from repositories.tour_languages import TourLanguagesRepository
+from repositories.languages import LanguagesRepository

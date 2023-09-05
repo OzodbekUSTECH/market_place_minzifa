@@ -13,6 +13,8 @@ from api.routers.tour_activities import router as tour_activities_router
 from api.routers.favorite_tours import router as tour_favorites_router
 from api.routers.tour_comments import router as tour_comments_router
 from api.routers.tour_comments_media import router as tour_comments_media_router
+from api.routers.tour_languages import router as tour_languages_router
+from api.routers.languages import router as languages_router
 all_routers = [
     auth_router,
     maillist_router,
@@ -21,6 +23,7 @@ all_routers = [
     rolepermissions_router,
     travelermanagers_router,
     currency_router,
+    languages_router,
     tour_router,
     tour_prices_router,
     tour_activities_router,
@@ -29,4 +32,5 @@ all_routers = [
     tour_comments_media_router,
     statuses_router,
     activities_router,
+    tour_languages_router
 ]

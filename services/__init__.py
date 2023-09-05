@@ -13,3 +13,5 @@ from services.tour_activities import TourActivitiesService
 from services.favorite_tours import FavoriteToursService
 from services.tour_comments import TourCommentsService
 from services.tour_comments_media import TourCommentsMediaService
+from services.tour_languages import TourLanguagesService
+from services.languages import LanguagesService
