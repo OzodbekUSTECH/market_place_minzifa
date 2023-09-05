@@ -32,7 +32,7 @@ class TourPricesService:
                 "discount_percentage": None,
                 "new_price": None
             }
-            if price_data.new_price > 0 and price_data.discount_percentage > 0:
+            if price_data.new_price is not None and price_data.discount_percentage is not None:
                 raise CustomExceptions.conflict("You can only fill either the new price or the discount")
             if price_data.discount_percentage:
                 new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
@@ -96,7 +96,7 @@ class TourPricesService:
                     "discount_percentage": None,
                     "new_price": None
                 }
-                if price_data.new_price > 0 and price_data.discount_percentage > 0:
+                if price_data.new_price is not None and price_data.discount_percentage is not None:
                     raise CustomExceptions.conflict("You can only fill either the new price or the discount")
                 if price_data.discount_percentage:
                     new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
