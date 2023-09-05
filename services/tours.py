@@ -64,8 +64,8 @@ class ToursService:
                 ip_tour_view_dict = {
                     "tour_id": tour_id,
                 }
-                await self.uow.ip_tour_view.create(ip_tour_view_dict)
-                ip_tour_view.add_ip_address(ip_of_user)
+                created_ip_tour_view = await self.uow.ip_tour_view.create(ip_tour_view_dict)
+                created_ip_tour_view.add_ip_address(ip_of_user)
                 await self.uow.commit()
             elif ip_of_user not in ip_tour_view.ip_addresses:
                 ip_tour_view.add_ip_address(ip_of_user)
