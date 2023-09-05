@@ -65,12 +65,13 @@ class ToursService:
                     "tour_id": tour_id,
                 }
                 created_ip_tour_view = await self.uow.ip_tour_view.create(ip_tour_view_dict)
-                created_ip_tour_view.add_ip_address(ip_of_user)
+                created_ip_tour_view.ip_addresses.append(ip_of_user)
+                # created_ip_tour_view.add_ip_address(ip_of_user)
                 await self.uow.commit()
-            elif ip_of_user not in ip_tour_view.ip_addresses:
+            if ip_tour_view and ip_of_user not in ip_tour_view.ip_addresses:
                 ip_tour_view.add_ip_address(ip_of_user)
                 await self.uow.commit()
-            elif ip_address_date != current_date:
+            if ip_of_user in ip_tour_view.ip_addresses and ip_address_date != current_date:
                 ip_tour_view.add_ip_address(ip_of_user)
                 await self.uow.commit()    
 
