@@ -30,7 +30,7 @@ class TourPricesService:
                 "currency_id": target_currency.id,
                 "price": converted_price
             }
-            if price_data.new_price and price_data.discount_percentage:
+            if price_data.new_price > 0 and price_data.discount_percentage > 0:
                 raise CustomExceptions.conflict("You can only fill either the new price or the discount")
             if price_data.discount_percentage:
                 new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
@@ -92,9 +92,9 @@ class TourPricesService:
                 price_dict = {
                     "price": converted_price,
                 }
+                if price_data.new_price > 0 and price_data.discount_percentage > 0:
+                    raise CustomExceptions.conflict("You can only fill either the new price or the discount")
                 if price_data.discount_percentage:
-                    if price_data.new_price:
-                        raise CustomExceptions.conflict("You can choose only new price or discount percentage")
                     new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
                     price_dict = {
                         "price": converted_price,
@@ -102,8 +102,6 @@ class TourPricesService:
                         "new_price": new_price
                     }
                 if price_data.new_price:
-                    if price_data.discount_percentage:
-                        raise CustomExceptions.conflict("You can choose only new price or discount percentage")
                     discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
                     price_dict = {
                         "price": converted_price,
