@@ -36,8 +36,9 @@ class TourPricesService:
                 new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
                 price_dict = {
                     "tour_id": price_data.tour_id,
+                    "currency_id": target_currency.id,
                     "price": converted_price,
-                    "discount": price_data.discount_percentage,
+                    "discount_percentage": price_data.discount_percentage,
                     "new_price": new_price
                 }
             if price_data.new_price:
@@ -46,8 +47,9 @@ class TourPricesService:
                 discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
                 price_dict = {
                     "tour_id": price_data.tour_id,
+                    "currency_id": target_currency.id,
                     "price": converted_price,
-                    "discount": discount_percentage,
+                    "discount_percentage": discount_percentage,
                     "new_price": price_data.new_price
                 }
             created_price = await self.uow.tour_prices.create(price_dict)
@@ -98,7 +100,7 @@ class TourPricesService:
                     new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
                     price_dict = {
                         "price": converted_price,
-                        "discount": price_data.discount_percentage,
+                        "discount_percentage": price_data.discount_percentage,
                         "new_price": new_price
                     }
                 if price_data.new_price:
@@ -107,7 +109,7 @@ class TourPricesService:
                     discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
                     price_dict = {
                         "price": converted_price,
-                        "discount": discount_percentage,
+                        "discount_percentage": discount_percentage,
                         "new_price": price_data.new_price
                     }
                 updated_price = await self.uow.tour_prices.update(price.id, price_dict)
