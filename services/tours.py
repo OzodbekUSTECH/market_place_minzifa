@@ -54,24 +54,24 @@ class ToursService:
 
         async with self.uow:
 
-            ip_address = await self.uow.ip_tour_view.get_by_ip_address(request.client.host)
+            ip_tour_view = await self.uow.ip_tour_view.get_by_tour_id(tour_id)
             tour = await self.uow.tours.get_by_id(tour_id)
-
+            ip_of_user = request.client.host
             # Извлекаем только дату из updated_at
-            ip_address_date = ip_address.updated.date() if ip_address else None
+            ip_address_date = ip_tour_view.updated.date() if ip_tour_view else None
             current_date = datetime.now().date()
-            if not ip_address:
+            if not ip_tour_view:
                 ip_tour_view_dict = {
-                    "ip_address": request.client.host,
+                    "tour_id": tour_id,
                 }
                 await self.uow.ip_tour_view.create(ip_tour_view_dict)
-                ip_address.add_tour_id(tour_id)
+                ip_tour_view.add_ip_address(ip_of_user)
                 await self.uow.commit()
-            elif tour_id not in ip_address.tour_ids:
-                ip_address.add_tour_id(tour_id)
+            elif ip_of_user not in ip_tour_view.ip_addresses:
+                ip_tour_view.add_ip_address(ip_of_user)
                 await self.uow.commit()
             elif ip_address_date != current_date:
-                ip_address.updated_at = datetime.now()
+                ip_tour_view.add_ip_address(ip_of_user)
                 await self.uow.commit()    
 
         return tour

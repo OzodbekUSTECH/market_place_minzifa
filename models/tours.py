@@ -20,7 +20,7 @@ class Tour(BaseTable):
     total_places = Column(Integer, nullable=False)
     free_places = Column(Integer, nullable=False)
     # view_count = Column(Integer, default=0)  # Добавляем поле для счетчика просмотров
-    views = relationship("IPTourView", lazy="subquery")
+    views = relationship("IPTourView")
     activities = relationship("TourActivity", back_populates="tour", lazy="subquery")
     tour_comments = relationship("TourComment", lazy="subquery")
     user = relationship("User", back_populates="tours", lazy="subquery")
@@ -32,7 +32,7 @@ class Tour(BaseTable):
     
     @hybrid_property
     def amount_views(self):
-        return len(self.views)
+        return len(self.views.ip_addresses)
     # def increment_view_count(self):
     #     self.view_count += 1
 
@@ -40,12 +40,11 @@ class Tour(BaseTable):
 class IPTourView(BaseTable):
     __tablename__ = 'ip_tour_views'
 
-    ip_address = Column(String, nullable=False)
-    tour_ids = Column(ARRAY(Integer), nullable=False)  
+    ip_addresses = Column(ARRAY(String))
+    tour_id = Column(Integer, ForeignKey("tours.id"), nullable=False)  
 
-    def add_tour_id(self, tour_id):
-        if tour_id not in self.tour_id:
-            self.tour_ids.append(tour_id)
+    def add_ip_address(self, ip):
+        return self.ip_address.append(ip)
     
 
    
