@@ -6,8 +6,8 @@ class CreateTourPriceSchema(BaseModel):
     tour_id: int
     currency_id: int
     price: float
-    discount_percentage: float = 0
-    new_price: float = 0
+    discount_percentage: Optional[float] = None
+    new_price: Optional[float] = None
 
     
     
@@ -16,8 +16,8 @@ class CreateTourPriceSchema(BaseModel):
 class UpdateTourPriceSchema(BaseModel):
     currency_id: int
     price: float
-    discount_percentage: float = 0
-    new_price: float = 0
+    discount_percentage: Optional[float] = None
+    new_price: Optional[float] = None
 
 
 class TourPriceSchema(CreateTourPriceSchema):
