@@ -5,7 +5,7 @@ from repositories.rolepermissions import RolePermissionsRepository
 from repositories.roles import RolesRepository
 from repositories.travelermanagers import TravelerManagersRepository
 from repositories.users import UsersRepository
-from repositories.tours import ToursRepository, IPTourViewRepository
+from repositories.tours import ToursRepository, IPTourViewRepository, IPAndToursViewRepository
 from repositories.currencies import CurrenciesRepository
 from repositories.tourprices import TourPricesRepository
 from repositories.tourstatuses import TourStatusesRepository

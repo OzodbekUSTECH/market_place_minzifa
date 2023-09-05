@@ -7,7 +7,7 @@ from models.permissions import Permission
 from models.roles import Role
 from models.rolepermissions import RolePermission
 from models.currencies import Currency
-from models.tours import Tour, IPTourView
+from models.tours import Tour, IPTourView, IPAndToursView
 from models.tourprices import TourPrice
 from models.tourstatuses import TourStatus
 from models.activities import Activity
