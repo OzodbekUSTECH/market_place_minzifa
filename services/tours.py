@@ -51,20 +51,30 @@ class ToursService:
         
     
     async def get_tour_by_id(self, tour_id: int, request: Request) -> TourSchema:
-        
+
         async with self.uow:
-            
+
             ip_address = await self.uow.ip_tour_view.get_by_ip_address(request.client.host)
             tour = await self.uow.tours.get_by_id(tour_id)
-            if not ip_address or ip_address.tour_id != tour_id:
+
+            # Извлекаем только дату из updated_at
+            ip_address_date = ip_address.updated.date() if ip_address else None
+            current_date = datetime.now().date()
+            if not ip_address:
                 ip_tour_view_dict = {
                     "ip_address": request.client.host,
-                    "tour_id": tour_id
                 }
                 await self.uow.ip_tour_view.create(ip_tour_view_dict)
-                # tour.increment_view_count()
-                # await self.uow.commit()
-            return tour
+                ip_address.add_tour_id(tour_id)
+                await self.uow.commit()
+            elif tour_id not in ip_address.tour_ids:
+                ip_address.add_tour_id(tour_id)
+                await self.uow.commit()
+            elif ip_address_date != current_date:
+                ip_address.updated_at = datetime.now()
+                await self.uow.commit()    
+
+        return tour
         
     async def update_tour(self, tour_id: int, tour_data: UpdateTourSchema) -> TourSchema:
         tour_dict = tour_data.model_dump()

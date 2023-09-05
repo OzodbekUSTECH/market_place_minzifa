@@ -1,6 +1,6 @@
 from repositories import BaseRepository, Pagination
 from fuzzywuzzy import fuzz, process
-
+from models import IPTourView
 class ToursRepository(BaseRepository):
    
     
@@ -36,7 +36,7 @@ class ToursRepository(BaseRepository):
 
 
 class IPTourViewRepository(BaseRepository):
-    async def get_by_ip_address(self, ip_address: str):
+    async def get_by_ip_address(self, ip_address: str)-> IPTourView:
         ip_tour_view = self.session.query(self.model).filter(self.model.ip_address == ip_address).first()
         self.session.commit()
         return ip_tour_view

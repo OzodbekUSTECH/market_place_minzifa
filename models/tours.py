@@ -1,5 +1,5 @@
 from models import BaseTable
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Date
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Date, ARRAY
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -41,9 +41,11 @@ class IPTourView(BaseTable):
     __tablename__ = 'ip_tour_views'
 
     ip_address = Column(String, nullable=False)
-    tour_id = Column(Integer, ForeignKey('tours.id'), nullable=False)  
+    tour_ids = Column(ARRAY(Integer), nullable=False)  
 
-    
+    def add_tour_id(self, tour_id):
+        if tour_id not in self.tour_id:
+            self.tour_ids.append(tour_id)
     
 
    
