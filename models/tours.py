@@ -29,7 +29,11 @@ class Tour(BaseTable):
     tour_comments = relationship("TourComment", lazy="subquery")
     user = relationship("User", back_populates="tours", lazy="subquery")
     
-    
+    def get_list_of_language_ids(self):
+        res = []
+        for language in self.languages:
+            res.append(language.language_id)
+        return res
     @hybrid_property
     def amount_comments(self):
         return len(self.tour_comments)

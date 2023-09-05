@@ -17,6 +17,7 @@ class FilterTours:
             age_group: str = Query(None),
             children_age: str = Query(None),
             level_of_activity: str = Query(None),
+            language_id: int = Query(None), 
     ):
         self.query = query
         self.status_id = status_id
@@ -30,6 +31,7 @@ class FilterTours:
         self.age_group = age_group
         self.children_age = children_age
         self.level_of_activity = level_of_activity
+        self.language_id = language_id
 
     def filter_tour(self, tour):
         if self.status_id and tour.status_id != self.status_id:
@@ -62,6 +64,10 @@ class FilterTours:
         if self.level_of_activity and tour.level_of_activity != self.level_of_activity:
             return False
 
+        if self.language_id:
+            lang_ids = tour.get_list_of_language_ids()
+            if self.language_id not in lang_ids:
+                return False
         if self.currency_id is not None and self.price is not None:
             for tour_price in tour.prices:
                 if tour_price.currency_id == self.currency_id and tour_price.price >= self.price:
