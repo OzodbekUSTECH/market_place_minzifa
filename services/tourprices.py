@@ -52,7 +52,7 @@ class TourPricesService:
                     "currency_id": target_currency.id,
                     "price": converted_price,
                     "discount_percentage": discount_percentage,
-                    "new_price": price_data.new_price
+                    "new_price": converted_new_price
                 }
             created_price = await self.uow.tour_prices.create(price_dict)
             response.append(TourPriceSchema(**created_price.__dict__))
@@ -115,7 +115,7 @@ class TourPricesService:
                     price_dict = {
                         "price": converted_price,
                         "discount_percentage": discount_percentage,
-                        "new_price": price_data.new_price
+                        "new_price": converted_new_price
                     }
                 updated_price = await self.uow.tour_prices.update(price.id, price_dict)
                 response.append(TourPriceSchema(**updated_price.__dict__))
