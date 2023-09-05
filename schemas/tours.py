@@ -14,7 +14,7 @@ class CreateTourSchema(BaseModel):
     free_places: int
     age_group: str
     children_age: str
-    level_of_activity: int
+    level_of_activity: str
 
 class CreatedTourResponseSchema(BaseModel):
     id: int
