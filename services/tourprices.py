@@ -44,7 +44,9 @@ class TourPricesService:
                     "new_price": new_price
                 }
             if price_data.new_price:
-                discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
+                exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
+                converted_new_price = price_data.new_price * exchange_rate
+                discount_percentage = await self._calculate_discount(converted_price, converted_new_price)
                 price_dict = {
                     "tour_id": price_data.tour_id,
                     "currency_id": target_currency.id,
@@ -106,7 +108,9 @@ class TourPricesService:
                         "new_price": new_price
                     }
                 if price_data.new_price:
-                    discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
+                    exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
+                    converted_new_price = price_data.new_price * exchange_rate
+                    discount_percentage = await self._calculate_discount(converted_price, converted_new_price)
                     price_dict = {
                         "price": converted_price,
                         "discount_percentage": discount_percentage,
