@@ -30,6 +30,26 @@ class TourPricesService:
                 "currency_id": target_currency.id,
                 "price": converted_price
             }
+            if price_data.discount_percentage is not None:
+                if price_data.new_price:
+                    raise CustomExceptions.conflict("You can choose only new price or discount percentage")
+                new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
+                price_dict = {
+                    "tour_id": price_data.tour_id,
+                    "price": converted_price,
+                    "discount": price_data.discount_percentage,
+                    "new_price": new_price
+                }
+            if price_data.new_price is not None:
+                if price_data.discount_percentage:
+                    raise CustomExceptions.conflict("You can choose only new price or discount percentage")
+                discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
+                price_dict = {
+                    "tour_id": price_data.tour_id,
+                    "price": converted_price,
+                    "discount": discount_percentage,
+                    "new_price": price_data.new_price
+                }
             created_price = await self.uow.tour_prices.create(price_dict)
             response.append(TourPriceSchema(**created_price.__dict__))
         return response
@@ -72,11 +92,39 @@ class TourPricesService:
                 price_dict = {
                     "price": converted_price,
                 }
+                if price_data.discount_percentage is not None:
+                    if price_data.new_price:
+                        raise CustomExceptions.conflict("You can choose only new price or discount percentage")
+                    new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
+                    price_dict = {
+                        "price": converted_price,
+                        "discount": price_data.discount_percentage,
+                        "new_price": new_price
+                    }
+                if price_data.new_price is not None:
+                    if price_data.discount_percentage:
+                        raise CustomExceptions.conflict("You can choose only new price or discount percentage")
+                    discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
+                    price_dict = {
+                        "price": converted_price,
+                        "discount": discount_percentage,
+                        "new_price": price_data.new_price
+                    }
                 updated_price = await self.uow.tour_prices.update(price.id, price_dict)
                 response.append(TourPriceSchema(**updated_price.__dict__))
 
             
         return response
+    
+    async def _calculate_discount(previous_price: int, new_price: int):
+            discount_percentage = ((previous_price - new_price) / previous_price) * 100
+            return discount_percentage
+
+    async def _calculate_new_price(previous_price: int, discount_percentage: int):
+            new_price = previous_price - (previous_price * discount_percentage / 100)
+            return new_price
+
+
         
 
     

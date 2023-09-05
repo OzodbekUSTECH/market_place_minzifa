@@ -66,7 +66,7 @@ class ToursService:
             
             tour = await self.uow.tours.get_by_id(tour_id)
             return tour
-
+    ######################################################################################
     async def _get_or_create_ip_address(self, ip_address: str):
         existing_ip_address = await self.uow.ip_tour_view.get_by_ip_address(ip_address)
         if not existing_ip_address:
