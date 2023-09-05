@@ -71,7 +71,7 @@ class ToursService:
                 created_ip_and_tour.increase_visited_times()
                 await self.uow.commit()
 
-            ip_and_tour_view = self.uow.ip_and_tours_view.get_by_ip_id_and_tour_id(ip_address.id, tour_id)
+            ip_and_tour_view = await self.uow.ip_and_tours_view.get_by_ip_id_and_tour_id(ip_address.id, tour_id)
             ip_and_tour_viewed_date = ip_and_tour_view.updated_at.date() if ip_and_tour_view else None
             current_date = datetime.now().date()
             if ip_address and tour_id in list_of_tour_ids and ip_and_tour_viewed_date != current_date:
