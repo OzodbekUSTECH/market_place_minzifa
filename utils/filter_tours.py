@@ -14,6 +14,9 @@ class FilterTours:
             region: str = Query(None),
             currency_id: int = Query(None),
             price: int = Query(None),
+            age_group: str = Query(None),
+            children_age: str = Query(None),
+            level_of_activity: str = Query(None),
     ):
         self.query = query
         self.status_id = status_id
@@ -24,6 +27,9 @@ class FilterTours:
         self.region = region
         self.currency_id = currency_id
         self.price = price
+        self.age_group = age_group
+        self.children_age = children_age
+        self.level_of_activity = level_of_activity
 
     def filter_tour(self, tour):
         if self.status_id and tour.status_id != self.status_id:
@@ -45,6 +51,15 @@ class FilterTours:
             return False
 
         if self.region and tour.region != self.region:
+            return False
+        
+        if self.age_group and tour.age_group != self.age_group:
+            return False
+        
+        if self.children_age and tour.children_age != self.children_age:
+            return False
+        
+        if self.level_of_activity and tour.level_of_activity != self.level_of_activity:
             return False
 
         if self.currency_id is not None and self.price is not None:

@@ -19,6 +19,10 @@ class Tour(BaseTable):
     region = Column(String, nullable=False)
     total_places = Column(Integer, nullable=False)
     free_places = Column(Integer, nullable=False)
+    age_group = Column(String, nullable=False)
+    children_age = Column(String, nullable=False)
+    level_of_activity = Column(String, nullable=False)
+    
     # view_count = Column(Integer, default=0)  # Добавляем поле для счетчика просмотров
     views = relationship("IPAndToursView", lazy="subquery")
     activities = relationship("TourActivity", back_populates="tour", lazy="subquery")
