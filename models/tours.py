@@ -44,7 +44,7 @@ class IPTourView(BaseTable):
     tour_id = Column(Integer, ForeignKey("tours.id"), nullable=False)  
 
     def add_ip_address(self, ip):
-        return self.ip_address.append(ip)
+        return self.ip_addresses.append(ip)
     
 
    
