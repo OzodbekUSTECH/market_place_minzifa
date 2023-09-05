@@ -28,7 +28,9 @@ class TourPricesService:
             price_dict = {
                 "tour_id": price_data.tour_id,
                 "currency_id": target_currency.id,
-                "price": converted_price
+                "price": converted_price,
+                "discount_percentage": None,
+                "new_price": None
             }
             if price_data.new_price > 0 and price_data.discount_percentage > 0:
                 raise CustomExceptions.conflict("You can only fill either the new price or the discount")
@@ -91,6 +93,8 @@ class TourPricesService:
 
                 price_dict = {
                     "price": converted_price,
+                    "discount_percentage": None,
+                    "new_price": None
                 }
                 if price_data.new_price > 0 and price_data.discount_percentage > 0:
                     raise CustomExceptions.conflict("You can only fill either the new price or the discount")
