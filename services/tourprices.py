@@ -116,11 +116,11 @@ class TourPricesService:
             
         return response
     
-    async def _calculate_discount(previous_price: int, new_price: int):
+    async def _calculate_discount(self, previous_price: int, new_price: int):
             discount_percentage = ((previous_price - new_price) / previous_price) * 100
             return discount_percentage
 
-    async def _calculate_new_price(previous_price: int, discount_percentage: int):
+    async def _calculate_new_price(self, previous_price: int, discount_percentage: int):
             new_price = previous_price - (previous_price * discount_percentage / 100)
             return new_price
 
