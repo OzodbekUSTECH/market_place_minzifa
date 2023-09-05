@@ -30,7 +30,7 @@ class TourPricesService:
                 "currency_id": target_currency.id,
                 "price": converted_price
             }
-            if price_data.discount_percentage is not None:
+            if price_data.discount_percentage:
                 if price_data.new_price:
                     raise CustomExceptions.conflict("You can choose only new price or discount percentage")
                 new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
@@ -40,7 +40,7 @@ class TourPricesService:
                     "discount": price_data.discount_percentage,
                     "new_price": new_price
                 }
-            if price_data.new_price is not None:
+            if price_data.new_price:
                 if price_data.discount_percentage:
                     raise CustomExceptions.conflict("You can choose only new price or discount percentage")
                 discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
@@ -92,7 +92,7 @@ class TourPricesService:
                 price_dict = {
                     "price": converted_price,
                 }
-                if price_data.discount_percentage is not None:
+                if price_data.discount_percentage:
                     if price_data.new_price:
                         raise CustomExceptions.conflict("You can choose only new price or discount percentage")
                     new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
@@ -101,7 +101,7 @@ class TourPricesService:
                         "discount": price_data.discount_percentage,
                         "new_price": new_price
                     }
-                if price_data.new_price is not None:
+                if price_data.new_price:
                     if price_data.discount_percentage:
                         raise CustomExceptions.conflict("You can choose only new price or discount percentage")
                     discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
