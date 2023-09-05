@@ -55,20 +55,20 @@ class ToursService:
         async with self.uow:
 
             ip_tour_view = await self.uow.ip_tour_view.get_by_tour_id(tour_id)
+            print(ip_tour_view)
+            print("----------------------------------------------------------------")
+            if not ip_tour_view:
+                ip_tour_view_dict = {
+                    "tour_id": tour_id,
+                }
+                ip_tour_view = await self.uow.ip_tour_view.create(ip_tour_view_dict)
+
             tour = await self.uow.tours.get_by_id(tour_id)
             ip_of_user = request.client.host
             # Извлекаем только дату из updated_at
             ip_address_date = ip_tour_view.updated_at.date() if ip_tour_view else None
             current_date = datetime.now().date()
-            if not ip_tour_view:
-                ip_tour_view_dict = {
-                    "tour_id": tour_id,
-                }
-                created_ip_tour_view = await self.uow.ip_tour_view.create(ip_tour_view_dict)
-                await self.uow.commit()
-                created_ip_tour_view.ip_addresses.append(ip_of_user)
-                # created_ip_tour_view.add_ip_address(ip_of_user)
-                await self.uow.commit()
+            print(ip_tour_view)
             if ip_tour_view and ip_of_user not in ip_tour_view.ip_addresses:
                 ip_tour_view.add_ip_address(ip_of_user)
                 await self.uow.commit()
