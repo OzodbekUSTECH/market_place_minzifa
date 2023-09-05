@@ -31,3 +31,7 @@ class TourPriceSchema(CreateTourPriceSchema):
     @validator('new_price', pre=True, always=True)
     def round_price(cls, value):
         return int(round(value))
+    
+    @validator('discount_percentage', pre=True, always=True)
+    def round_price(cls, value):
+        return int(round(value))
