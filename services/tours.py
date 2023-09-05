@@ -54,7 +54,7 @@ class ToursService:
 
         async with self.uow:
             ip_of_user = request.client.host
-            ip_address = await self.uow.ip_tour_view.get_by_ip_address(tour_id)
+            ip_address = await self.uow.ip_tour_view.get_by_ip_address(ip_of_user)
             if not ip_address:
                 ip_address_dict = {
                     "ip_address": ip_of_user,
@@ -81,7 +81,7 @@ class ToursService:
             # Извлекаем только дату из updated_at
             
             tour = await self.uow.tours.get_by_id(tour_id)
-        return tour
+            return tour
         
     async def update_tour(self, tour_id: int, tour_data: UpdateTourSchema) -> TourSchema:
         tour_dict = tour_data.model_dump()
