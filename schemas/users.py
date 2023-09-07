@@ -10,8 +10,6 @@ class UserCreateSchema(BaseModel):
     password: constr(min_length=8, max_length=64)
     company_name: str = None
     phone_number: str = None
-    is_traveler_expert: bool = False
-    is_traveler: bool = False
     role_id: int
     link: str = None
     about: str = None
@@ -45,8 +43,6 @@ class UserUpdateSchema(BaseModel):
     email: EmailStr
     company_name: str = None
     phone_number: str = None
-    is_traveler_expert: bool = False
-    is_traveler: bool = False
     role_id: int
     link: str = None
     about: str = None
@@ -56,8 +52,6 @@ class UserSchema(BaseModel):
     email: str
     company_name: Optional[str]
     phone_number: Optional[str]
-    is_traveler_expert: bool
-    is_traveler: bool
     role_id: int
     rating: float
     link: Optional[str]
