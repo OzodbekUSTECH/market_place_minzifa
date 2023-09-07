@@ -59,13 +59,12 @@ class TourPricesService:
                     "new_price": converted_new_price
                 }
             created_price = await self.uow.tour_prices.create(price_dict)
-            response.append(TourPriceSchema(**created_price.__dict__))
+            response.append(created_price)
         return response
     
     async def create_tour_prices(self, price_data: CreateTourPriceSchema) -> list[TourPriceSchema]:
         async with self.uow:
-            list_of_prices_for_tour = await self._create_prices_for_tour(price_data)
-            return list_of_prices_for_tour
+            return await self._create_prices_for_tour(price_data)
         
     async def get_list_of_prices(self, pagination: Pagination) -> list[TourPriceSchema]:
         async with self.uow:
@@ -124,7 +123,7 @@ class TourPricesService:
                     "new_price": converted_new_price
                 }
             updated_price = await self.uow.tour_prices.update(price.id, price_dict)
-            response.append(TourPriceSchema(**updated_price.__dict__))
+            response.append(updated_price)
         return response
     async def update_tour_prices(self, price_data: UpdateTourPriceSchema) -> list[TourPriceSchema]:
         async with self.uow:
