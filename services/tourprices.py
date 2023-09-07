@@ -79,57 +79,56 @@ class TourPricesService:
         async with self.uow:
             return await self.uow.tour_prices.get_by_tour_id(tour_id)
         
+    async def _update_prices_for_tour(self, price_data: UpdateTourPriceSchema):
+        prices = await self.uow.tour_prices.get_by_tour_id(price_data.tour_id)
+        base_currency = await self.uow.currencies.get_by_id(price_data.currency_id)
 
-    async def update_tour_prices(self, tour_id: int, price_data: UpdateTourPriceSchema) -> list[TourPriceSchema]:
-        async with self.uow:
-            prices = await self.uow.tour_prices.get_by_tour_id(tour_id)
-            base_currency = await self.uow.currencies.get_by_id(price_data.currency_id)
+        response = []
+        for price in prices:
+            if price.currency_id == base_currency.id:
+                converted_price = price_data.price
+            else:
+                target_currency = await self.uow.currencies.get_by_id(price.currency_id)
+                exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
+                if exchange_rate:
+                    converted_price = price_data.price * exchange_rate
+                else:
+                    converted_price = price_data.price * target_currency.exchange_rate
 
-            response = []
-            for price in prices:
+            price_dict = {
+                "price": converted_price,
+                "discount_percentage": None,
+                "new_price": None
+            }
+            if price_data.new_price is not None and price_data.discount_percentage is not None:
+                raise CustomExceptions.conflict("You can only fill either the new price or the discount")
+            if price_data.discount_percentage:
+                new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
+                price_dict = {
+                    "price": converted_price,
+                    "discount_percentage": price_data.discount_percentage,
+                    "new_price": new_price
+                }
+            if price_data.new_price:
                 if price.currency_id == base_currency.id:
-                    converted_price = price_data.price
+                    discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
+                    converted_new_price = price_data.new_price
                 else:
                     target_currency = await self.uow.currencies.get_by_id(price.currency_id)
                     exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
-                    if exchange_rate:
-                        converted_price = price_data.price * exchange_rate
-                    else:
-                        converted_price = price_data.price * target_currency.exchange_rate
-
+                    converted_new_price = price_data.new_price * exchange_rate
+                    discount_percentage = await self._calculate_discount(converted_price, converted_new_price)
                 price_dict = {
                     "price": converted_price,
-                    "discount_percentage": None,
-                    "new_price": None
+                    "discount_percentage": discount_percentage,
+                    "new_price": converted_new_price
                 }
-                if price_data.new_price is not None and price_data.discount_percentage is not None:
-                    raise CustomExceptions.conflict("You can only fill either the new price or the discount")
-                if price_data.discount_percentage:
-                    new_price = await self._calculate_new_price(converted_price, price_data.discount_percentage)
-                    price_dict = {
-                        "price": converted_price,
-                        "discount_percentage": price_data.discount_percentage,
-                        "new_price": new_price
-                    }
-                if price_data.new_price:
-                    if price.currency_id == base_currency.id:
-                        discount_percentage = await self._calculate_discount(converted_price, price_data.new_price)
-                        converted_new_price = price_data.new_price
-                    else:
-                        target_currency = await self.uow.currencies.get_by_id(price.currency_id)
-                        exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
-                        converted_new_price = price_data.new_price * exchange_rate
-                        discount_percentage = await self._calculate_discount(converted_price, converted_new_price)
-                    price_dict = {
-                        "price": converted_price,
-                        "discount_percentage": discount_percentage,
-                        "new_price": converted_new_price
-                    }
-                updated_price = await self.uow.tour_prices.update(price.id, price_dict)
-                response.append(TourPriceSchema(**updated_price.__dict__))
-
-            
+            updated_price = await self.uow.tour_prices.update(price.id, price_dict)
+            response.append(TourPriceSchema(**updated_price.__dict__))
         return response
+    async def update_tour_prices(self, price_data: UpdateTourPriceSchema) -> list[TourPriceSchema]:
+        async with self.uow:
+            return await self._update_prices_for_tour(price_data)
     
     async def _calculate_discount(self, previous_price: int, new_price: int):
             discount_percentage = ((previous_price - new_price) / previous_price) * 100

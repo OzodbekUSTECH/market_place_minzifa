@@ -41,10 +41,9 @@ async def get_list_of_prices_of_tour(
 ) -> list[TourPriceSchema]:
     return await tour_prices_service.get_list_of_prices_of_tour(tour_id)
 
-@router.put('/tour/{tour_id}', response_model=list[TourPriceSchema])
+@router.put('', response_model=list[TourPriceSchema])
 async def update_tour_prices(
-    tour_id: int,
     tour_data: UpdateTourPriceSchema,
     tour_prices_service: Annotated[TourPricesService, Depends(get_tour_prices_services)]
 ) -> list[TourPriceSchema]:
-    return await tour_prices_service.update_tour_prices(tour_id, tour_data)
+    return await tour_prices_service.update_tour_prices(tour_data)

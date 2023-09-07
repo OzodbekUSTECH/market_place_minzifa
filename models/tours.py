@@ -11,7 +11,7 @@ class Tour(BaseTable):
     
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     status_id = Column(Integer, ForeignKey('tour_statuses.id'), nullable=False, index=True)
-    prices = relationship("TourPrice", back_populates="tour", lazy="subquery")
+    prices = relationship("TourPrice", lazy="subquery")
     status = relationship("TourStatus", back_populates="tours", lazy="subquery")
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
