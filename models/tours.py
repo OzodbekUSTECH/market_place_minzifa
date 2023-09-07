@@ -11,7 +11,7 @@ class Tour(BaseTable):
     
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     status_id = Column(Integer, ForeignKey('tour_statuses.id'), nullable=False, index=True)
-    prices = relationship("TourPrice", lazy="subquery")
+    prices = relationship("TourPrice", cascade="all, delete-orphan", lazy="subquery")
     status = relationship("TourStatus", back_populates="tours", lazy="subquery")
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
@@ -22,11 +22,11 @@ class Tour(BaseTable):
     age_group = Column(String, nullable=False)
     children_age = Column(String, nullable=False)
     level_of_activity = Column(String, nullable=False)
-    languages = relationship("TourLanguage", lazy="subquery")
+    languages = relationship("TourLanguage", cascade="all, delete-orphan", lazy="subquery")
     # view_count = Column(Integer, default=0)  # Добавляем поле для счетчика просмотров
-    views = relationship("IPAndToursView", lazy="subquery")
-    activities = relationship("TourActivity", back_populates="tour", lazy="subquery")
-    tour_comments = relationship("TourComment", lazy="subquery")
+    views = relationship("IPAndToursView", cascade="all, delete-orphan", lazy="subquery")
+    activities = relationship("TourActivity", back_populates="tour", cascade="all, delete-orphan", lazy="subquery")
+    tour_comments = relationship("TourComment", cascade="all, delete-orphan", lazy="subquery")
     user = relationship("User", back_populates="tours", lazy="subquery")
     
     def get_list_of_language_ids(self):

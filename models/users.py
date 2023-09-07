@@ -20,13 +20,14 @@ class User(BaseTable):
     about = Column(Text, nullable=True)
 
     role = relationship("Role", lazy="subquery")
-    favorite_tours = relationship("FavoriteTours", lazy="subquery")
-    tours = relationship("Tour", back_populates="user", lazy="subquery")
+    favorite_tours = relationship("FavoriteTours", cascade="all, delete-orphan", lazy="subquery")
+    tours = relationship("Tour", back_populates="user",cascade="all, delete-orphan", lazy="subquery")
     
     travelers = relationship(
         "TravelersAndManagersAssociation",
         primaryjoin="User.id == TravelersAndManagersAssociation.manager_id",
         # back_populates="traveler",
+        # cascade="all, delete-orphan",
         lazy="subquery"
     )
     
@@ -34,6 +35,7 @@ class User(BaseTable):
         "TravelersAndManagersAssociation",
         primaryjoin="User.id == TravelersAndManagersAssociation.traveler_id",
         # back_populates="manager",
+        # cascade="all, delete-orphan",
         lazy="subquery"
     )
     @hybrid_property

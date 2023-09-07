@@ -12,5 +12,5 @@ class CurrencyHandler:
             data = response.json()
             exchange_rate = data['rates'][upper_currency_name]
             if exchange_rate:
-                return float(exchange_rate)
+                return exchange_rate
             return None
