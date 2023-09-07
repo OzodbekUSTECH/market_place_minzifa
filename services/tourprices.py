@@ -1,7 +1,7 @@
 from schemas.tourprices import CreateTourPriceSchema, UpdateTourPriceSchema, TourPriceSchema
 from repositories import Pagination
 from datetime import datetime
-from models import Tour
+from models import TourPrice
 from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 from utils.currency import CurrencyHandler
@@ -10,7 +10,7 @@ class TourPricesService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
-    async def _create_prices_for_tour(self, price_data: CreateTourPriceSchema):
+    async def _create_prices_for_tour(self, price_data: CreateTourPriceSchema) -> list[TourPrice]:
         base_currency = await self.uow.currencies.get_by_id(price_data.currency_id)
         target_currencies = await self.uow.currencies.get_all()
         response = []        
@@ -59,14 +59,14 @@ class TourPricesService:
                     "new_price": converted_new_price
                 }
             created_price = await self.uow.tour_prices.create(price_dict)
-            response.append(TourPriceSchema(**created_price.__dict__))
+            response.append(created_price)
         return response
     
-    async def create_tour_prices(self, price_data: CreateTourPriceSchema) -> list[TourPriceSchema]:
+    async def create_tour_prices(self, price_data: CreateTourPriceSchema) -> list[TourPrice]:
         async with self.uow:
             return await self._create_prices_for_tour(price_data)
         
-    async def get_list_of_prices(self, pagination: Pagination) -> list[TourPriceSchema]:
+    async def get_list_of_prices(self, pagination: Pagination) -> list[TourPrice]:
         async with self.uow:
             return await self.uow.tour_prices.get_all(pagination)
     
@@ -74,11 +74,11 @@ class TourPricesService:
         async with self.uow:
             return await self.uow.tour_prices.get_by_id(price_id)
 
-    async def get_list_of_prices_of_tour(self, tour_id: int) -> list[TourPriceSchema]:
+    async def get_list_of_prices_of_tour(self, tour_id: int) -> list[TourPrice]:
         async with self.uow:
             return await self.uow.tour_prices.get_by_tour_id(tour_id)
         
-    async def _update_prices_for_tour(self, price_data: UpdateTourPriceSchema):
+    async def _update_prices_for_tour(self, price_data: UpdateTourPriceSchema) -> list[TourPrice]:
         prices = await self.uow.tour_prices.get_by_tour_id(price_data.tour_id)
         base_currency = await self.uow.currencies.get_by_id(price_data.currency_id)
 
@@ -125,15 +125,15 @@ class TourPricesService:
             updated_price = await self.uow.tour_prices.update(price.id, price_dict)
             response.append(TourPriceSchema(**updated_price.__dict__))
         return response
-    async def update_tour_prices(self, price_data: UpdateTourPriceSchema) -> list[TourPriceSchema]:
+    async def update_tour_prices(self, price_data: UpdateTourPriceSchema) -> list[TourPrice]:
         async with self.uow:
             return await self._update_prices_for_tour(price_data)
     
-    async def _calculate_discount(self, previous_price: int, new_price: int):
+    async def _calculate_discount(self, previous_price: int, new_price: int) -> float:
             discount_percentage = ((previous_price - new_price) / previous_price) * 100
             return discount_percentage
 
-    async def _calculate_new_price(self, previous_price: int, discount_percentage: int):
+    async def _calculate_new_price(self, previous_price: int, discount_percentage: int) -> float:
             new_price = previous_price - (previous_price * discount_percentage / 100)
             return new_price
 

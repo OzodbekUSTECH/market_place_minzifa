@@ -29,9 +29,7 @@ class TourPriceSchema(CreateTourPriceSchema):
         if value is not None:
             return round(value)
     
-    # @validator('price', pre=True, always=True)
-    # def round_price(cls, value):
-    #     return round(value)
+    
     
     
     

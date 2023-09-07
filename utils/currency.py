@@ -4,7 +4,7 @@ import httpx
 class CurrencyHandler:
 
     @staticmethod
-    async def get_exchange_rate(base_currency: str, currency_name: str):
+    async def get_exchange_rate(base_currency: str, currency_name: str) -> float | None:
         upper_base_currency_name = base_currency.upper()
         upper_currency_name = currency_name.upper()
         async with httpx.AsyncClient() as client:
