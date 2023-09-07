@@ -9,8 +9,15 @@ class CreateTourPriceSchema(BaseModel):
     discount_percentage: Optional[float] = None
     new_price: Optional[float] = None
 
+    @validator('new_price', pre=True, always=True)
+    def round_price(cls, value):
+        if value is not None:
+            return round(value)
     
-    
+    @validator('discount_percentage', pre=True, always=True)
+    def round_price(cls, value):
+        if value is not None:
+            return round(value)
     
     
 class UpdateTourPriceSchema(CreateTourPriceSchema):
@@ -25,12 +32,5 @@ class TourPriceSchema(CreateTourPriceSchema):
     # def round_price(cls, value):
     #     return round(value)
     
-    @validator('new_price', pre=True, always=True)
-    def round_price(cls, value):
-        if value is not None:
-            return round(value)
     
-    @validator('discount_percentage', pre=True, always=True)
-    def round_price(cls, value):
-        if value is not None:
-            return int(round(value))
+    
