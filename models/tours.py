@@ -1,28 +1,30 @@
 from models import BaseTable
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Date, ARRAY, JSON
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Date, ARRAY
 from sqlalchemy.orm import relationship
 from datetime import datetime
+from sqlalchemy.dialects.postgresql import JSONB
+
 from sqlalchemy.ext.hybrid import hybrid_property
 from utils.locale_handler import LocaleHandler
 from schemas.tours import TourSchema
 class Tour(BaseTable):
     __tablename__ = 'tours'
     
-    title = Column(JSON, nullable=False)
-    description = Column(JSON, nullable=False)
+    title = Column(JSONB, nullable=False)
+    description = Column(JSONB, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     status_id = Column(Integer, ForeignKey('tour_statuses.id'), nullable=False, index=True)
     prices = relationship("TourPrice", cascade="all, delete-orphan", lazy="subquery")
     status = relationship("TourStatus", back_populates="tours", lazy="subquery")
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
-    country = Column(JSON, nullable=False)
-    region = Column(JSON, nullable=False)
+    country = Column(JSONB, nullable=False)
+    region = Column(JSONB, nullable=False)
     total_places = Column(Integer, nullable=False)
     free_places = Column(Integer, nullable=False)
     age_group = Column(String, nullable=False)
     children_age = Column(String, nullable=False)
-    level_of_activity = Column(JSON, nullable=False)
+    level_of_activity = Column(JSONB, nullable=False)
     languages = relationship("TourLanguage", cascade="all, delete-orphan", lazy="subquery")
     # view_count = Column(Integer, default=0)  # Добавляем поле для счетчика просмотров
     views = relationship("IPAndToursView", cascade="all, delete-orphan", lazy="subquery")

@@ -4,11 +4,12 @@ from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, JSON,
 from sqlalchemy.orm import relationship
 from schemas.roles import RoleSchema
 from utils.locale_handler import LocaleHandler
+from sqlalchemy.dialects.postgresql import JSONB
 
 class Role(BaseTable):
     __tablename__ = 'roles'
 
-    name = Column(JSON, nullable=False)
+    name = Column(JSONB, nullable=False)
 
     role_permissions = relationship("RolePermission", back_populates="role", lazy="subquery")
 

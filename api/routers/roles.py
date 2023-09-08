@@ -26,6 +26,7 @@ async def get_list_of_roles(
 
 @router.get('/{id}', name="get role by ID", response_model=RoleSchema)
 async def get_role_data_by_id(
+    locale: Annotated[LocaleHandler, Depends()],
     id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]
 ) -> RoleSchema:
