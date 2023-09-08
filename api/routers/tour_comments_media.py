@@ -8,7 +8,7 @@ from models import User
 from security.permissionhandler import PermissionHandler, Permissions
 
 router = APIRouter(
-    prefix="/tours/comments/media",
+    prefix="/tour/comments/media",
     tags=["Tour Comments Media"]
 )
 

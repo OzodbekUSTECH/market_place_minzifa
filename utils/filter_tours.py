@@ -1,7 +1,6 @@
 from fastapi import Query
 from datetime import date
 from fuzzywuzzy import fuzz, process
-
 class FilterTours:
     def __init__(
             self,
@@ -33,13 +32,13 @@ class FilterTours:
         self.level_of_activity = level_of_activity
         self.language_id = language_id
 
-    def filter_tour(self, tour):
+    def filter_tour(self, tour, locale: str):
         if self.status_id and tour.status_id != self.status_id:
             return False
 
-        if self.query and fuzz.partial_ratio(self.query.lower(), tour.title.lower()) <= 60:
+        if self.query and fuzz.partial_ratio(self.query.lower(), tour.title[locale].lower()) <= 60:
             return False
-
+        
         if self.tour_rating and (tour.user.rating < self.tour_rating or tour.user.rating >= self.tour_rating + 0.5):
             return False
 
@@ -49,10 +48,10 @@ class FilterTours:
         if self.end_date and tour.end_date != self.end_date:
             return False
 
-        if self.country and tour.country != self.country:
+        if self.country and tour.country[locale] != self.country:
             return False
 
-        if self.region and tour.region != self.region:
+        if self.region and tour.region[locale] != self.region:
             return False
         
         if self.age_group and tour.age_group != self.age_group:
@@ -61,7 +60,7 @@ class FilterTours:
         if self.children_age and tour.children_age != self.children_age:
             return False
         
-        if self.level_of_activity and tour.level_of_activity != self.level_of_activity:
+        if self.level_of_activity and tour.level_of_activity[locale] != self.level_of_activity:
             return False
 
         if self.language_id:

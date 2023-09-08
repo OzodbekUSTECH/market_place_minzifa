@@ -15,7 +15,7 @@ router = APIRouter(
     tags=["Tours"],
 )
 
-@router.get('/search')
+@router.get('/{locale}/search')
 async def search_tours(
     locale: Annotated[LocaleHandler, Depends()],
     pagination: Annotated[Pagination, Depends()],
@@ -36,7 +36,7 @@ async def create_tour(
 ) -> TourSchema:
     return await tours_service.create_tour(tour_data)
 
-@router.get('')
+@router.get('/{locale}')
 async def get_list_of_tours(
     locale: Annotated[LocaleHandler, Depends()],
     pagination: Annotated[Pagination, Depends()],
@@ -44,7 +44,7 @@ async def get_list_of_tours(
 ) -> list[TourSchema]:
     return await tours_service.get_list_of_tours(locale, pagination)
 
-@router.get('/user/{user_id}', response_model=list[TourSchema])
+@router.get('/{locale}/user/{user_id}', response_model=list[TourSchema])
 async def get_list_of_tours_of_user(
     locale: Annotated[LocaleHandler, Depends()],
     pagination: Annotated[Pagination, Depends()],
@@ -53,7 +53,7 @@ async def get_list_of_tours_of_user(
 ):
     return await tours_service.get_list_of_tours_of_user(user_id, locale, pagination)
 
-@router.get('/{id}', response_model=TourSchema)
+@router.get('/{locale}/{id}', response_model=TourSchema)
 async def get_tour_by_id(
     locale: Annotated[LocaleHandler, Depends()],
     id: int,

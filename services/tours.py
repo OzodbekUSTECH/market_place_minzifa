@@ -126,7 +126,7 @@ class ToursService:
 
             for user in users:
                 for tour in user.tours:
-                    if filters.filter_tour(tour):
+                    if filters.filter_tour(tour, locale.get_language):
                         matched_tours.append(tour)
 
             return await self.uow.serialize_one_or_all_models_by_locale(matched_tours, locale)
