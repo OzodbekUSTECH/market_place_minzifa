@@ -1,5 +1,5 @@
 from pydantic import BaseModel, validator
-from typing import Optional
+from typing import Optional, Union
 from schemas.tourprices import TourPriceSchema
 from datetime import date, datetime
 class CreateTourSchema(BaseModel):
@@ -7,14 +7,15 @@ class CreateTourSchema(BaseModel):
     user_id: int
     start_date: date = None
     end_date: date = None
-    title: str
-    country: str
-    region: str
+    title: Union[dict[str, str], str]
+    description: Union[dict[str, str], str] 
+    country: Union[dict[str, str], str]
+    region: Union[dict[str, str], str]
     total_places: int
     free_places: int
     age_group: str
     children_age: str
-    level_of_activity: str
+    level_of_activity: Union[dict[str, str], str]
 
 class CreatedTourResponseSchema(BaseModel):
     id: int
@@ -28,8 +29,7 @@ class TourSchema(CreateTourSchema):
     amount_views: int
     created_at: datetime
     updated_at: datetime
-    class ConfigDict:
-        from_attributes = True
+    
 
 
 # from schemas.tourprices import TourPriceSchema, CreateTourPriceSchema

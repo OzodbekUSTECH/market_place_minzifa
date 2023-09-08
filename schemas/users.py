@@ -57,7 +57,7 @@ class UserSchema(BaseModel):
     link: Optional[str]
     about: Optional[str]
 
-    @validator('rating', pre=True, always=True)
+    @validator('rating')
     def round_rating(cls, value):
         return round(value, 2)
 

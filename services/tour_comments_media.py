@@ -5,7 +5,7 @@ from datetime import datetime
 from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 from utils.mediahandler import MediaHandler
-
+from models import TourCommentMedia
 class TourCommentsMediaService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
@@ -14,7 +14,7 @@ class TourCommentsMediaService:
             self,
             tour_comment_id: int,
             media_group: list[UploadFile],
-    ) -> list[TourCommentMediaSchema]:
+    ) -> list[TourCommentMedia]:
         if len(media_group) > 3:
             raise CustomExceptions.forbidden("Maximum number of media is 3")
         urls = await MediaHandler.save_media(media_group, MediaHandler.comment_media_dir)
@@ -30,15 +30,15 @@ class TourCommentsMediaService:
             return response
         
     
-    async def get_list_of_tour_comments_media(self, pagination: Pagination) -> list[TourCommentMediaSchema]:
+    async def get_list_of_tour_comments_media(self, pagination: Pagination) -> list[TourCommentMedia]:
         async with self.uow:
             return await self.uow.tour_comments_media.get_all(pagination)
         
-    async def get_tour_comments_media_by_id(self, tour_comments_media_id: int) -> TourCommentMediaSchema:
+    async def get_tour_comments_media_by_id(self, tour_comments_media_id: int) -> TourCommentMedia:
         async with self.uow:
             return await self.uow.tour_comments_media.get_by_id(tour_comments_media_id)
         
-    async def get_list_of_tour_comments_media_by_tour_comment_id(self, tour_comment_id: int) -> list[TourCommentMediaSchema]:
+    async def get_list_of_tour_comments_media_by_tour_comment_id(self, tour_comment_id: int) -> list[TourCommentMedia]:
         async with self.uow:
             comment_instance = await self.uow.tour_comments.get_by_id(tour_comment_id)
             return comment_instance.media
@@ -47,7 +47,7 @@ class TourCommentsMediaService:
             self, 
             tour_comments_media_id: int,
             media: UploadFile
-    ) -> TourCommentMediaSchema:
+    ) -> TourCommentMedia:
         url = await MediaHandler.update_media(media, MediaHandler.comment_media_dir)
         async with self.uow:
             media_dict = {
@@ -57,6 +57,6 @@ class TourCommentsMediaService:
             return await self.uow.tour_comments_media.update(tour_comments_media_id, media_dict)
         
 
-    async def delete_tour_comments_media(self, tour_comment_media_id: int) -> TourCommentMediaSchema:
+    async def delete_tour_comments_media(self, tour_comment_media_id: int) -> TourCommentMedia:
         async with self.uow:
             return await self.uow.tour_comments_media.delete(tour_comment_media_id)

@@ -7,6 +7,7 @@ from schemas.roles import RoleSchema, CreateRoleSchema, UpdateRoleSchema, RolePe
 from schemas.rolepermissions import RolePermissionsSchema
 from models import User
 from security.permissionhandler import PermissionHandler, Permissions
+from utils.locale_handler import LocaleHandler
 
 router = APIRouter(
     prefix="/roles",
@@ -14,12 +15,13 @@ router = APIRouter(
 )
 
 
-@router.get('', name="get list of roles", response_model=list[RoleSchema])
+@router.get('/{locale}', name="get list of roles", response_model=list[RoleSchema])
 async def get_list_of_roles(
+    locale: Annotated[LocaleHandler, Depends()],
     pagination: Annotated[Pagination, Depends()],
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]
 ) -> list[RoleSchema]:
-    return await roles_service.get_all_roles(pagination)
+    return await roles_service.get_all_roles(pagination, locale)
 
 
 @router.get('/{id}', name="get role by ID", response_model=RoleSchema)

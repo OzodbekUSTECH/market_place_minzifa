@@ -1,27 +1,28 @@
 from models import BaseTable
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Date, ARRAY
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Date, ARRAY, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
-
+from utils.locale_handler import LocaleHandler
+from schemas.tours import TourSchema
 class Tour(BaseTable):
     __tablename__ = 'tours'
     
-    title = Column(String, nullable=False)
-    
+    title = Column(JSON, nullable=False)
+    description = Column(JSON, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     status_id = Column(Integer, ForeignKey('tour_statuses.id'), nullable=False, index=True)
     prices = relationship("TourPrice", cascade="all, delete-orphan", lazy="subquery")
     status = relationship("TourStatus", back_populates="tours", lazy="subquery")
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
-    country = Column(String, nullable=False)
-    region = Column(String, nullable=False)
+    country = Column(JSON, nullable=False)
+    region = Column(JSON, nullable=False)
     total_places = Column(Integer, nullable=False)
     free_places = Column(Integer, nullable=False)
     age_group = Column(String, nullable=False)
     children_age = Column(String, nullable=False)
-    level_of_activity = Column(String, nullable=False)
+    level_of_activity = Column(JSON, nullable=False)
     languages = relationship("TourLanguage", cascade="all, delete-orphan", lazy="subquery")
     # view_count = Column(Integer, default=0)  # Добавляем поле для счетчика просмотров
     views = relationship("IPAndToursView", cascade="all, delete-orphan", lazy="subquery")
@@ -46,8 +47,32 @@ class Tour(BaseTable):
         return amount
     
     
-    # def increment_view_count(self):
-    #     self.view_count += 1
+    async def to_read_model(self, locale: LocaleHandler):
+        title = await self._get_trans_columns_by_locale(self.title, locale)
+        description = await self._get_trans_columns_by_locale(self.description, locale)
+        country = await self._get_trans_columns_by_locale(self.country, locale)
+        region = await self._get_trans_columns_by_locale(self.region, locale)
+        level_of_activity = await self._get_trans_columns_by_locale(self.level_of_activity, locale)
+        return TourSchema(
+            id=self.id,
+            title=title,
+            description=description,
+            user_id=self.user_id,
+            status_id=self.status_id,
+            start_date=self.start_date,
+            end_date=self.end_date,
+            country=country,
+            region=region,
+            total_places=self.total_places,
+            free_places=self.free_places,
+            age_group=self.age_group,
+            children_age=self.children_age,
+            level_of_activity=level_of_activity,
+            amount_views=self.amount_views,
+            amount_comments=self.amount_comments,
+            created_at=self.created_at,
+            updated_at=self.updated_at,
+        )
 
 
 class IPTourView(BaseTable):

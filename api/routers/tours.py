@@ -8,6 +8,7 @@ from models import User
 from datetime import date
 from security.permissionhandler import PermissionHandler, Permissions
 from utils.filter_tours import FilterTours
+from utils.locale_handler import LocaleHandler
 
 router = APIRouter(
     prefix="/tours",
@@ -16,13 +17,15 @@ router = APIRouter(
 
 @router.get('/search')
 async def search_tours(
+    locale: Annotated[LocaleHandler, Depends()],
     pagination: Annotated[Pagination, Depends()],
     tours_service: Annotated[ToursService, Depends(get_tours_services)],
     filters: Annotated[FilterTours, Depends()]
 ) -> list[TourSchema]:
     return await tours_service.search_tours(
         filters,
-        pagination
+        pagination,
+        locale,
     )
 
 
@@ -35,19 +38,29 @@ async def create_tour(
 
 @router.get('')
 async def get_list_of_tours(
+    locale: Annotated[LocaleHandler, Depends()],
     pagination: Annotated[Pagination, Depends()],
     tours_service: Annotated[ToursService, Depends(get_tours_services)]
 ) -> list[TourSchema]:
-    return await tours_service.get_list_of_tours(pagination)
+    return await tours_service.get_list_of_tours(locale, pagination)
 
+@router.get('/user/{user_id}', response_model=list[TourSchema])
+async def get_list_of_tours_of_user(
+    locale: Annotated[LocaleHandler, Depends()],
+    pagination: Annotated[Pagination, Depends()],
+    user_id: int,
+    tours_service: Annotated[ToursService, Depends(get_tours_services)]
+):
+    return await tours_service.get_list_of_tours_of_user(user_id, locale, pagination)
 
 @router.get('/{id}', response_model=TourSchema)
 async def get_tour_by_id(
+    locale: Annotated[LocaleHandler, Depends()],
     id: int,
     request: Request,
     tours_service: Annotated[ToursService, Depends(get_tours_services)]
 ) -> TourSchema:
-    return await tours_service.get_tour_by_id(id, request)
+    return await tours_service.get_tour_by_id(id, request, locale)
 
 @router.put('/{id}', response_model=TourSchema)
 async def update_tour(

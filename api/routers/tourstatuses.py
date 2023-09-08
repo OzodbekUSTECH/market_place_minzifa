@@ -6,6 +6,7 @@ from repositories import Pagination
 from schemas.tourstatuses import CreateTourStatusSchema, UpdateTourStatusSchema, TourStatusSchema
 from models import User
 from security.permissionhandler import PermissionHandler, Permissions
+from utils.locale_handler import LocaleHandler
 
 router = APIRouter(
     prefix="/status",
@@ -21,20 +22,22 @@ async def create_status(
     
 
 
-@router.get('', response_model=list[TourStatusSchema])
+@router.get('/{locale}', response_model=list[TourStatusSchema])
 async def get_list_of_statuses(
+    locale: Annotated[LocaleHandler, Depends()],
     pagination: Annotated[Pagination, Depends()],
     tour_status_service: Annotated[TourStatusesService, Depends(get_tour_statuses_services)]
 ) -> list[TourStatusSchema]:
-    return await tour_status_service.get_list_of_statuses(pagination)
+    return await tour_status_service.get_list_of_statuses(locale, pagination)
     
 
-@router.get('/{id}', response_model=TourStatusSchema)
+@router.get('/{locale}/{id}', response_model=TourStatusSchema)
 async def get_status_by_id(
+    locale: Annotated[LocaleHandler, Depends()],
     id: int,
     tour_status_service: Annotated[TourStatusesService, Depends(get_tour_statuses_services)]
 ) -> TourStatusSchema:
-    return await tour_status_service.get_status_by_id(id)
+    return await tour_status_service.get_status_by_id(id, locale)
     
 
 @router.put('/{id}', response_model=TourStatusSchema)

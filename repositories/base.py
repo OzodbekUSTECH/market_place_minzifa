@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 from fastapi import Query
 from datetime import date
 from fuzzywuzzy import fuzz, process
+from typing import Union
 
 class Pagination:
     def __init__(self, page: int = Query(1, ge=1), page_size: int = Query(100, le=100)):

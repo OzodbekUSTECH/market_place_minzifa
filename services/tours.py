@@ -3,18 +3,19 @@ from repositories import Pagination
 from utils.filter_tours import FilterTours
 from fastapi import Request
 from datetime import datetime, date
-from models import Tour
+from models import Tour, IPTourView
 from database.unitofwork import UnitOfWork
 from utils.exceptions import CustomExceptions
 from utils.currency import CurrencyHandler
 from fuzzywuzzy import fuzz, process
+from utils.locale_handler import LocaleHandler
 
 class ToursService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
     # Ваш метод для создания тура с ценами
-    async def create_tour(self, tour_data: CreateTourSchema) -> TourSchema:
+    async def create_tour(self, tour_data: CreateTourSchema) -> Tour:
         # tour_dict = tour_data.model_dump(exclude={"price"})
         tour_dict = tour_data.model_dump()
 
@@ -45,14 +46,20 @@ class ToursService:
         
             
 
-    async def get_list_of_tours(self, pagination: Pagination) -> TourSchema:
+    async def get_list_of_tours(self, locale: LocaleHandler, pagination: Pagination = None) -> Tour:
         async with self.uow:
-            return await self.uow.tours.get_all(pagination)
-        
+            tours = await self.uow.tours.get_all(pagination)
+            return await self.uow.serialize_one_or_all_models_by_locale(tours, locale)
+    
+    async def get_list_of_tours_of_user(self, user_id: int, locale: LocaleHandler, pagination: Pagination = None) -> list[Tour]:
+        async with self.uow:
+            user = await self.uow.users.get_by_id(user_id)
+            user_tours = user.tours[pagination.offset:pagination.offset + pagination.limit]
+            return await self.uow.serialize_one_or_all_models_by_locale(user_tours, locale)
     ###################################################################################
     ###################################################################################
     ###################################################################################
-    async def get_tour_by_id(self, tour_id: int, request: Request) -> TourSchema:
+    async def get_tour_by_id(self, tour_id: int, request: Request, locale: LocaleHandler) -> Tour:
         async with self.uow:
             ip_of_user = request.client.host
             ip_address = await self._get_or_create_ip_address(ip_of_user)
@@ -65,9 +72,9 @@ class ToursService:
             await self._update_tour_view(ip_address, tour_id)
             
             tour = await self.uow.tours.get_by_id(tour_id)
-            return tour
+            return await self.uow.serialize_one_or_all_models_by_locale(tour, locale)
     ######################################################################################
-    async def _get_or_create_ip_address(self, ip_address: str):
+    async def _get_or_create_ip_address(self, ip_address: str) -> IPTourView:
         existing_ip_address = await self.uow.ip_tour_view.get_by_ip_address(ip_address)
         if not existing_ip_address:
             ip_address_dict = {
@@ -96,7 +103,7 @@ class ToursService:
     ###################################################################################
     ###################################################################################
     
-    async def update_tour(self, tour_id: int, tour_data: UpdateTourSchema) -> TourSchema:
+    async def update_tour(self, tour_id: int, tour_data: UpdateTourSchema) -> Tour:
         tour_dict = tour_data.model_dump()
         async with self.uow:
             updated_tour = await self.uow.tours.update(tour_id, tour_dict)
@@ -110,8 +117,9 @@ class ToursService:
     async def search_tours(
             self, 
             filters: FilterTours,
-            pagination: Pagination
-        ):
+            pagination: Pagination,
+            locale: LocaleHandler,
+        ) -> list[Tour]:
         async with self.uow:
             users = await self.uow.users.get_all(pagination)
             matched_tours = []
@@ -121,7 +129,7 @@ class ToursService:
                     if filters.filter_tour(tour):
                         matched_tours.append(tour)
 
-            return matched_tours
+            return await self.uow.serialize_one_or_all_models_by_locale(matched_tours, locale)
     
 
         # async def create_full_tour(self, tour_data: CreateTourSchema) -> TourSchema: 

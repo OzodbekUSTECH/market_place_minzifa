@@ -6,7 +6,7 @@ from repositories.base import Pagination
 from schemas.activities import CreateActivitySchema, UpdateActivitySchema, ActivitySchema
 from models import User
 from security.permissionhandler import PermissionHandler, Permissions
-
+from utils.locale_handler import LocaleHandler
 router = APIRouter(
     prefix="/activities",
     tags=["Acitivities"],
@@ -19,19 +19,21 @@ async def create_activity(
 ) -> ActivitySchema:
     return await activities_service.create_activity(activity_data)
 
-@router.get('', response_model=list[ActivitySchema])
+@router.get('/{locale}', response_model=list[ActivitySchema])
 async def get_list_of_activities(
+    locale: Annotated[LocaleHandler, Depends()],
     pagination: Annotated[Pagination, Depends()],
     activities_service: Annotated[ActivitiesService, Depends(get_activities_services)]
 ) -> list[ActivitySchema]:
-    return await activities_service.get_list_of_activities(pagination)
+    return await activities_service.get_list_of_activities(pagination, locale)
 
-@router.get('/{id}', response_model=ActivitySchema)
+@router.get('/{locale}/{id}', response_model=ActivitySchema)
 async def get_activity_by_id(
+    locale: Annotated[LocaleHandler, Depends()],
     id: int,
     activities_service: Annotated[ActivitiesService, Depends(get_activities_services)]
 ) -> ActivitySchema:
-    return await activities_service.get_activity_by_id(id)
+    return await activities_service.get_activity_by_id(id, locale)
 
 @router.put('/{id}', response_model=ActivitySchema)
 async def update_activity(

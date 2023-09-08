@@ -12,9 +12,7 @@ class User(BaseTable):
     email = Column(String, index=True)
     password = Column(String)
     company_name = Column(String, nullable=True)
-    phone_number = Column(String, nullable=True)
-    # is_traveler_expert = Column(Boolean, default=False)
-    # is_traveler = Column(Boolean, default=False)    
+    phone_number = Column(String, nullable=True)  
     role_id = Column(Integer, ForeignKey("roles.id"))
     link = Column(String, nullable=True)
     about = Column(Text, nullable=True)
@@ -41,14 +39,14 @@ class User(BaseTable):
     @hybrid_property
     def rating(self):
         
-
-        all_ratings = []
-        
-        for tour in self.tours:
-            for comment in tour.tour_comments:
-                all_ratings.append(comment.rating)
-                
-        if all_ratings:
-            return sum(all_ratings) / len(all_ratings)
+        if self.tours:
+            all_ratings = []
+            
+            for tour in self.tours:
+                for comment in tour.tour_comments:
+                    all_ratings.append(comment.rating)
+                    
+            if all_ratings:
+                return sum(all_ratings) / len(all_ratings)
         return 1
     

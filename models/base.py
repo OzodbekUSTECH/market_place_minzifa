@@ -1,6 +1,7 @@
 from database.db import Base
 from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, ForeignKey, DateTime
 from datetime import datetime
+from utils.locale_handler import LocaleHandler
 
 class BaseTable(Base):
     __abstract__ = True  # Make this class abstract, so it won't create its own table
@@ -15,3 +16,9 @@ class BaseTable(Base):
     )
     
     
+    async def _get_trans_columns_by_locale(self, field: dict, locale: LocaleHandler):
+        if locale.get_language != "all":
+            value = field.get(locale.get_language, "")
+            return value
+        return field
+

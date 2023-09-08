@@ -1,4 +1,7 @@
-from typing import Type
+from typing import Type, Union
+from utils.locale_handler import LocaleHandler
+from sqlalchemy.ext.declarative import DeclarativeMeta
+
 from models import (
     User, 
     MailList, 
@@ -109,3 +112,8 @@ class UnitOfWork:
     async def rollback(self):
         self.session.rollback()
         
+    async def serialize_one_or_all_models_by_locale(self, models: Union[list[DeclarativeMeta], DeclarativeMeta], locale: LocaleHandler):
+        if isinstance(models, list):
+            return [await model.to_read_model(locale) for model in models]
+        
+        return await models.to_read_model(locale)
