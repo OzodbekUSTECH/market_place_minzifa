@@ -24,9 +24,9 @@ class RolesService:
         role_dict = role_data.model_dump()
         async with self.uow:
 
-            existing_role = await self.uow.roles.has_already_role_name(role_data)
-            if existing_role:
-                raise CustomExceptions.conflict("Role with this name already exists")
+            # existing_role = await self.uow.roles.has_already_role_name(role_data)
+            # if existing_role:
+            #     raise CustomExceptions.conflict("Role with this name already exists")
             
             created_role = await self.uow.roles.create(role_dict)
             
@@ -36,9 +36,9 @@ class RolesService:
         role_dict = role_data.model_dump()
         async with self.uow:
 
-            existing_role = await self.uow.roles.has_already_role_name(role_data)
-            if existing_role:
-                raise CustomExceptions.conflict("Role with this name already exists")
+            # existing_role = await self.uow.roles.has_already_role_name(role_data)
+            # if existing_role:
+            #     raise CustomExceptions.conflict("Role with this name already exists")
 
             created_role = await self.uow.roles.update(role_id, role_dict)
             
