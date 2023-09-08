@@ -24,13 +24,13 @@ async def get_list_of_roles(
     return await roles_service.get_all_roles(pagination, locale)
 
 
-@router.get('/{id}', name="get role by ID", response_model=RoleSchema)
+@router.get('/{locale}/{id}', name="get role by ID", response_model=RoleSchema)
 async def get_role_data_by_id(
     locale: Annotated[LocaleHandler, Depends()],
     id: int,
     roles_service: Annotated[RolesService, Depends(get_rolesservices)]
 ) -> RoleSchema:
-    return await roles_service.get_role_by_id(id)
+    return await roles_service.get_role_by_id(id, locale)
 
 @router.post('',  response_model=RoleSchema)
 async def create_role(
