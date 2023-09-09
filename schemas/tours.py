@@ -19,8 +19,9 @@ class CreateTourSchema(BaseModel):
 
 class CreatedTourResponseSchema(BaseModel):
     id: int
+
 class UpdateTourSchema(CreateTourSchema):
-    pass
+    updated_at: datetime = None
     
 
 class TourSchema(CreateTourSchema):
@@ -28,7 +29,7 @@ class TourSchema(CreateTourSchema):
     amount_comments: int
     amount_views: int
     created_at: datetime
-    updated_at: datetime
+    updated_at: Optional[datetime]
     
 
 

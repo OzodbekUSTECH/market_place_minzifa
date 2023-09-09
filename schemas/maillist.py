@@ -1,22 +1,21 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-
+from datetime import datetime
 
     
 class CreateMailListSchema(BaseModel):
-    name: str = None
+    name: Optional[str] = None
     email: EmailStr
 
 class UpdateMailListSchema(CreateMailListSchema):
-    pass
+    updated_at: datetime = None
 
-class MailListSchema(BaseModel):
+class MailListSchema(CreateMailListSchema):
     id: int
-    name: Optional[str]
-    email: EmailStr
+    created_at: datetime
+    updated_at: Optional[datetime]
 
-    class ConfigDict:
-        from_attribute = True
+    
 
 
 class SendMailMessageSchema(BaseModel):

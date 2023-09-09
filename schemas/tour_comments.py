@@ -1,5 +1,6 @@
 from pydantic import BaseModel, field_validator
-
+from datetime import datetime
+from typing import Optional
 class CreateTourCommentSchema(BaseModel):
     user_id: int
     tour_id: int
@@ -15,7 +16,8 @@ class CreateTourCommentSchema(BaseModel):
 
 
 class UpdateTourCommentSchema(CreateTourCommentSchema):
-    pass
+    updated_at: datetime = None
 
 class TourCommentSchema(CreateTourCommentSchema):
     id: int
+    updated_at: Optional[datetime]

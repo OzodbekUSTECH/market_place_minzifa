@@ -21,7 +21,7 @@ async def create_currency(
     return await currencies_service.create_currency(currency_data)
 
 @router.get('', response_model=list[CurrencySchema])
-async def get_list_of_tours(
+async def get_list_of_currencies(
     pagination: Annotated[Pagination, Depends()],
     currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
 ) -> list[CurrencySchema]:

@@ -11,8 +11,7 @@ class TravelersSchema(BaseModel):
     is_traveler: bool
     role_id: int
 
-    class ConfigDict:
-        from_attributes = True
+    
 
 class ManagersSchema(BaseModel):
     id: int
@@ -22,8 +21,7 @@ class ManagersSchema(BaseModel):
     phone_number: Optional[str]
     role_id: int
 
-    class ConfigDict:
-        from_attributes = True
+    
 
 
 class CreateTravelerAndManagerSchema(BaseModel):

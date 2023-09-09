@@ -27,6 +27,13 @@ async def get_list_of_prices(
 ) -> list[TourPriceSchema]:
     return await tour_prices_service.get_list_of_prices(pagination)
 
+@router.get('/tour/{tour_id}', response_model=list[TourPriceSchema])
+async def get_list_of_prices_of_tour(
+    tour_id: int,
+    tour_prices_service: Annotated[TourPricesService, Depends(get_tour_prices_services)]
+) -> list[TourPriceSchema]:
+    return await tour_prices_service.get_list_of_prices_of_tour(tour_id)
+
 @router.get('/{id}', response_model=TourPriceSchema)
 async def get_tour_price_by_id(
     id: int,
@@ -34,12 +41,7 @@ async def get_tour_price_by_id(
 ) -> TourPriceSchema:
     return await tour_prices_service.get_price_by_id(id)
 
-@router.get('/tour/{tour_id}', response_model=list[TourPriceSchema])
-async def get_list_of_prices_of_tour(
-    tour_id: int,
-    tour_prices_service: Annotated[TourPricesService, Depends(get_tour_prices_services)]
-) -> list[TourPriceSchema]:
-    return await tour_prices_service.get_list_of_prices_of_tour(tour_id)
+
 
 @router.put('', response_model=list[TourPriceSchema])
 async def update_tour_prices(
