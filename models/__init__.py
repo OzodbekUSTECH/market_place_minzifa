@@ -34,6 +34,8 @@ from models.tour_comments import TourComment, TourCommentMedia
 from models.blogs import Blog, BlogMedia
 from models.blog_countries import BlogCountry
 
+from models.support_questions import QuestionDoc, SupportQuestion
+
 # from models.tours import Tour, IPTourView, IPAndToursView
 # from models.tourprices import TourPrice
 # from models.tour_activities import TourActivity

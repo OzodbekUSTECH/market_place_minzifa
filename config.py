@@ -39,6 +39,7 @@ class Settings(BaseSettings):
     tour_comments_media_dir: str = "tour_comments/"
     tours_media_dir: str = "tours/"
     blogs_media_dir: str = "blogs/"
+    countries_media_dir: str = "countries/"
 
     @property
     def TOURS_MEDIA_URL(self):
@@ -51,6 +52,10 @@ class Settings(BaseSettings):
     @property
     def BLOG_MEDIA_URL(self):
         return f"{settings.MEDIA_URL}{self.blogs_media_dir}"
+
+    @property
+    def COUNTRY_MEDIA_URL(self):
+        return f"{settings.MEDIA_URL}{self.countries_media_dir}"
 
     api_v1_prefix: str = "/v1"
     development: bool = False

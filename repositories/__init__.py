@@ -33,6 +33,8 @@ from repositories.tour_comments import TourCommentsRepository, TourCommentsMedia
 
 from repositories.blogs import BlogsRepository, BlogMediaRepository
 from repositories.blog_countries import BlogCountriesRepository
+
+from repositories.support_questions import SupportQuestionsRepository, QuestionDocsRepository
 # from repositories.tourprices import TourPricesRepository
 # from repositories.tour_activities import TourActivitiesRepository
 # from repositories.favorite_tours import FavoriteToursRepository

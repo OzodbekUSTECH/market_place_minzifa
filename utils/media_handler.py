@@ -17,6 +17,7 @@ class MediaHandler:
     tour_comments_media_dir = settings.tour_comments_media_dir
     tours_media_dir = settings.tours_media_dir
     blogs_media_dir = settings.blogs_media_dir
+    countries_media_dir = settings.countries_media_dir
 
 
 

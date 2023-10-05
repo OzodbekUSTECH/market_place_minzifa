@@ -47,6 +47,9 @@ class UnitOfWork:
     blog_media: Type[repositories.BlogMediaRepository]
     blog_countries: Type[repositories.BlogCountriesRepository]
 
+    support_questions: Type[repositories.SupportQuestionsRepository]
+    question_docs: Type[repositories.QuestionDocsRepository]
+
     
     # tour_prices: Type[TourPricesRepository]
     # TourActivitiesRepository: Type[TourActivitiesRepository]
@@ -98,6 +101,10 @@ class UnitOfWork:
         self.blogs = repositories.BlogsRepository(self.session, model=models.Blog)
         self.blog_media =  repositories.BlogMediaRepository(self.session, model=models.BlogMedia)
         self.blog_countries = repositories.BlogCountriesRepository(self.session, model=models.BlogCountry)
+
+        self.support_questions = repositories.SupportQuestionsRepository(self.session, model=models.SupportQuestion)
+        self.question_docs = repositories.QuestionDocsRepository(self.session, model=models.QuestionDoc)
+
         # self.tour_prices = TourPricesRepository(self.session, model=TourPrice)
         # self.tour_activities = TourActivitiesRepository(self.session, model=TourActivity)
         # self.favorite_tours = FavoriteToursRepository(self.session, model=FavoriteTours)

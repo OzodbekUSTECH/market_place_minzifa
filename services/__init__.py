@@ -23,6 +23,8 @@ from services.tour_comments import tour_comments_service
 
 from services.blogs import blogs_service
 
+from services.support_questions import support_questions_service
+
 # from services.tours import ToursService
 # from services.tourprices import TourPricesService
 # from services.tour_activities import TourActivitiesService
