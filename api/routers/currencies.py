@@ -1,11 +1,14 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from services import CurrenciesService
-from utils.dependency import get_currencies_services, get_current_user
-from repositories import Pagination
-from schemas.currencies import CurrencySchema, CreateCurrencySchema, UpdateCurrencySchema
-from models import User
-from security.permissionhandler import PermissionHandler, Permissions
+from services import currencies_service
+from repositories import Page
+from schemas.currencies import (
+    CurrencySchema,
+    CreateCurrencySchema,
+    UpdateCurrencySchema,
+)
+from schemas import IdResponseSchema
+from utils.locale_handler import LocaleHandler
 
 router = APIRouter(
     prefix="/currencies",
@@ -13,38 +16,60 @@ router = APIRouter(
 )
 
 
-@router.post('', response_model=CurrencySchema)
+@router.post("", response_model=IdResponseSchema)
 async def create_currency(
     currency_data: CreateCurrencySchema,
-    currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
-) -> CurrencySchema:
+):
+    """
+    - name: dict[str, str]\n
+    for example:\n
+    name: {\n
+        "ru": "Руб",\n
+        "en": "Rub"\n
+    }\n
+    symbol: P\n
+    exchange_rate: 60.53 
+    
+    """
     return await currencies_service.create_currency(currency_data)
 
-@router.get('', response_model=list[CurrencySchema])
-async def get_list_of_currencies(
-    pagination: Annotated[Pagination, Depends()],
-    currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
-) -> list[CurrencySchema]:
-    return await currencies_service.get_list_of_currencies(pagination)
 
-@router.get('/{id}', response_model=CurrencySchema)
+@router.get("/{locale}", response_model=Page[CurrencySchema])
+@LocaleHandler.serialize_one_all_models_by_locale
+async def get_list_of_currencies(
+    locale: Annotated[LocaleHandler, Depends()],
+):
+    return await currencies_service.get_list_of_currencies()
+
+
+@router.get("/{locale}/{id}", response_model=CurrencySchema)
+@LocaleHandler.serialize_one_all_models_by_locale
 async def get_currency_by_id(
+    locale: Annotated[LocaleHandler, Depends()],
     id: int,
-    currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
-) -> CurrencySchema:
+):
     return await currencies_service.get_currency_by_id(id)
 
-@router.put('/{id}', response_model=CurrencySchema)
+
+@router.put("/{id}", response_model=IdResponseSchema)
 async def update_currency(
     id: int,
     currency_data: UpdateCurrencySchema,
-    currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
-) -> CurrencySchema:
+):
+    """
+    - name: dict[str, str]\n
+    for example:\n
+    name: {\n
+        "ru": "Руб",\n
+        "en": "Rub"\n
+    }\n
+    symbol: P\n
+    exchange_rate: 60.53 
+    
+    """
     return await currencies_service.update_currency(id, currency_data)
 
-@router.delete('/{id}', response_model=CurrencySchema)
-async def delete_currency(
-    id: int,
-    currencies_service: Annotated[CurrenciesService, Depends(get_currencies_services)],
-) -> CurrencySchema:
+
+@router.delete("/{id}", response_model=IdResponseSchema)
+async def delete_currency(id: int):
     return await currencies_service.delete_currency(id)

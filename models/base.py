@@ -1,24 +1,14 @@
-from database.db import Base
-from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, ForeignKey, DateTime
-from datetime import datetime
-from utils.locale_handler import LocaleHandler
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-class BaseTable(Base):
-    __abstract__ = True  # Make this class abstract, so it won't create its own table
 
-    id = Column(Integer, primary_key=True, index=True)
-    
-    created_at = Column(
-        DateTime, default=datetime.now
-    )
-    updated_at = Column(
-        DateTime, nullable=True
-    )
+class BaseTable(DeclarativeBase):
+    __abstract__ = True 
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+
+    created_at: Mapped[str | None]  
+    updated_at: Mapped[str | None]  
     
     
-    async def _get_trans_columns_by_locale(self, field: dict, locale: LocaleHandler):
-        if locale.get_language != "all":
-            value = field.get(locale.get_language, "")
-            return value
-        return field
-
+    
+    

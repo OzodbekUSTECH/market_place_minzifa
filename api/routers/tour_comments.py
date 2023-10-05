@@ -1,58 +1,97 @@
-from schemas.tour_comments import CreateTourCommentSchema, UpdateTourCommentSchema, TourCommentSchema
+from schemas.tour_comments import (
+    CreateTourCommentSchema,
+    UpdateTourCommentSchema,
+    TourCommentSchema
+)
+from schemas import IdResponseSchema
 from typing import Annotated
-from fastapi import APIRouter, Depends
-from services import TourCommentsService
-from utils.dependency import get_tour_comments_services, get_current_user
-from repositories import Pagination
-from models import User
-from security.permissionhandler import PermissionHandler, Permissions
-
+from fastapi import APIRouter, Depends, Form, UploadFile, File
+from services import tour_comments_service
+from repositories import Page
+from utils.locale_handler import LocaleHandler
+from utils.filters.filter_comments import FilterCommentsParams
+from typing import Optional, Union
 router = APIRouter(
     prefix="/tour/comments",
     tags=["Tour Comments"],
 )
 
 
-@router.post('', response_model=TourCommentSchema)
+@router.post("", response_model=IdResponseSchema)
 async def create_tour_comment(
-    tour_comment_data: CreateTourCommentSchema,
-    tour_comments_service: Annotated[TourCommentsService, Depends(get_tour_comments_services)]
-) -> TourCommentSchema:
-    return await tour_comments_service.create_tour_comment(tour_comment_data)
+    tour_id: int = Form(),
+    user_id: int = Form(),
+    comment_text: str = Form(),
+    rating: float | None = Form(None, ge=1, le=5),
+    media: list[UploadFile] = File(None),
+    parent_comment_id: int = Form(None),
+):
+    comment_data = CreateTourCommentSchema(
+        tour_id=tour_id,
+        user_id=user_id,
+        comment_text=comment_text,
+        rating=rating,
+        media=media,
+        parent_comment_id=parent_comment_id
+    )
+    return await tour_comments_service.create_comment(comment_data)
 
-@router.get('', response_model=list[TourCommentSchema])
+@router.post('/media/{comment_id}')
+async def create_comment_media(
+    comment_id: int,
+    media_group: list[UploadFile]
+) -> None:
+    
+    await tour_comments_service.create_media(comment_id, media_group)
+
+
+
+@router.get("/{locale}", response_model=Page[TourCommentSchema])
+@LocaleHandler.serialize_one_all_models_by_locale
 async def get_list_of_tour_comments(
-    pagination: Annotated[Pagination, Depends()],
-    tour_comments_service: Annotated[TourCommentsService, Depends(get_tour_comments_services)]
-) -> list[TourCommentSchema]:
-    return await tour_comments_service.get_list_of_tour_comments(pagination)
+    locale: Annotated[LocaleHandler, Depends()],
+    filter_params: Annotated[FilterCommentsParams, Depends()]
+):
+    return await tour_comments_service.get_list_of_comments(filter_params)
 
-@router.get('/{id}', response_model=TourCommentSchema)
+
+@router.get("/{locale}/{id}", response_model=TourCommentSchema)
+@LocaleHandler.serialize_one_all_models_by_locale
 async def get_tour_comment_by_id(
-    id: int,
-    tour_comments_service: Annotated[TourCommentsService, Depends(get_tour_comments_services)]
-) -> TourCommentSchema:
-    return await tour_comments_service.get_tour_comment_by_id(id)
+    locale: Annotated[LocaleHandler, Depends()],
+    id: int
+):
+    return await tour_comments_service.get_comment_by_id(id)
 
-@router.get('/tour/{tour_id}', response_model=list[TourCommentSchema])
-async def get_list_of_comments_of_tour(
-    tour_id: int,
-    pagination: Annotated[Pagination, Depends()],
-    tour_comments_service: Annotated[TourCommentsService, Depends(get_tour_comments_services)]
-) -> list[TourCommentSchema]:
-    return await tour_comments_service.get_list_of_comments_of_tour(tour_id, pagination)
 
-@router.put('/{id}', response_model=TourCommentSchema)
+@router.put("/{id}", response_model=IdResponseSchema)
 async def update_tour_comment(
     id: int,
-    tour_comment_data: UpdateTourCommentSchema,
-    tour_comments_service: Annotated[TourCommentsService, Depends(get_tour_comments_services)]
-) -> TourCommentSchema:
-    return await tour_comments_service.update_tour_comment(id, tour_comment_data)
-
-@router.delete('/{id}', response_model=TourCommentSchema)
-async def delete_tour_comment(
-    id: int,
-    tour_comments_service: Annotated[TourCommentsService, Depends(get_tour_comments_services)]
+    tour_id: int = Form(),
+    user_id: int = Form(),
+    comment_text: str = Form(),
+    rating: float | None = Form(None, ge=1, le=5),
+    parent_comment_id: int = Form(None),
 ):
-    return await tour_comments_service.delete_tour_comment(id)
+    comment_data = UpdateTourCommentSchema(
+        tour_id=tour_id,
+        user_id=user_id,
+        comment_text=comment_text,
+        rating=rating,
+        parent_comment_id=parent_comment_id
+    )
+    return await tour_comments_service.update_comment(id, comment_data)
+
+
+@router.delete("/{id}", response_model=IdResponseSchema)
+async def delete_tour_comment(id: int):
+    return await tour_comments_service.delete_comment(id)
+
+
+@router.delete('/media/{id}', response_model=IdResponseSchema)
+async def delete_tour_comment_media(
+    id: int
+):
+    return await tour_comments_service.delete_media(id)
+
+

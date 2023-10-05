@@ -1,23 +1,60 @@
-from pydantic import BaseModel, field_validator
+from schemas import  CreateBaseModel, UpdateBaseModel, IdResponseSchema, TourMixinBaseModel
+from pydantic import Field
 from datetime import datetime
-from typing import Optional
-class CreateTourCommentSchema(BaseModel):
+from typing import Union
+from fastapi import UploadFile, File
+
+class CustomTourSchema(IdResponseSchema):
+    title: Union[dict[str, str], str]
+
+class CustomUserSchema(IdResponseSchema):
+    first_name: str
+    last_name: str
+
+
+
+class CreateCommentMediaSchema(CreateBaseModel):
+    comment_id: int
+    filename: str
+
+
+class TourCommentMediaSchema(IdResponseSchema):
+    comment_id: int
+    media_url: str
+
+
+############################
+class CreateTourCommentSchema(TourMixinBaseModel, CreateBaseModel):
     user_id: int
-    tour_id: int
-    title: str
     comment_text: str
-    rating: int
-
-    @field_validator("rating")
-    def validate_rating(cls, v):
-        if v < 1 or v > 5:
-            raise ValueError('Rating must be between 1 and 5')
-        return v
+    rating: float | None
+    media: list
+    parent_comment_id: int | None
 
 
-class UpdateTourCommentSchema(CreateTourCommentSchema):
-    updated_at: datetime = None
 
-class TourCommentSchema(CreateTourCommentSchema):
-    id: int
-    updated_at: Optional[datetime]
+#############################
+class UpdateTourCommentSchema(CreateTourCommentSchema, UpdateBaseModel):
+    pass
+
+#############################
+
+class TourCommentReplySchema(UpdateBaseModel, IdResponseSchema):
+    user: CustomUserSchema
+    parent_comment_id: int
+    comment_text: str
+
+
+
+
+class TourCommentSchema(UpdateTourCommentSchema, IdResponseSchema):
+
+    user: CustomUserSchema
+    tour: CustomTourSchema
+    media: list[TourCommentMediaSchema]
+    replies: list[TourCommentReplySchema]
+
+
+    tour_id: int = Field(exclude=True)
+    user_id: int = Field(exclude=True)
+    

@@ -1,34 +1,40 @@
 from schemas.languages import CreateLanguageSchema, UpdateLanguageSchema
-from repositories import Pagination
-from database.unitofwork import UnitOfWork
+from database import UnitOfWork
 from utils.exceptions import CustomExceptions
-from models import Language
-from utils.locale_handler import LocaleHandler
-
+import models
 class LanguagesService:
-    def __init__(self, uow: UnitOfWork):
-        self.uow = uow
+    def __init__(self):
+        self.uow = UnitOfWork()
 
-    async def create_language(self, language_data: CreateLanguageSchema) -> Language:
+    async def create_language(self, language_data: CreateLanguageSchema) -> models.Language:
         language_dict = language_data.model_dump()
         async with self.uow:
-            return await self.uow.languages.create(language_dict)
+            language = await self.uow.languages.create(language_dict)
+            await self.uow.commit()
+            return language
         
-    async def get_list_of_languages(self, locale: LocaleHandler, pagination: Pagination = None) -> list[Language]:
+    async def get_list_of_languages(self) -> list[models.Language]:
         async with self.uow:
-            languages = await self.uow.languages.get_all(pagination)
-            return await self.uow.serialize_one_or_all_models_by_locale(languages, locale)
+            return await self.uow.languages.get_all()
         
-    async def get_language_by_id(self, id: int, locale: LocaleHandler,) -> Language:
+    async def get_language_by_id(self, id: int) -> models.Language:
         async with self.uow:
-            language = await self.uow.languages.get_by_id(id)
-            return await self.uow.serialize_one_or_all_models_by_locale(language, locale)
+            return await self.uow.languages.get_by_id(id)
         
-    async def update_language(self, id: int, language_data: UpdateLanguageSchema) -> Language:
+    async def update_language(self, id: int, language_data: UpdateLanguageSchema) -> models.Language:
         language_dict = language_data.model_dump()
         async with self.uow:
-            return await self.uow.languages.update(id, language_dict)
+            language = await self.uow.languages.update(id, language_dict)
+            await self.uow.commit()
+            return language
 
-    async def delete_language(self, id: int) -> Language:
+    async def delete_language(self, id: int) -> models.Language:
         async with self.uow:
-            return await self.uow.languages.delete(id)
+            try:
+                language = await self.uow.languages.delete(id)
+                await self.uow.commit()
+                return language
+            except:
+                raise CustomExceptions.forbidden("Language cant be deleted since tours have this language")
+            
+languages_service = LanguagesService()

@@ -1,156 +1,72 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
-from services.users import UsersService
-from utils.dependency import get_users_services, get_current_user
-from schemas.users import UserCreateSchema, UserSchema, UserUpdateSchema, TokenSchema, ResetPasswordSchema, UserCreatedResponseSchema
-from database.mail import EmailSender
-from repositories.base import Pagination
-from fastapi.security import OAuth2PasswordRequestForm
-from models import User
-from security.permissionhandler import PermissionHandler, Permissions
+from fastapi import APIRouter, Depends, Form
+from services import users_service
+from schemas.users import (
+    CreateUserSchema,
+    UserSchema,
+    UpdateUserSchema,
+    UserSchemaWithTravelExpertAndEmployees
+)
+from schemas import IdResponseSchema
+from repositories import Page
+from utils.locale_handler import LocaleHandler
 router = APIRouter(
     prefix="/users",
     tags=["Users"],
 )
 
 
-@router.post('/login', name="get access token", response_model=TokenSchema)
-async def get_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    users_service: Annotated[UsersService, Depends(get_users_services)]
-) -> TokenSchema:
-    """
-    Get Access Token
-    - param username: The email of the user.
-    - param password: The password of the user.
-    - return: Access Token and Type.
-    """
-    return await users_service.authenticate_user(form_data.username, form_data.password)
-
-
-@router.get('/me', name="get own user data", response_model=UserSchema)
-async def get_own_user_data(
-    current_user = Depends(get_current_user),
-) -> UserSchema:
-    """
-    Get Own User Data
-    - return: User data.
-    """
-    return current_user
-
-@router.post('/forgot/password', name="forgot password") #forgot what to use get or post or put)
-async def forgot_password(
-    email: str, 
-    email_sender: EmailSender = Depends()
-):
-    """
-    Forgot Password:
-    - return: Message success or error
-
-    :send a link to reset password to the email address.
-    """
-    return await email_sender.send_reset_password_link(email)
-
-@router.put('/reset/password', name="reset password", response_model=UserSchema)
-async def reset_password(
-    token: str, 
-    user_password: ResetPasswordSchema,
-    users_service: Annotated[UsersService, Depends(get_users_services)]
-):
-    """
-    Reset password:
-    - return: Message that password has been changed or something went wrong.
-    """
-    return await users_service.reset_password(token, user_password.password1)
-
-
-@router.post('', name="Registration", response_model=UserCreatedResponseSchema)
+@router.post("/{locale}", response_model=IdResponseSchema)
 async def create_user(
-    user_data: UserCreateSchema,
-    users_service: Annotated[UsersService, Depends(get_users_services)],
-) -> UserSchema:
-    """
-    Create User:
-    - return: User data.
-    """
-    return await users_service.register_user(user_data) 
+    locale: Annotated[LocaleHandler, Depends()],
+    user_data: CreateUserSchema,
+):
+    return await users_service.register_user(user_data, locale)
 
 
+@router.get("", response_model=Page[UserSchemaWithTravelExpertAndEmployees])
+async def get_list_of_users():
+    return await users_service.get_list_of_users()
 
-@router.put('/{id}', name="Update User Data", response_model=UserSchema) 
-async def update_user_data(
-    id: int, 
-    user_data: UserUpdateSchema,
-    users_service: Annotated[UsersService, Depends(get_users_services)],
-    current_user: Annotated[User, Depends(get_current_user)]
-) -> UserSchema:
-    """
-    Update User Data
-    - param user_id: The ID of the user to update.
-    - return: Updated user data.
-    """
-    await PermissionHandler.has_permission(
-        user_id=id, 
-        required_permission=Permissions.CONTROL_USERS.value, 
-        current_user=current_user
-    )
+@router.get('/role/{role_id}', response_model=Page[UserSchemaWithTravelExpertAndEmployees])
+async def get_list_of_users_of_role(
+    role_id: int,
+):
+    return await users_service.get_list_of_users_by_role_id(role_id)
 
-    return await users_service.update_user(id, user_data)
-
-
-
-@router.get('', name="get list of users", response_model=list[UserSchema])
-async def get_list_of_users(
-    pagination: Annotated[Pagination, Depends()],
-    users_service: Annotated[UsersService, Depends(get_users_services)]
-) -> list[UserSchema]:
-    """
-    Get All Users Data:
-    - param page: The page.
-    - param page_size: The quantity of users per page.
-    - return: list of all users.
-    """
-    return await users_service.get_list_of_users(pagination)
-
-
-@router.get('/{id}', name="get user by ID", response_model=UserSchema)
-async def get_user_by_id(
-    id: int,
-    users_service: Annotated[UsersService, Depends(get_users_services)]
-) -> UserSchema:
-    """
-    Get User By ID:
-    - param user_id: The ID of the user to get.
-    - return: User data.
-    """
+@router.get("/{id}", response_model=UserSchemaWithTravelExpertAndEmployees)
+async def get_user_by_id(id: int) -> UserSchema:
     return await users_service.get_user_by_id(id)
 
 
-@router.delete('/{id}', name="delete user data", response_model=UserSchema)
-async def delete_user_data(
+@router.put("/{id}", response_model=IdResponseSchema)
+async def update_user(
     id: int,
-    users_service: Annotated[UsersService, Depends(get_users_services)],
-    current_user: Annotated[User, Depends(get_current_user)]
-) -> UserSchema:
-    """
-    Delete User:
-    - param user_id: The id of the user to delete.
-    - return: User data.
-    """
-    await PermissionHandler.has_permission(
-        user_id=id, 
-        required_permission=Permissions.CONTROL_USERS.value, 
-        current_user=current_user
-    )
+    user_data: UpdateUserSchema,
+):
+    
+    return await users_service.update_user(id, user_data)
 
+
+@router.put("/{id}/ban", response_model=IdResponseSchema)
+async def ban_or_unban_user(
+    id: int,
+    ban: bool = Form(),
+):
+    """
+    - Form-data: ban = True if you want to ban the user
+    - Form-data: ban = False if you want to unban the user
+    """
+    return await users_service.ban_or_unban_user(id, ban)
+
+
+@router.delete("/{id}", response_model=IdResponseSchema)
+async def delete_user(
+    id: int,
+):
+    """
+    WARNING!!!!
+    - BE CAREFULL TO DELETE USER, SINCE EVERYTHING THAT RELATES TO HIM WILL BE DELETED!!!
+    """
     return await users_service.delete_user(id)
-
-
-
-# @router.get('/{manager_id}/travelers', name="get travelers", response_model=list[UserSchema])
-# async def get_list_of_travelers_of_manager(
-#     manager_id: int,
-#     users_service: Annotated[UsersService, Depends(get_users_services)]
-# ):
-#     return await users_service.get_travelers(manager_id)

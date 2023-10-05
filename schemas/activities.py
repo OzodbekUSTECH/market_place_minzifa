@@ -1,10 +1,12 @@
-from pydantic import BaseModel, EmailStr, field_validator, constr
+from schemas import  CreateBaseModel, UpdateBaseModel, IdResponseSchema
 from typing import Union
-class CreateActivitySchema(BaseModel):
+
+class CreateActivitySchema(CreateBaseModel):
     name: Union[dict[str, str], str]
 
-class UpdateActivitySchema(CreateActivitySchema):
+
+class UpdateActivitySchema(CreateActivitySchema, UpdateBaseModel):
     pass
 
-class ActivitySchema(CreateActivitySchema):
-    id: int
+class ActivitySchema(UpdateActivitySchema, IdResponseSchema):
+    pass

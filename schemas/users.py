@@ -1,113 +1,95 @@
 import re
-from pydantic import BaseModel, EmailStr, field_validator, constr, validator
-from typing import Optional, Text
-from datetime import datetime
-class UserCreatedResponseSchema(BaseModel):
-    id: int
+from pydantic import BaseModel, EmailStr, field_validator, Field
+from schemas import  CreateBaseModel, UpdateBaseModel, IdResponseSchema
 
-class UserCreateSchema(BaseModel):
+
+class BaseUserSchema(CreateBaseModel):
+    first_name: str
+    last_name: str
     email: EmailStr
-    password: constr(min_length=8, max_length=64)
-    company_name: str = None
-    phone_number: str = None
+    company_name: str | None
+    phone_number: str | None
+    link: str | None
+    about: str | None
     role_id: int
-    link: str = None
-    about: str = None
-    
 
-    @field_validator("password")
-    def password_must_contain_special_characters(cls, v):
-        if not re.search(r"[^a-zA-Z0-9]", v):
-            raise ValueError("Password must contain special characters")
-        return v
 
-    @field_validator("password")
-    def password_must_contain_numbers(cls, v):
-        if not re.search(r"[0-9]", v):
-            raise ValueError("Password must contain numbers")
-        return v
+class CreateUserSchema(BaseUserSchema):
+    password: str = Field(min_length=8, max_length=64)
 
-    @field_validator("password")
-    def password_must_contain_uppercase(cls, v):
-        if not re.search(r"[A-Z]", v):
-            raise ValueError("Password must contain uppercase characters")
-        return v
+    # @field_validator("password")
+    # def password_must_contain_special_characters(cls, v):
+    #     if not re.search(r"[^a-zA-Z0-9]", v):
+    #         raise ValueError("Password must contain special characters")
+    #     return v
 
-    @field_validator("password")
-    def password_must_contain_lowercase(cls, v):
-        if not re.search(r"[a-z]", v):
-            raise ValueError("Password must contain lowercase characters")
-        return v
-    
-class UserUpdateSchema(BaseModel):
-    email: EmailStr
-    company_name: str = None
-    phone_number: str = None
-    role_id: int
-    link: str = None
-    about: str = None
-    updated_at: datetime = None
+    # @field_validator("password")
+    # def password_must_contain_numbers(cls, v):
+    #     if not re.search(r"[0-9]", v):
+    #         raise ValueError("Password must contain numbers")
+    #     return v
 
-class UserSchema(BaseModel):
-    id: int
-    email: str
-    company_name: Optional[str]
-    phone_number: Optional[str]
-    role_id: int
-    rating: float
-    link: Optional[str]
-    about: Optional[str]
-    created_at: datetime
-    updated_at: Optional[datetime]
+    # @field_validator("password")
+    # def password_must_contain_uppercase(cls, v):
+    #     if not re.search(r"[A-Z]", v):
+    #         raise ValueError("Password must contain uppercase characters")
+    #     return v
 
-    @validator('rating')
-    def round_rating(cls, value):
-        return round(value, 2)
+    # @field_validator("password")
+    # def password_must_contain_lowercase(cls, v):
+    #     if not re.search(r"[a-z]", v):
+    #         raise ValueError("Password must contain lowercase characters")
+    #     return v
 
+
+class UpdateUserSchema(BaseUserSchema, UpdateBaseModel):
+    pass
+
+class UserSchema(UpdateUserSchema, IdResponseSchema):
+    pass
+
+
+
+class UserSchemaWithTravelExpertAndEmployees(UserSchema):
+    travel_expert: UserSchema | None
+    employees: list[UserSchema]
+    # @validator('rating')
+    # def round_rating(cls, value):
+    #     return round(value, 2)
 
 
 class TokenSchema(BaseModel):
     access_token: str
     token_type: str
-    
-    
+
+
 class TokenData(BaseModel):
     email: str
 
 
 class ResetPasswordSchema(BaseModel):
-    password1: constr(min_length=8, max_length=64)
-    password2: constr(min_length=8, max_length=64)
+    password: str = Field(min_length=8, max_length=64)
 
-    
-    
-    @field_validator("password1")
+    @field_validator("password")
     def password_must_contain_special_characters(cls, v):
         if not re.search(r"[^a-zA-Z0-9]", v):
             raise ValueError("Password must contain special characters")
         return v
 
-    @field_validator("password1")
+    @field_validator("password")
     def password_must_contain_numbers(cls, v):
         if not re.search(r"[0-9]", v):
             raise ValueError("Password must contain numbers")
         return v
 
-    @field_validator("password1")
+    @field_validator("password")
     def password_must_contain_uppercase(cls, v):
         if not re.search(r"[A-Z]", v):
             raise ValueError("Password must contain uppercase characters")
         return v
 
-    @field_validator("password1")
+    @field_validator("password")
     def password_must_contain_lowercase(cls, v):
         if not re.search(r"[a-z]", v):
             raise ValueError("Password must contain lowercase characters")
         return v
-    
-    @validator("password2")
-    def passwords_match(cls, v, values):
-        if 'password1' in values and v != values['password1']:
-            raise ValueError('passwords do not match')
-        return v
-    

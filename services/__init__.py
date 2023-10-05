@@ -1,17 +1,32 @@
-from services.maillist import MailListService
-from services.permissions import PermissionsService
-from services.rolepermissions import RolePermissionsService
-from services.roles import RolesService
-from services.travelermanagers import TravelerManagersService
-from services.users import UsersService
-from services.tours import ToursService
-from services.currencies import CurrenciesService
-from services.tourprices import TourPricesService
-from services.tourstatuses import TourStatusesService
-from services.activities import ActivitiesService
-from services.tour_activities import TourActivitiesService
-from services.favorite_tours import FavoriteToursService
-from services.tour_comments import TourCommentsService
-from services.tour_comments_media import TourCommentsMediaService
-from services.tour_languages import TourLanguagesService
-from services.languages import LanguagesService
+# from services.maillist import MailListService
+from services.users import users_service
+from services.roles import roles_service
+from services.user_employees import user_employees_service
+from services.emails import emails_service
+from services.currencies import currencies_service
+from services.activities import activities_service
+from services.languages import languages_service
+from services.accommodations import accommodations_service
+from services.categories import categories_service
+from services.types import types_service
+from services.countries import countries_service
+from services.regions import regions_service
+from services.tourprices import tour_prices_service
+
+
+from services.tour_statuses import tour_statuses_service
+from services.tour_children_ages import tour_children_ages_service
+from services.tour_activity_levels import tour_activity_levels_service
+from services.tours import tours_service
+from services.tour_media_group import tour_media_group_service
+from services.tour_comments import tour_comments_service
+
+from services.blogs import blogs_service
+
+# from services.tours import ToursService
+# from services.tourprices import TourPricesService
+# from services.tour_activities import TourActivitiesService
+# from services.favorite_tours import FavoriteToursService
+# from services.tour_comments import TourCommentsService
+# from services.tour_comments_media import TourCommentsMediaService
+# from services.tour_languages import TourLanguagesService

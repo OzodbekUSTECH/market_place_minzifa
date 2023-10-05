@@ -1,10 +1,11 @@
-from pydantic import BaseModel
 from typing import Union
-class CreateLanguageSchema(BaseModel):
+from schemas import  CreateBaseModel, UpdateBaseModel, IdResponseSchema
+
+class CreateLanguageSchema(CreateBaseModel):
     name: Union[dict[str, str], str]
 
-class UpdateLanguageSchema(CreateLanguageSchema):
+class UpdateLanguageSchema(CreateLanguageSchema, UpdateBaseModel):
     pass
 
-class LanguageSchema(CreateLanguageSchema):
-    id: int
+class LanguageSchema(UpdateLanguageSchema, IdResponseSchema):
+    pass

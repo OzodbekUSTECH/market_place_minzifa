@@ -1,20 +1,31 @@
-from schemas.users import UserCreateSchema, UserUpdateSchema, TokenSchema
+from schemas.users import CreateUserSchema, UpdateUserSchema,  TokenSchema, ResetPasswordSchema
 from security.password import PasswordHandler
-from repositories import Pagination
+from repositories import paginate
 from datetime import timedelta
 from jose import JWTError
 from schemas.users import TokenData
 from datetime import datetime
-from models import User
+import models
 from security.jwthandler import JWTHandler
-from database.unitofwork import UnitOfWork
+from database import UnitOfWork, email_sender
 from utils.exceptions import CustomExceptions
+from utils.locale_handler import LocaleHandler
+
 
 class UsersService:
-    def __init__(self, uow: UnitOfWork):
-        self.uow = uow
+    def __init__(self):
+        self.uow = UnitOfWork()
 
-    async def register_user(self, user_data: UserCreateSchema) -> User:
+    async def send_email_message_to_welcome_user(self, user: models.User, locale: LocaleHandler) -> None:
+        await email_sender.send_welcome_email_message(
+            user=user, 
+            locale=locale.get_language,
+            subject = "Welcome to MARKET PLACE MINZIFATRAVEL",
+            template_name="registration.html"
+        )
+            
+
+    async def register_user(self, user_data: CreateUserSchema, locale: LocaleHandler) -> models.User:
         async with self.uow:
             existing_user = await self.uow.users.get_by_email(user_data.email)
             if existing_user:
@@ -24,40 +35,56 @@ class UsersService:
 
             user_dict = user_data.model_dump()
             user_dict["password"] = hashed_password
-            return await self.uow.users.create(user_dict)
-        
-    async def get_list_of_users(self, pagination: Pagination) -> list[User]:
-        async with self.uow:
-            users = await self.uow.users.get_all(pagination)
-            return users
-
-    async def get_user_by_id(self, user_id: int) -> User:
-        async with self.uow:
-            user = await self.uow.users.get_by_id(user_id)
+            user = await self.uow.users.create(user_dict)
+            await self.uow.commit()
+            await self.send_email_message_to_welcome_user(
+                user=user, locale=locale)
             return user
+        
+    async def get_list_of_users(self) -> list[models.User]:
+        async with self.uow:
+            return await self.uow.users.get_all()
+        
+    async def get_list_of_users_by_role_id(self, role_id: int) -> list[models.User]:
+        async with self.uow:
+            role: models.Role = await self.uow.roles.get_by_id(role_id)
+            return paginate(role.users)
 
-    async def update_user(self, user_id: int, user_data: UserUpdateSchema) -> User:
+    async def get_user_by_id(self, id: int) -> models.User:
+        async with self.uow:
+            user = await self.uow.users.get_by_id(id)
+            return user
+        
+    
+    async def update_user(self, id: int, user_data: UpdateUserSchema) -> models.User:
         user_dict = user_data.model_dump()
         async with self.uow:
-            existing_user = await self.uow.users.get_by_email(user_data.email)
-            if existing_user and existing_user.email != user_data.email:
-                raise CustomExceptions.conflict("Already exists user with this email")
-            updated_user = await self.uow.users.update(user_id, user_dict)
+            updated_user = await self.uow.users.update(id, user_dict)
+            await self.uow.commit()
             return updated_user
 
 
-    async def delete_user(self, user_id: int) -> User:
+    async def ban_or_unban_user(self, id: int, ban: bool) -> models.User:
         async with self.uow:
-            deleted_user = await self.uow.users.delete(user_id)
-            return deleted_user
+            user: models.User = await self.uow.users.get_by_id(id)
+            user.is_banned = ban
+            await self.uow.commit()
+            return user
+        
+    async def delete_user(self, id: int) -> models.User:
+        async with self.uow:
+            user: models.User = await self.uow.users.delete(id)
+            await self.uow.commit()
+            return user
 
     async def authenticate_user(self, email: str, password: str) -> TokenSchema:
         async with self.uow:
-            user = await self.uow.users.get_by_email(email)
+            user: models.User = await self.uow.users.get_by_email(email)
                 
             if not user or not PasswordHandler.verify(password, user.password):
                 raise CustomExceptions.unauthorized("Incorrect email or password")
-
+            if user and user.is_banned:
+                raise CustomExceptions.forbidden("The user is banned")
 
             access_token_expires = timedelta(minutes=JWTHandler.ACCESS_TOKEN_EXPIRE_MINUTES)
 
@@ -68,16 +95,17 @@ class UsersService:
 
     
     
-    async def get_current_user(self, token: str) -> User:
+    async def get_current_user(self, token: str) -> models.User:
         credentials_exception = CustomExceptions.unauthorized("Could not validate credentials")
         try:
             payload = await JWTHandler.decode(token)
-            email: str = payload.get("email")  # "sub" is the key used by JWT to represent the subject (usually user ID or email)
+            email: str = payload.get("email") 
             if email is None:
                 raise credentials_exception
             token_data = TokenData(email=email)
         except JWTError:
             raise credentials_exception
+        
         async with self.uow:
         
             user = await self.uow.users.get_by_email(token_data.email)
@@ -87,12 +115,17 @@ class UsersService:
 
             return user
 
-    async def get_user_by_email(self, email: str) -> User:
+    async def send_reset_password_link(self, locale: str, email: str) -> dict:
         async with self.uow:
-            user = await self.uow.users.get_by_email(email)
-            return user
+            user: models.User = await self.uow.users.get_by_email(email)
+            if not user:
+                raise CustomExceptions.not_found("Email not found")
+            token = await self._generate_reset_token(email)
+            await email_sender.send_reset_password_link(locale, email, token)   
+                 
+            return {"message": "Reset Password sent successfully"}
     
-    async def generate_reset_token(self, email: str) -> str:
+    async def _generate_reset_token(self, email: str) -> str:
         payload = {
             "email": email,
             "exp": datetime.utcnow() + timedelta(hours=2)
@@ -100,23 +133,19 @@ class UsersService:
         token = await JWTHandler.encode(payload)
         return token
     
-    async def reset_password(self, token: str, password: str) -> User:
-        
+    async def reset_password(self, token: str, password_data: ResetPasswordSchema) -> models.User:
         user = await self.get_current_user(token)
-        hashed_password = PasswordHandler.hash(password)
+        hashed_password = PasswordHandler.hash(password_data.password)
         password_dict = {
             "password": hashed_password
         }
         async with self.uow:
             updated_user = await self.uow.users.update(user.id, password_dict)
+            await self.uow.commit()
             return updated_user
 
     
-    # async def get_travelers(self, manager_id: int):
-    #     async with self.uow:
-    #         return await self.uow.users.get_travelers_of_manager(manager_id)
-
-    #checker for auth
+    
     
 
-        
+users_service = UsersService()

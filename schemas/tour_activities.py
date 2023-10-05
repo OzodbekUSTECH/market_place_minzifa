@@ -1,11 +1,6 @@
-from pydantic import BaseModel, EmailStr, field_validator, constr
+from schemas import CreateBaseModel, TourMixinBaseModel
 
-class CreateTourActivitySchema(BaseModel):
-    tour_id: int
+class CreateTourActivitySchema(TourMixinBaseModel, CreateBaseModel):
+
     activity_id: int
 
-class UpdateTourActivitySchema(CreateTourActivitySchema):
-    pass
-
-class TourActivitySchema(CreateTourActivitySchema):
-    id: int

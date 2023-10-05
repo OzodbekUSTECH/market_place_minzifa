@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Our Service</title>
+</head>
+<body>
+    {% if user.role.name["ru"] == "Путешественник" %}
+        {% if locale == "ru" %}
+            <p>Привет {{ user.first_name }} путешественник</p>
+        {% else %}
+            <p>Hello {{ user.first_name }} traveler</p>
+        {% endif %}
+    {% elif user.role.name["ru"] == "Тревел эксперт" %}
+        {% if locale == "ru" %}
+            <p>Привет {{ user.first_name }} тревел эксперт</p>
+        {% else %}
+            <p>Hello {{ user.first_name }} traveler expert</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

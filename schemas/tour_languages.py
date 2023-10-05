@@ -1,11 +1,4 @@
-from pydantic import BaseModel
+from schemas import CreateBaseModel, TourMixinBaseModel
 
-class CreateTourLanguageSchema(BaseModel):
-    tour_id: int
+class CreateTourLanguageSchema(TourMixinBaseModel, CreateBaseModel):
     language_id: int
-
-class UpdateTourLanguageSchema(CreateTourLanguageSchema):
-    pass
-
-class TourLanguageSchema(CreateTourLanguageSchema):
-    id: int

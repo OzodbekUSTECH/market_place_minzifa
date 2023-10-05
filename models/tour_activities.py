@@ -1,13 +1,11 @@
-from models import BaseTable
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
-from sqlalchemy.orm import relationship
+from models import BaseTable, TourMixin
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
 
     
-class TourActivity(BaseTable):
+class TourActivity(TourMixin, BaseTable):
     __tablename__ = 'tour_activities'
     
-    tour_id = Column(Integer, ForeignKey('tours.id'))
-    activity_id = Column(Integer, ForeignKey('activities.id'))
+    activity_id: Mapped[int] = mapped_column(ForeignKey("activities.id"))
 
-    tour = relationship("Tour", back_populates="activities", lazy="subquery")
-    activity = relationship("Activity", lazy="subquery")
+    

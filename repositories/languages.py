@@ -1,5 +1,4 @@
-from repositories import BaseRepository, Pagination
-from sqlalchemy import func
+from repositories import BaseRepository
 
 
 class LanguagesRepository(BaseRepository):

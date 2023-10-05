@@ -1,18 +1,41 @@
-from repositories.base import BaseRepository, Pagination
-from repositories.maillist import MailListRepository
-from repositories.permissions import PermissionsRepository
-from repositories.rolepermissions import RolePermissionsRepository
-from repositories.roles import RolesRepository
-from repositories.travelermanagers import TravelerManagersRepository
+from repositories.base import BaseRepository
+from fastapi_pagination import Params as Pagination, Page, paginate
 from repositories.users import UsersRepository
-from repositories.tours import ToursRepository, IPTourViewRepository, IPAndToursViewRepository
+from repositories.roles import RolesRepository
+from repositories.user_employees import UserEmployeesRepository
+from repositories.emails import EmailsRepository
 from repositories.currencies import CurrenciesRepository
-from repositories.tourprices import TourPricesRepository
-from repositories.tourstatuses import TourStatusesRepository
 from repositories.activities import ActivitiesRepository
-from repositories.tour_activities import TourActivitiesRepository
-from repositories.favorite_tours import FavoriteToursRepository
-from repositories.tour_comments import TourCommentsRepository
-from repositories.tour_comments_media import TourCommentsMediaRepository
-from repositories.tour_languages import TourLanguagesRepository
 from repositories.languages import LanguagesRepository
+from repositories.accommodations import AccommodationsRepository
+from repositories.categories import CategoriesRepository
+from repositories.types import TypesRepository
+from repositories.countries import CountriesRepository
+from repositories.regions import RegionsRepository
+
+from repositories.tour_statuses import TourStatusesRepository
+from repositories.tour_children_ages import TourChildrenAgesRepository
+from repositories.tour_activity_levels import TourActivityLevelsRepository
+from repositories.tours import ToursRepository
+from repositories.tour_media_group import TourMediaGroupRepository
+from repositories.tour_categories import TourCategoriesRepository
+from repositories.tour_additional_types import TourAdditionalTypesRepository
+from repositories.tour_languages import TourLanguagesRepository
+from repositories.tour_activities import TourActivitiesRepository
+from repositories.tour_accommodations import TourAccommodationsRepository
+from repositories.tour_countries import TourCountriesRepository
+from repositories.tour_regions import TourRegionsRepository
+from repositories.tour_prices import TourPricesRepository
+
+
+from repositories.tour_comments import TourCommentsRepository, TourCommentsMediaRepository
+
+
+from repositories.blogs import BlogsRepository, BlogMediaRepository
+from repositories.blog_countries import BlogCountriesRepository
+# from repositories.tourprices import TourPricesRepository
+# from repositories.tour_activities import TourActivitiesRepository
+# from repositories.favorite_tours import FavoriteToursRepository
+# from repositories.tour_comments import TourCommentsRepository
+# from repositories.tour_comments_media import TourCommentsMediaRepository
+# from repositories.tour_languages import TourLanguagesRepository

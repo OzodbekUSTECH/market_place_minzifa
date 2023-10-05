@@ -1,20 +1,7 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
-# DATABASE_URL = "postgresql://postgres:77girado@localhost:5432/marketplacedb"
+from config import settings
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
-#production
-DATABASE_URL = "postgresql://postgres:77girado@db/postgres"
-
-engine = create_engine(DATABASE_URL, echo=True)
-session_maker = sessionmaker(expire_on_commit=False, bind=engine)
+engine = create_async_engine(settings.DATABASE_URL, echo=settings.ECHO, pool_size=10, max_overflow=20)
+session_maker = async_sessionmaker(engine, autoflush=False, autocommit=False, expire_on_commit=False)
 
 
-Base = declarative_base()
-
-
-def get_db():
-    db = session_maker()
-    try:
-        yield db
-    finally:
-        db.close()

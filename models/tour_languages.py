@@ -1,14 +1,13 @@
-from models import BaseTable
-from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, DateTime, ForeignKey
-from datetime import datetime
-from sqlalchemy.orm import relationship
+from models import BaseTable, TourMixin
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
 
-class TourLanguage(BaseTable):
+class TourLanguage(TourMixin, BaseTable):
     __tablename__ = 'tour_languages'
 
-    tour_id = Column(Integer, ForeignKey("tours.id"), nullable=False)
-    language_id = Column(Integer, ForeignKey("languages.id"), nullable=False)
+    language_id: Mapped[int] = mapped_column(ForeignKey("languages.id"))
 
+   
     
     
    

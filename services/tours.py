@@ -1,164 +1,290 @@
-from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema
-from repositories import Pagination
-from utils.filter_tours import FilterTours
-from fastapi import Request
-from datetime import datetime, date
-from models import Tour, IPTourView
-from database.unitofwork import UnitOfWork
+from schemas.tours import CreateTourSchema, UpdateTourSchema
+from schemas.tour_categories import CreateTourCategorySchema
+from schemas.tour_additional_types import CreateTourAdditionalTypeSchema
+from schemas.tour_languages import CreateTourLanguageSchema
+from schemas.tour_activities import CreateTourActivitySchema
+from schemas.tour_accommodations import CreateTourAccommodationSchema
+from schemas.tour_countries import CreateTourCountrySchema
+from schemas.tour_regions import CreateTourRegionSchema
+from schemas.tour_prices import CreateTourPriceSchema
+from repositories import paginate
+import models
+from database import UnitOfWork
 from utils.exceptions import CustomExceptions
-from utils.currency import CurrencyHandler
-from fuzzywuzzy import fuzz, process
+from utils.filters.filter_tours import FilterToursParams
 from utils.locale_handler import LocaleHandler
+from typing import Set, Callable
+from utils.tour_prices import TourPriceHandler
 
 class ToursService:
-    def __init__(self, uow: UnitOfWork):
-        self.uow = uow
+    def __init__(self):
+        self.uow = UnitOfWork()
 
-    # Ваш метод для создания тура с ценами
-    async def create_tour(self, tour_data: CreateTourSchema) -> Tour:
-        # tour_dict = tour_data.model_dump(exclude={"price"})
+    async def _bulk_create(
+            self,
+            data_list: list[dict],
+            bulk_create_func: Callable
+    ):
+        await bulk_create_func(data_list)
+
+    async def create_tour(self, tour_data: CreateTourSchema) -> models.Tour:
         tour_dict = tour_data.model_dump()
-
         async with self.uow:
-            created_tour = await self.uow.tours.create(tour_dict)
-            # await self._create_prices_for_tour(
-            #     tour=created_tour,
-            #     price=tour_data.price
-            # )
-            #had to use get_by_id for the response model in the router! Otherwise it doesn't work
-            #i got a fastapi.exceptions.ResponseValidationError
-            # tour = await self.uow.tours.get_by_id(created_tour.id)
-            # return tour
-            return created_tour
-
-    # async def _create_prices_for_tour(self, tour: Tour, price: float):
-    #     base_currency = await self.uow.currencies.get_by_name('USD')
-    #     target_currencies = await self.uow.currencies.get_all()        
-    #     for target_currency in target_currencies:
-    #         converted_price = price if target_currency == base_currency else price * target_currency.exchange_rate
+            tour: models.Tour = await self.uow.tours.create(tour_dict)
             
-    #         create_price_data = CreateTourPriceSchema(
-    #             tour_id=tour.id,
-    #             currency_id=target_currency.id,
-    #             price=converted_price
-    #         )
-    #         await self.uow.tour_prices.create(create_price_data.model_dump())
+            
+            data_list = await self._create_update_prices(tour, tour_data)
+            await self.uow.tour_prices.bulk_create(data_list)
+
+            # Создайте список словарей для категорий
+            await self._bulk_create(
+                data_list=[CreateTourCategorySchema(tour_id=tour.id, category_id=category_id).model_dump() for category_id in tour_data.category_ids],
+                bulk_create_func=self.uow.tour_categories.bulk_create
+            )
+            await self._bulk_create(
+                data_list=[CreateTourAdditionalTypeSchema(tour_id=tour.id, type_id=additional_type_id).model_dump() for additional_type_id in tour_data.additional_type_ids],
+                bulk_create_func=self.uow.tour_additional_types.bulk_create
+            )
+
+            await self._bulk_create(
+                data_list=[CreateTourLanguageSchema(tour_id=tour.id, language_id=language_id).model_dump() for language_id in tour_data.language_ids],
+                bulk_create_func=self.uow.tour_languages.bulk_create
+            )
+
+            await self._bulk_create(
+                data_list=[CreateTourActivitySchema(tour_id=tour.id, activity_id=activity_id).model_dump() for activity_id in tour_data.activity_ids],
+                bulk_create_func=self.uow.tour_activities.bulk_create
+            )
+            await self._bulk_create(
+                data_list = [CreateTourAccommodationSchema(tour_id=tour.id, accommodation_id=accommodation_id).model_dump() for accommodation_id in tour_data.accommodation_ids],
+                bulk_create_func=self.uow.tour_accommodations.bulk_create
+            )
+
+            await self._bulk_create(
+                data_list=[CreateTourCountrySchema(tour_id=tour.id, country_id=country_id).model_dump() for country_id in tour_data.country_ids],
+                bulk_create_func=self.uow.tour_countries.bulk_create
+            )
+
+            await self._bulk_create(
+                data_list=[CreateTourRegionSchema(tour_id=tour.id, region_id=region_id).model_dump() for region_id in tour_data.region_ids],
+                bulk_create_func=self.uow.tour_regions.bulk_create
+            )
+            
         
-            
-
-    async def get_list_of_tours(self, locale: LocaleHandler, pagination: Pagination = None) -> Tour:
-        async with self.uow:
-            tours = await self.uow.tours.get_all(pagination)
-            return await self.uow.serialize_one_or_all_models_by_locale(tours, locale)
-    
-    async def get_list_of_tours_of_user(self, user_id: int, locale: LocaleHandler, pagination: Pagination = None) -> list[Tour]:
-        async with self.uow:
-            user = await self.uow.users.get_by_id(user_id)
-            user_tours = user.tours[pagination.offset:pagination.offset + pagination.limit]
-            return await self.uow.serialize_one_or_all_models_by_locale(user_tours, locale)
-    ###################################################################################
-    ###################################################################################
-    ###################################################################################
-    async def get_tour_by_id(self, tour_id: int, request: Request, locale: LocaleHandler) -> Tour:
-        async with self.uow:
-            ip_of_user = request.client.host
-            ip_address = await self._get_or_create_ip_address(ip_of_user)
-            
-            list_of_tour_ids = ip_address.get_list_of_tour_ids()
-            
-            if tour_id not in list_of_tour_ids:
-                await self._add_tour_view(ip_address, tour_id)
-            
-            await self._update_tour_view(ip_address, tour_id)
-            
-            tour = await self.uow.tours.get_by_id(tour_id)
-            return await self.uow.serialize_one_or_all_models_by_locale(tour, locale)
-    ######################################################################################
-    async def _get_or_create_ip_address(self, ip_address: str) -> IPTourView:
-        existing_ip_address = await self.uow.ip_tour_view.get_by_ip_address(ip_address)
-        if not existing_ip_address:
-            ip_address_dict = {
-                "ip_address": ip_address,
-            }
-            existing_ip_address = await self.uow.ip_tour_view.create(ip_address_dict)
-        return existing_ip_address
-
-    async def _add_tour_view(self, ip_address, tour_id: int):
-        ip_and_tour_dict = {
-            "ip_id": ip_address.id,
-            "tour_id": tour_id
-        }
-        created_ip_and_tour = await self.uow.ip_and_tours_view.create(ip_and_tour_dict)
-        created_ip_and_tour.increase_visited_times()
-        await self.uow.commit()
-
-    async def _update_tour_view(self, ip_address, tour_id: int):
-        ip_and_tour_view = await self.uow.ip_and_tours_view.get_by_ip_id_and_tour_id(ip_address.id, tour_id)
-        ip_and_tour_viewed_date = ip_and_tour_view.updated_at.date() if ip_and_tour_view else None
-        current_date = datetime.now().date()
-        if ip_address and tour_id in ip_address.get_list_of_tour_ids() and ip_and_tour_viewed_date != current_date:
-            ip_and_tour_view.increase_visited_times()
             await self.uow.commit()
-    ###################################################################################
-    ###################################################################################
-    ###################################################################################
-    
-    async def update_tour(self, tour_id: int, tour_data: UpdateTourSchema) -> Tour:
-        tour_dict = tour_data.model_dump()
+            return tour
+
+    async def _delete_expired_discounts(self) -> bool:
+        
+        expired_discounts: list[models.TourPrice] = await self.uow.tour_prices.get_expired_discounts()
+        if expired_discounts:
+            null_sign = None
+            for expired_discount in expired_discounts:
+                null_discount_dict = {
+                    "discount_percentage": null_sign,
+                    "new_price": null_sign,
+                    "discount_start_date": null_sign,
+                    "discount_end_date": null_sign
+                }
+                
+                await self.uow.tour_prices.update(expired_discount.id, null_discount_dict)
+            
+            await self.uow.commit()
+        
+        
+
+
+    async def get_list_of_tours(
+        self,
+        filter_params: FilterToursParams,
+        locale: LocaleHandler,
+    ) -> list[models.Tour]:
         async with self.uow:
-            updated_tour = await self.uow.tours.update(tour_id, tour_dict)
+            await self._delete_expired_discounts()
+            tours = await self.uow.tours.get_all()
+            filtered_tours = await filter_params.get_filtered_items(tours.items, locale)
+            return paginate(filtered_tours)
+
+    async def get_tour_by_id(self, id: int) -> models.Tour:
+        async with self.uow:
+            return await self.uow.tours.get_by_id(id)
+
+    async def _update_items(
+        self, 
+        current_items: set[int], 
+        new_items: set[int], 
+        add_item_func: callable, 
+        remove_item_func: callable, 
+    ):
+        items_to_add = new_items - current_items
+        items_to_remove = current_items - new_items
+        
+        for item_id in items_to_add:
+            await add_item_func(item_id)
+        
+        for item_id in items_to_remove:
+            await remove_item_func(item_id)
+
+    async def update_tour(self, id: int, tour_data: UpdateTourSchema) -> models.Tour:
+        async with self.uow:
+            existing_tour: models.Tour = await self.uow.tours.get_by_id(id)
+
+            if not existing_tour:
+                raise CustomExceptions.not_found()
+            
+            await self._create_update_prices(existing_tour, tour_data, update_mode=True)
+
+            await self._update_items(
+                set(existing_tour.category_ids), 
+                set(tour_data.category_ids),
+                lambda category_id: self.uow.tour_categories.create(
+                    CreateTourCategorySchema(
+                        tour_id=existing_tour.id,
+                        category_id=category_id
+                    ).model_dump()
+                ),
+                lambda category_id: self.uow.tour_categories.delete_by(
+                    tour_id=existing_tour.id,
+                    category_id=category_id
+                )
+            )
+
+            await self._update_items(
+                set(existing_tour.additional_type_ids), 
+                set(tour_data.additional_type_ids),
+                lambda additional_type_id: self.uow.tour_additional_types.create(
+                    CreateTourAdditionalTypeSchema(
+                        tour_id=existing_tour.id,
+                        type_id=additional_type_id
+                    ).model_dump()
+                ),
+                lambda additional_type_id: self.uow.tour_additional_types.delete_by(
+                    tour_id=existing_tour.id,
+                    type_id=additional_type_id
+                )
+            )
+
+            await self._update_items(
+                set(existing_tour.language_ids),
+                set(tour_data.language_ids),
+                lambda language_id: self.uow.tour_languages.create(
+                    CreateTourLanguageSchema(
+                        tour_id=existing_tour.id,
+                        language_id=language_id,
+                    ).model_dump()
+                ),
+                lambda language_id: self.uow.tour_languages.delete_by(
+                    tour_id = existing_tour.id,
+                    language_id = language_id
+                )
+            )
+
+            await self._update_items(
+                set(existing_tour.activity_ids),
+                set(tour_data.activity_ids),
+                lambda activity_id: self.uow.tour_activities.create(
+                    CreateTourActivitySchema(
+                        tour_id=existing_tour.id,
+                        activity_id=activity_id
+                    ).model_dump()
+                ),
+                lambda activity_id: self.uow.tour_activities.delete_by(
+                    tour_id = existing_tour.id,
+                    activity_id = activity_id
+                )
+            )
+
+            await self._update_items(
+                set(existing_tour.accommodation_ids),
+                set(tour_data.accommodation_ids),
+                lambda accommodation_id: self.uow.tour_accommodations.create(
+                    CreateTourAccommodationSchema(
+                        tour_id=existing_tour.id,
+                        accommodation_id=accommodation_id
+                    ).model_dump()
+                ),
+                lambda accommodation_id: self.uow.tour_accommodations.delete_by(
+                    tour_id=existing_tour.id,
+                    accommodation_id=accommodation_id
+                )
+            )
+
+            await self._update_items(
+                set(existing_tour.country_ids),
+                set(tour_data.country_ids),
+                lambda country_id: self.uow.tour_countries.create(
+                    CreateTourCountrySchema(
+                        tour_id=existing_tour.id,
+                        country_id=country_id
+                    ).model_dump()
+                ),
+                lambda country_id: self.uow.tour_countries.delete_by(
+                    tour_id=existing_tour.id,
+                    country_id=country_id
+                )
+            )
+
+            await self._update_items(
+                set(existing_tour.region_ids),
+                set(tour_data.region_ids),
+                lambda region_id: self.uow.tour_regions.create(
+                    CreateTourRegionSchema(
+                        tour_id=existing_tour.id,
+                        region_id=region_id
+                    ).model_dump()
+                ),
+                lambda region_id: self.uow.tour_regions.delete_by(
+                    tour_id=existing_tour.id,
+                    region_id=region_id
+                )
+            )
+            
+
+            tour_dict = tour_data.model_dump()
+            updated_tour = await self.uow.tours.update(id, tour_dict)
+
+            await self.uow.commit()
+
             return updated_tour
         
-    async def delete_tour(self, tour_id: int) -> TourSchema:
-        async with self.uow:
-            return await self.uow.tours.delete(tour_id)
+    async def _create_update_prices(
+            self,
+            tour: models.Tour,
+            tour_data: CreateTourSchema,
+            update_mode: bool = False
+    ):
+        price_data = CreateTourPriceSchema(
+            tour_id=tour.id,
+            currency_id=tour_data.currency_id,
+            price=tour_data.price,
+            discount_percentage=tour_data.discount_percentage,
+            new_price=tour_data.new_price,
+            discount_start_date=tour_data.discount_start_date,
+            discount_end_date=tour_data.discount_end_date
+        )
+
+        data_list = []
+
+        target_currencies: list[models.Currency] = await self.uow.currencies.get_all_without_pagination()
+        base_currency = await self.uow.currencies.get_by_id(tour_data.currency_id)
+        for target_currency in target_currencies:
+            price_dict = await TourPriceHandler.create_price_dict(
+                target_currency, base_currency, price_data
+            )
+            if update_mode:
+                await self.uow.tour_prices.update(target_currency.price_instance.id, price_dict)
+            else:
+                data_list.append(price_dict)
+
+        if data_list:
+            return data_list
         
 
-    async def search_tours(
-            self, 
-            filters: FilterTours,
-            pagination: Pagination,
-            locale: LocaleHandler,
-        ) -> list[Tour]:
+    async def delete_tour(self, id: int) -> models.Tour:
         async with self.uow:
-            users = await self.uow.users.get_all(pagination)
-            matched_tours = []
+            tour = await self.uow.tours.delete(id)
+            await self.uow.commit()
+            return tour
+                   
 
-            for user in users:
-                for tour in user.tours:
-                    if filters.filter_tour(tour, locale.get_language):
-                        matched_tours.append(tour)
-
-            return await self.uow.serialize_one_or_all_models_by_locale(matched_tours, locale)
-    
-
-        # async def create_full_tour(self, tour_data: CreateTourSchema) -> TourSchema: 
-    #     tour_dict = tour_data.model_dump(exclude=["price", "currency_id", "activities_ids"])
-    #     async with self.uow:
-    #         created_tour = await self.uow.tours.create(tour_dict)
-    #         base_currency = await self.uow.currencies.get_by_id(tour_data.currency_id)
-    #         target_currencies = await self.uow.currencies.get_all()
-    #         for target_currency in target_currencies:
-    #             if target_currency == base_currency:
-    #                 converted_price = tour_data.price
-    #             else:
-    #                 exchange_rate = await CurrencyHandler.get_exchange_rate(base_currency.name, target_currency.name)
-    #                 if exchange_rate:
-    #                     converted_price = tour_data.price * exchange_rate
-    #                 else:
-    #                     converted_price = tour_data.price * target_currency.exchange_rate
-                    
-    #             price_dict = {
-    #                 "tour_id": created_tour.id,
-    #                 "currency_id": target_currency.id,
-    #                 "price": converted_price
-    #             }
-    #             await self.uow.tour_prices.create(price_dict)
-    #         for activity_id in tour_data.activities_ids:
-    #             activity_dict = {
-    #                 "tour_id": created_tour.id,
-    #                 "activity_id": activity_id,
-    #             }
-    #             await self.uow.tour_activities.create(activity_dict)
-            
-    #         return await self.uow.tours.get_by_id(created_tour.id)
+tours_service = ToursService()

@@ -1,105 +1,169 @@
 from models import BaseTable
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Date, ARRAY
-from sqlalchemy.orm import relationship
-from datetime import datetime
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSONB
-
 from sqlalchemy.ext.hybrid import hybrid_property
-from utils.locale_handler import LocaleHandler
-from schemas.tours import TourSchema
+from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models import (
+        User,
+        TourStatus,
+        TourChildrenAge,
+        TourActivityLevel,
+        TourMedia,
+        Category,
+        Type,
+        Language,
+        Activity,
+        Accommodation,
+        Country,
+        Region,
+        Currency
+    )
+
+
 class Tour(BaseTable):
-    __tablename__ = 'tours'
-    
-    title = Column(JSONB, nullable=False)
-    description = Column(JSONB, nullable=False)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    status_id = Column(Integer, ForeignKey('tour_statuses.id'), nullable=False, index=True)
-    prices = relationship("TourPrice", cascade="all, delete-orphan", lazy="subquery")
-    status = relationship("TourStatus", back_populates="tours", lazy="subquery")
-    start_date = Column(Date, nullable=False)
-    end_date = Column(Date, nullable=False)
-    country = Column(JSONB, nullable=False)
-    region = Column(JSONB, nullable=False)
-    total_places = Column(Integer, nullable=False)
-    free_places = Column(Integer, nullable=False)
-    age_group = Column(String, nullable=False)
-    children_age = Column(String, nullable=False)
-    level_of_activity = Column(JSONB, nullable=False)
-    languages = relationship("TourLanguage", cascade="all, delete-orphan", lazy="subquery")
-    # view_count = Column(Integer, default=0)  # Добавляем поле для счетчика просмотров
-    views = relationship("IPAndToursView", cascade="all, delete-orphan", lazy="subquery")
-    activities = relationship("TourActivity", back_populates="tour", cascade="all, delete-orphan", lazy="subquery")
-    tour_comments = relationship("TourComment", cascade="all, delete-orphan", lazy="subquery")
-    user = relationship("User", back_populates="tours", lazy="subquery")
-    
-    def get_list_of_language_ids(self):
-        res = []
-        for language in self.languages:
-            res.append(language.language_id)
-        return res
-    @hybrid_property
-    def amount_comments(self):
-        return len(self.tour_comments)
+    __tablename__ = "tours"
+
+    title: Mapped[dict] = mapped_column(type_=JSONB)
+    description: Mapped[dict] = mapped_column(type_=JSONB)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    status_id: Mapped[int] = mapped_column(ForeignKey("tour_statuses.id"))
+
+    age_group_from: Mapped[int]
+    age_group_to: Mapped[int]
+
+    children_age_id: Mapped[int] = mapped_column(ForeignKey("tour_children_ages.id"))
+
+    activity_level_id: Mapped[int] = mapped_column(
+        ForeignKey("tour_activity_levels.id")
+    )
+
+    start_date: Mapped[str]
+    end_date: Mapped[str]
+
+    total_places: Mapped[int]
+    free_places: Mapped[int]
+
+    is_guaranteed: Mapped[bool] = mapped_column(default=False, server_default="false")
+
+    main_type_id: Mapped[int] = mapped_column(ForeignKey("types.id"))
     
     @hybrid_property
-    def amount_views(self):
-        amount = 0
-        for view in self.views:
-            amount += view.visited_times
-        return amount
+    def total_free_places(self) -> int:
+        return self.free_places
     
+    @hybrid_property
+    def start_month(self) -> int:
+        # Преобразование строки start_date в объект даты
+        start_date_obj = datetime.strptime(self.start_date, "%d.%m.%Y")
+        # Извлечение месяца в виде числа (1-12)
+        return start_date_obj.month
+
+    @hybrid_property
+    def duration(self) -> int:
+        start_date = datetime.strptime(self.start_date, "%d.%m.%Y")
+        end_date = datetime.strptime(self.end_date, "%d.%m.%Y")
+        delta = end_date - start_date
+        return delta.days
+
+    @hybrid_property
+    def is_one_day_tour(self) -> bool:
+        return self.duration == 1
+
+    @hybrid_property
+    def category_ids(self) -> list[int]:
+        return [category.id for category in self.categories]
     
-    async def to_read_model(self, locale: LocaleHandler):
-        title = await self._get_trans_columns_by_locale(self.title, locale)
-        description = await self._get_trans_columns_by_locale(self.description, locale)
-        country = await self._get_trans_columns_by_locale(self.country, locale)
-        region = await self._get_trans_columns_by_locale(self.region, locale)
-        level_of_activity = await self._get_trans_columns_by_locale(self.level_of_activity, locale)
-        return TourSchema(
-            id=self.id,
-            title=title,
-            description=description,
-            user_id=self.user_id,
-            status_id=self.status_id,
-            start_date=self.start_date,
-            end_date=self.end_date,
-            country=country,
-            region=region,
-            total_places=self.total_places,
-            free_places=self.free_places,
-            age_group=self.age_group,
-            children_age=self.children_age,
-            level_of_activity=level_of_activity,
-            amount_views=self.amount_views,
-            amount_comments=self.amount_comments,
-            created_at=self.created_at,
-            updated_at=self.updated_at,
+    @hybrid_property
+    def additional_type_ids(self) -> list[int]:
+        return [additional_type.id for additional_type in self.additional_types]
+    
+    @hybrid_property
+    def language_ids(self) -> list[int]:
+        return [language.id for language in self.languages]
+
+    @hybrid_property
+    def activity_ids(self) -> list[int]:
+        return [activity.id for activity in self.activities]
+    
+    @hybrid_property
+    def accommodation_ids(self) -> list[int]:
+        return [accommodation.id for accommodation in self.accommodations]
+    
+    @hybrid_property
+    def country_ids(self) -> list[int]:
+        return [country.id for country in self.countries]
+    
+    @hybrid_property
+    def region_ids(self) -> list[int]:
+        return [region.id for region in self.regions]
+
+    user: Mapped["User"] = relationship(back_populates="tours", lazy="subquery")
+    status: Mapped["TourStatus"] = relationship(lazy="subquery")
+    children_age: Mapped["TourChildrenAge"] = relationship(lazy="subquery")
+    activity_level: Mapped["TourActivityLevel"] = relationship(lazy="subquery")
+    photos: Mapped[list["TourMedia"]] = relationship(cascade="all, delete-orphan", lazy="subquery")
+    categories: Mapped[list["Category"]] = relationship(secondary="tour_categories", lazy="subquery", cascade='all,delete')
+    main_type: Mapped["Type"] = relationship(lazy="subquery")
+    additional_types: Mapped[list["Type"]] = relationship(secondary="tour_additional_types", lazy="subquery",cascade="all, delete") 
+    languages: Mapped[list["Language"]] = relationship(secondary="tour_languages", lazy="subquery",cascade="all, delete")
+    activities: Mapped[list["Activity"]] = relationship(secondary="tour_activities", lazy="subquery",cascade="all, delete")
+    accommodations: Mapped[list["Accommodation"]] = relationship(secondary="tour_accommodations", lazy="subquery",cascade="all, delete")
+    countries: Mapped[list["Country"]] = relationship(secondary="tour_countries", lazy="subquery",cascade="all, delete")
+    regions: Mapped[list["Region"]] = relationship(secondary="tour_regions", lazy="subquery",cascade="all, delete")
+    prices: Mapped[list["Currency"]] = relationship(
+            secondary="tour_prices",
+            lazy="subquery",
+            cascade="all, delete",
+            overlaps="price_instance"  # Add this parameter
         )
+    # views: Mapped[list["IPAndToursView"]] = relationship(cascade="all, delete_orphan", lazy="subquery")
+    # activities: Mapped[list["models.Activity"]] = relationship(back_populates="tour", cascade="all, delete_orphan", lazy="subquery")
+    # tour_comments: Mapped[list["models.TourComment"]] = relationship(back_populates="tours", lazy="subquery")
+    # languages: Mapped[list["models.TourLanguage"]] = relationship(cascade="all, delete_orphan", lazy="subquery")
+    # status: Mapped["models.TourStatus"] = relationship(back_populates="tours", lazy="subquery")
+    # prices: Mapped[list["models.TourPrice"]] = relationship(cascade="all, delete", lazy="subquery")
+
+    # @hybrid_property
+    # def amount_comments(self):
+    #     return len(self.tour_comments)
+
+    # @hybrid_property
+    # def amount_views(self):
+    #     amount = 0
+    #     for view in self.views:
+    #         amount += view.visited_times
+    #     return amount
+
+    # def get_list_of_language_ids(self):
+    #     res = []
+    #     for language in self.languages:
+    #         res.append(language.language_id)
+    #     return res
 
 
-class IPTourView(BaseTable):
-    __tablename__ = 'ip_tour_views'
+# class IPTourView(BaseTable):
+#     __tablename__ = 'ip_tour_views'
 
-    
-    ip_address = Column(String, nullable=False)
-    viewed_tours = relationship("IPAndToursView", lazy="subquery")
-    
-    def get_list_of_tour_ids(self):
-        tour_ids = []
-        for instance in self.viewed_tours:
-            tour_ids.append(instance.tour_id)
-        return tour_ids
-    
-class IPAndToursView(BaseTable):
-    __tablename__ = 'ip_and_tours_views'
 
-    ip_id = Column(Integer, ForeignKey("ip_tour_views.id"), nullable=False)
-    visited_times = Column(Integer, default=0)
-    tour_id = Column(Integer, ForeignKey("tours.id"), nullable=False)
+#     ip_address = Column(String, nullable=False)
+#     viewed_tours = relationship("IPAndToursView", lazy="subquery")
 
-    def increase_visited_times(self):
-        self.visited_times += 1
+#     def get_list_of_tour_ids(self):
+#         tour_ids = []
+#         for instance in self.viewed_tours:
+#             tour_ids.append(instance.tour_id)
+#         return tour_ids
 
-    
+# class IPAndToursView(BaseTable):
+#     __tablename__ = 'ip_and_tours_views'
 
-   
+#     ip_id = Column(Integer, ForeignKey("ip_tour_views.id"), nullable=False)
+#     visited_times = Column(Integer, default=0)
+#     tour_id = Column(Integer, ForeignKey("tours.id"), nullable=False)
+
+#     def increase_visited_times(self):
+#         self.visited_times += 1

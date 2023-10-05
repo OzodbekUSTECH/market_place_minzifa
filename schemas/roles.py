@@ -1,23 +1,15 @@
-from pydantic import BaseModel, EmailStr, field_validator, constr
+from schemas import  CreateBaseModel, UpdateBaseModel, IdResponseSchema
 from typing import Union
 
 
     
 
-class CreateRoleSchema(BaseModel):
+class CreateRoleSchema(CreateBaseModel):
     name: Union[dict[str, str], str]
 
-class UpdateRoleSchema(CreateRoleSchema):
+class UpdateRoleSchema(CreateRoleSchema, UpdateBaseModel):
     pass
 
-class RoleSchema(CreateRoleSchema):
-    id: int
+class RoleSchema(UpdateRoleSchema, IdResponseSchema):
+    pass
 
-class RolePermissionsSchema(BaseModel):
-    id: int
-    role_id: int
-    name: str
-    endpoint: str
-
-    class ConfigDict:
-        from_attributes = True

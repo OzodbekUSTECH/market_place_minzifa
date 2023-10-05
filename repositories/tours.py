@@ -1,52 +1,22 @@
-from repositories import BaseRepository, Pagination
-from fuzzywuzzy import fuzz, process
-from models import IPTourView
+from repositories import BaseRepository
+from utils.filters.filter_tours import FilterToursParams
+from sqlalchemy import insert, select, update, delete
+from fastapi_pagination.ext.async_sqlalchemy import paginate
+from utils.locale_handler import LocaleHandler
+from fuzzywuzzy import fuzz
+
 class ToursRepository(BaseRepository):
-   
-    
-    # async def search_tours(self, query: str, status_id: int, tour_rating: float, pagination: Pagination):
-    #     all_tours = await self.get_all(pagination)
-    #     matched_tours = []
+    ...
 
-    #     for tour in all_tours:
-            
-    #         if not status_id or tour.status_id == status_id:
-                    
-    #             if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
-
-    #                 matched_tours.append(tour)
-
-    #     return matched_tours
-    
-    async def search_tours_new(self, query: str, status_id: int, tour_rating: float, pagination: Pagination):
-        all_tours = await self.get_all(pagination)
-        matched_tours = []
-
-        for tour in all_tours:
-            # Применение фильтров
-            if not status_id or tour.status_id == status_id:
-                    
-                if not query or fuzz.partial_ratio(query.lower(), tour.title.lower()) > 60:
-
-                    matched_tours.append(tour)
-
-        return matched_tours
 
 
 
 
 class IPTourViewRepository(BaseRepository):
-    async def get_by_ip_address(self, ip_address: int):
-        ip_tour_view = self.session.query(self.model).filter(self.model.ip_address == ip_address).first()
-        self.session.commit()
-        return ip_tour_view
+    ...
     
 class IPAndToursViewRepository(BaseRepository):
-    async def get_by_ip_id_and_tour_id(self, ip_id: int, tour_id: int):
-        instance = self.session.query(self.model).filter(self.model.ip_id == ip_id, self.model.tour_id == tour_id).first()
-        self.session.commit()
-        return instance
-
+    ...
 
 
         

@@ -1,51 +1,71 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from services import ActivitiesService
-from utils.dependency import get_activities_services, get_current_user
-from repositories.base import Pagination
-from schemas.activities import CreateActivitySchema, UpdateActivitySchema, ActivitySchema
-from models import User
-from security.permissionhandler import PermissionHandler, Permissions
+from services import activities_service
+from repositories import Page
+from schemas.activities import (
+    CreateActivitySchema,
+    UpdateActivitySchema,
+    ActivitySchema,
+)
+from schemas import IdResponseSchema
 from utils.locale_handler import LocaleHandler
+
 router = APIRouter(
     prefix="/activities",
     tags=["Acitivities"],
 )
 
-@router.post('', response_model=ActivitySchema)
+
+@router.post("", response_model=IdResponseSchema)
 async def create_activity(
     activity_data: CreateActivitySchema,
-    activities_service: Annotated[ActivitiesService, Depends(get_activities_services)]
 ) -> ActivitySchema:
+    """
+    - name: dict[str, str]\n
+    for example:\n
+    name: {\n
+        "ru": "Активность на русском",\n
+        "en": "Acitivity in english"\n
+    }
+    """
     return await activities_service.create_activity(activity_data)
 
-@router.get('/{locale}', response_model=list[ActivitySchema])
+
+@router.get("/{locale}", response_model=Page[ActivitySchema])
+@LocaleHandler.serialize_one_all_models_by_locale
 async def get_list_of_activities(
     locale: Annotated[LocaleHandler, Depends()],
-    pagination: Annotated[Pagination, Depends()],
-    activities_service: Annotated[ActivitiesService, Depends(get_activities_services)]
 ) -> list[ActivitySchema]:
-    return await activities_service.get_list_of_activities(pagination, locale)
+    return await activities_service.get_list_of_activities()
 
-@router.get('/{locale}/{id}', response_model=ActivitySchema)
+
+@router.get("/{locale}/{id}", response_model=ActivitySchema)
+@LocaleHandler.serialize_one_all_models_by_locale
 async def get_activity_by_id(
     locale: Annotated[LocaleHandler, Depends()],
     id: int,
-    activities_service: Annotated[ActivitiesService, Depends(get_activities_services)]
 ) -> ActivitySchema:
-    return await activities_service.get_activity_by_id(id, locale)
+    return await activities_service.get_activity_by_id(id)
 
-@router.put('/{id}', response_model=ActivitySchema)
+
+@router.put("/{id}", response_model=IdResponseSchema)
 async def update_activity(
     id: int,
     activity_data: UpdateActivitySchema,
-    activities_service: Annotated[ActivitiesService, Depends(get_activities_services)]
 ) -> ActivitySchema:
+    """
+    - name: dict[str, str]\n
+    for example:\n
+    name: {\n
+        "ru": "Активность на русском",\n
+        "en": "Acitivity in english"\n
+    }
+    """
     return await activities_service.update_activity(id, activity_data)
 
-@router.delete('/{id}', response_model=ActivitySchema)
+
+@router.delete("/{id}", response_model=IdResponseSchema)
 async def delete_activity(
     id: int,
-    activities_service: Annotated[ActivitiesService, Depends(get_activities_services)]
 ) -> ActivitySchema:
     return await activities_service.delete_activity(id)

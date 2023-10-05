@@ -1,25 +1,16 @@
 from models import BaseTable
-from enum import Enum as PyEnum
-from sqlalchemy import String, Boolean, BigInteger, Column, Integer, Enum, JSON, ForeignKey
-from sqlalchemy.orm import relationship
-from schemas.roles import RoleSchema
-from utils.locale_handler import LocaleHandler
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSONB
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from models import User
 
 class Role(BaseTable):
     __tablename__ = 'roles'
 
-    name = Column(JSONB, nullable=False)
+    name: Mapped[dict] = mapped_column(type_=JSONB)
 
-    role_permissions = relationship("RolePermission", back_populates="role", lazy="subquery")
-
-
-    async def to_read_model(self, locale: LocaleHandler):
-        name = await self._get_trans_columns_by_locale(self.name, locale)
-        return RoleSchema(
-            id=self.id,
-            name=name,
-        )
+    users: Mapped[list["User"]] = relationship(back_populates="role", lazy="subquery", order_by="User.id")
 
 
 
