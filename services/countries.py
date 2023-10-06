@@ -5,8 +5,6 @@ from utils.media_handler import MediaHandler
 import models
 
 
-import pycountry
-
 class CountriesService:
     def __init__(self):
         self.uow = UnitOfWork()
