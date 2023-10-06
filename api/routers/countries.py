@@ -13,6 +13,9 @@ router = APIRouter(
     tags=["Countries (for tours)"],
 )
 
+# @router.post('/parser')
+# async def parse_all_countries():
+#     return await countries_service.parse_all_countries()
 
 @router.post("", response_model=IdResponseSchema)
 async def create_country(
