@@ -61,3 +61,8 @@ class BaseRepository:
         stmt = delete(self.model).filter_by(**filters).returning(self.model)
         result = await self.session.execute(stmt)
         return result.scalar_one()
+    
+    async def get_one_by(self, **filters) -> dict:
+        stmt = select(self.model).filter_by(**filters)
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()

@@ -37,6 +37,8 @@ from repositories.blog_countries import BlogCountriesRepository
 from repositories.support_questions import SupportQuestionsRepository, QuestionDocsRepository
 
 from repositories.sold_tours import SoldToursRepository
+
+from repositories.statistics_of_views import StatisticsOfViewsRepository
 # from repositories.tourprices import TourPricesRepository
 # from repositories.tour_activities import TourActivitiesRepository
 # from repositories.favorite_tours import FavoriteToursRepository

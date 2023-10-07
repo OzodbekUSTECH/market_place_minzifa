@@ -38,6 +38,8 @@ from models.support_questions import QuestionDoc, SupportQuestion
 
 from models.sold_tours import SoldTour
 
+from models.statistics_of_views import StatisticOfViews
+
 # from models.tours import Tour, IPTourView, IPAndToursView
 # from models.tourprices import TourPrice
 # from models.tour_activities import TourActivity
