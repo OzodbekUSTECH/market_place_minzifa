@@ -1,5 +1,5 @@
-from schemas import  CreateBaseModel, TourMixinBaseModel
+# from schemas import  CreateBaseModel, TourMixinBaseModel
 
-class CreateTourCategorySchema(TourMixinBaseModel, CreateBaseModel):
-    category_id: int
+# class CreateTourCategorySchema(TourMixinBaseModel, CreateBaseModel):
+#     category_id: int
 

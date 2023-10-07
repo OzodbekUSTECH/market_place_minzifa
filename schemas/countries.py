@@ -16,7 +16,7 @@ class UpdateCountrySchema(UpdateBaseModel, CreateCountrySchema):
 
 
 
-class CountrySchema(UpdateCountrySchema, IdResponseSchema):
+class CountrySchema(IdResponseSchema, UpdateCountrySchema):
     photo_url: str
 
     filename: str = Field(exclude=True)

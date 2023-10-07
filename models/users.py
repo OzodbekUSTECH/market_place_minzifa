@@ -27,17 +27,26 @@ class User(BaseTable):
     @hybrid_property
     def rating(self):
         total_rating = 0
-        total_comments_with_rating = 0
+        amount_reviews = 0
 
         if self.tours:
             for tour in self.tours:
                 total_rating += tour.rating # Учтем максимальное значение рейтинга
-                total_comments_with_rating += tour.length_comments_with_rating
+                amount_reviews += tour.amount_reviews
 
-        if total_comments_with_rating == 0:
+        if amount_reviews == 0:
             return 1  # Возвращаем значение по умолчанию (1) если нет комментариев с рейтингом
         else:
-            return round(total_rating / total_comments_with_rating, 2)
+            return round(total_rating / amount_reviews, 2)
+        
+    @hybrid_property
+    def amount_reviews(self) -> int:
+        default = 0
+        if self.tours:
+            for tour in self.tours:
+                default += tour.amount_reviews
+        
+        return default
 
 
 
@@ -59,7 +68,7 @@ class User(BaseTable):
         lazy="immediate",
         overlaps="travel_expert"  # Add this parameter
     )
-    tours: Mapped[list["Tour"]] = relationship(back_populates="user", lazy="subquery")
+    tours: Mapped[list["Tour"]] = relationship(back_populates="user", lazy="immediate")
     
     
     

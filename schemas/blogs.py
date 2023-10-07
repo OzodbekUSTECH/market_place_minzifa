@@ -8,7 +8,7 @@ class CreateBlogMediaSchema(CreateBaseModel):
     blog_id: int
     filename: str
 
-class BlogMediaSchema(CreateBlogMediaSchema, IdResponseSchema):
+class BlogMediaSchema(IdResponseSchema, CreateBlogMediaSchema):
     filename: str = Field(exclude=True)
     media_url: str
 
@@ -23,7 +23,7 @@ class CreateBlogSchema(CreateBaseModel):
 class UpdateBlogSchema(UpdateBaseModel, CreateBlogSchema):
     pass
 
-class BlogSchema(UpdateBlogSchema, IdResponseSchema):
+class BlogSchema(IdResponseSchema, UpdateBlogSchema):
     views: int
     media: list[BlogMediaSchema]
     countries: list[CountrySchema]

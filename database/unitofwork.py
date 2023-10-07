@@ -31,8 +31,8 @@ class UnitOfWork:
     tour_activity_levels: Type[repositories.TourActivityLevelsRepository]
     tours: Type[repositories.ToursRepository]
     tour_media_group: Type[repositories.TourMediaGroupRepository]
-    tour_categories: Type[repositories.TourCategoriesRepository]
-    tour_additional_types: Type[repositories.TourAdditionalTypesRepository]
+    # tour_categories: Type[repositories.TourCategoriesRepository]
+    # tour_additional_types: Type[repositories.TourAdditionalTypesRepository]
     tour_languages: Type[repositories.TourLanguagesRepository]
     tour_activities: Type[repositories.TourActivitiesRepository]
     tour_accommodations: Type[repositories.TourAccommodationsRepository]
@@ -90,8 +90,8 @@ class UnitOfWork:
         self.tour_activity_levels = repositories.TourActivityLevelsRepository(self.session, model=models.TourActivityLevel)
         self.tours = repositories.ToursRepository(self.session, model=models.Tour)
         self.tour_media_group = repositories.TourMediaGroupRepository(self.session, model=models.TourMedia)
-        self.tour_categories = repositories.TourCategoriesRepository(self.session, model=models.TourCategory)
-        self.tour_additional_types = repositories.TourAdditionalTypesRepository(self.session, model=models.TourAdditionalType)
+        # self.tour_categories = repositories.TourCategoriesRepository(self.session, model=models.TourCategory)
+        # self.tour_additional_types = repositories.TourAdditionalTypesRepository(self.session, model=models.TourAdditionalType)
         self.tour_languages = repositories.TourLanguagesRepository(self.session, model=models.TourLanguage)
         self.tour_activities = repositories.TourActivitiesRepository(self.session, model=models.TourActivity)
         self.tour_accommodations = repositories.TourAccommodationsRepository(self.session, model=models.TourAccommodation)

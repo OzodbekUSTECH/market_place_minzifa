@@ -7,5 +7,5 @@ class CreateLanguageSchema(CreateBaseModel):
 class UpdateLanguageSchema(UpdateBaseModel, CreateLanguageSchema):
     pass
 
-class LanguageSchema(UpdateLanguageSchema, IdResponseSchema):
+class LanguageSchema(IdResponseSchema, UpdateLanguageSchema):
     pass

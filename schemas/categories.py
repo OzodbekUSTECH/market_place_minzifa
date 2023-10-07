@@ -7,5 +7,5 @@ class CreateCategorySchema(CreateBaseModel):
 class UpdateCategorySchema(UpdateBaseModel, CreateCategorySchema):
     pass
 
-class CategorySchema(UpdateCategorySchema, IdResponseSchema):
+class CategorySchema(IdResponseSchema, UpdateCategorySchema):
     pass

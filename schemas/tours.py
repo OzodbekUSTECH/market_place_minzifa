@@ -51,11 +51,14 @@ class CreateTourSchema(CreateBaseModel):
 
     is_guaranteed: bool
 
-    category_ids: list[int] = Field(exclude=True)
+    # category_ids: list[int] = Field(exclude=True)
+    category_id: int
 
     main_type_id: int
+
+    is_allowed_individually: bool
     
-    additional_type_ids: list[int] = Field(exclude=True)
+    # additional_type_ids: list[int] = Field(exclude=True)
 
     language_ids: list[int] = Field(exclude=True)
 
@@ -89,9 +92,10 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     children_age: TourChildrenAgeSchema
     activity_level: TourActivityLevelSchema
     photos: list[TourMediaSchema]
-    categories: list[CategorySchema]
+    category: CategorySchema
+    # categories: list[CategorySchema]
     main_type: TypeSchema
-    additional_types: list[TypeSchema]
+    # additional_types: list[TypeSchema]
     languages: list[LanguageSchema]
     activities: list[ActivitySchema]
     accommodations: list[AccommodationSchema]
@@ -100,6 +104,10 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     prices: list[CustomTourPriceSchema]
 
     total_free_places: int
+    
+    amount_reviews: int
+    amount_countries: int
+    amount_regions: int
     
 
 
@@ -111,7 +119,10 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     activity_level_id: int = Field(exclude=True)
     main_type_id: int = Field(exclude=True)
     start_month: int = Field(exclude=True)
+
+    category_id: int = Field(exclude=True)
     
+
    
     currency_id: int = Field(None, exclude=True)
     price: int | None = Field(None, exclude=True)

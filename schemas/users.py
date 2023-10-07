@@ -47,7 +47,7 @@ class UpdateUserSchema(UpdateBaseModel, BaseUserSchema):
 
 class UserSchema(IdResponseSchema, UpdateUserSchema):
     rating: int | float
-
+    amount_reviews: int
 
 
 class UserSchemaWithTravelExpertAndEmployees(UserSchema):

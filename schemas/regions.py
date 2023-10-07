@@ -10,5 +10,5 @@ class UpdateRegionSchema(UpdateBaseModel, CreateRegionSchema):
     pass
 
 
-class RegionSchema(UpdateRegionSchema, IdResponseSchema):
+class RegionSchema(IdResponseSchema, UpdateRegionSchema):
     pass

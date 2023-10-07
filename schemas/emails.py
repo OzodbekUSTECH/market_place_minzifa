@@ -8,7 +8,7 @@ class CreateEmailSchema(CreateBaseModel):
     language: str
 
 
-class EmailSchema(CreateEmailSchema, IdResponseSchema):
+class EmailSchema(IdResponseSchema, CreateEmailSchema):
     pass
 
 

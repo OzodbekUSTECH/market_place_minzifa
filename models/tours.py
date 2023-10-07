@@ -51,6 +51,10 @@ class Tour(BaseTable):
     is_guaranteed: Mapped[bool] = mapped_column(default=False, server_default="false")
 
     main_type_id: Mapped[int] = mapped_column(ForeignKey("types.id"))
+
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
+
+    is_allowed_individually: Mapped[bool] = mapped_column(default=False, server_default="false")
     
     @hybrid_property
     def total_free_places(self) -> int:
@@ -74,13 +78,13 @@ class Tour(BaseTable):
     def is_one_day_tour(self) -> bool:
         return self.duration == 1
 
-    @hybrid_property
-    def category_ids(self) -> list[int]:
-        return [category.id for category in self.categories]
+    # @hybrid_property
+    # def category_ids(self) -> list[int]:
+    #     return [category.id for category in self.categories]
     
-    @hybrid_property
-    def additional_type_ids(self) -> list[int]:
-        return [additional_type.id for additional_type in self.additional_types]
+    # @hybrid_property
+    # def additional_type_ids(self) -> list[int]:
+    #     return [additional_type.id for additional_type in self.additional_types]
     
     @hybrid_property
     def language_ids(self) -> list[int]:
@@ -115,7 +119,7 @@ class Tour(BaseTable):
         return default
     
     @hybrid_property
-    def length_comments_with_rating(self) -> int:
+    def amount_reviews(self) -> int:
         default = 0
         if self.comments:
             for comment in self.comments:
@@ -123,17 +127,25 @@ class Tour(BaseTable):
                     default += 1
         return default
     
-   
-
+    @hybrid_property
+    def amount_countries(self) -> int:
+        return len(self.countries)
+    
+    @hybrid_property
+    def amount_regions(self) -> int:
+        return len(self.regions)
+    
 
     user: Mapped["User"] = relationship(back_populates="tours", lazy="subquery")
     status: Mapped["TourStatus"] = relationship(lazy="subquery")
     children_age: Mapped["TourChildrenAge"] = relationship(lazy="subquery")
     activity_level: Mapped["TourActivityLevel"] = relationship(lazy="subquery")
     photos: Mapped[list["TourMedia"]] = relationship(cascade="all, delete-orphan", lazy="subquery")
-    categories: Mapped[list["Category"]] = relationship(secondary="tour_categories", lazy="subquery", cascade='all,delete')
+
+    category: Mapped["Category"] = relationship(lazy="subquery")
+    # categories: Mapped[list["Category"]] = relationship(secondary="tour_categories", lazy="subquery", cascade='all,delete')
     main_type: Mapped["Type"] = relationship(lazy="subquery")
-    additional_types: Mapped[list["Type"]] = relationship(secondary="tour_additional_types", lazy="subquery",cascade="all, delete") 
+    # additional_types: Mapped[list["Type"]] = relationship(secondary="tour_additional_types", lazy="subquery",cascade="all, delete") 
     languages: Mapped[list["Language"]] = relationship(secondary="tour_languages", lazy="subquery",cascade="all, delete")
     activities: Mapped[list["Activity"]] = relationship(secondary="tour_activities", lazy="subquery",cascade="all, delete")
     accommodations: Mapped[list["Accommodation"]] = relationship(secondary="tour_accommodations", lazy="subquery",cascade="all, delete")

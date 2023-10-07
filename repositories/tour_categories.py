@@ -1,8 +1,8 @@
-from repositories import BaseRepository
+# from repositories import BaseRepository
 
 
-class TourCategoriesRepository(BaseRepository):
-    ...
+# class TourCategoriesRepository(BaseRepository):
+#     ...
       
 
 

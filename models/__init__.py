@@ -19,8 +19,8 @@ from models.tour_children_ages import TourChildrenAge
 from models.tour_activity_levels import TourActivityLevel
 from models.tours import Tour
 from models.tour_media_group import TourMedia
-from models.tour_categories import TourCategory
-from models.tour_additional_types import TourAdditionalType
+# from models.tour_categories import TourCategory
+# from models.tour_additional_types import TourAdditionalType
 from models.tour_languages import TourLanguage
 from models.tour_activities import TourActivity
 from models.tour_accommodations import TourAccommodation

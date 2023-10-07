@@ -16,6 +16,7 @@ class FilterToursParams(BaseFilterParams):
         duration_from: int = Query(None),
         duration_to: int = Query(None),
         category_id: int = Query(None),
+        type_id: int = Query(None),
         accommodation_id: int = Query(None),
         age_group_from: int = Query(None),
         age_group_to: int = Query(None),
@@ -38,6 +39,7 @@ class FilterToursParams(BaseFilterParams):
         self.duration_from = duration_from
         self.duration_to = duration_to
         self.category_id = category_id
+        self.type_id = type_id
         self.accommodation_id = accommodation_id
         self.age_group_from = age_group_from
         self.age_group_to = age_group_to
@@ -88,8 +90,13 @@ class FilterToursParams(BaseFilterParams):
             filters.append(tour.duration <= self.duration_to)
 
         #Проверка параметра category_id
+        # if self.category_id is not None:
+        #     filters.append(self.category_id in tour.category_ids)
         if self.category_id is not None:
-            filters.append(self.category_id in tour.category_ids)
+            filters.append(self.category_id == tour.category_id)
+
+        if self.type_id is not None:
+            filters.append(self.type_id == tour.main_type_id)
 
         if self.accommodation_id is not None:
             filters.append(self.accommodation_id in tour.accommodation_ids)

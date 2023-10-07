@@ -10,6 +10,6 @@ class CreateRoleSchema(CreateBaseModel):
 class UpdateRoleSchema(UpdateBaseModel, CreateRoleSchema):
     pass
 
-class RoleSchema(UpdateRoleSchema, IdResponseSchema):
+class RoleSchema(IdResponseSchema, UpdateRoleSchema):
     pass
 

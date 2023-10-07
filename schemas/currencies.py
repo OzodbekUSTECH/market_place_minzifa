@@ -9,5 +9,5 @@ class CreateCurrencySchema(CreateBaseModel):
 class UpdateCurrencySchema(UpdateBaseModel, CreateCurrencySchema):
     pass
 
-class CurrencySchema(UpdateCurrencySchema, IdResponseSchema):
+class CurrencySchema(IdResponseSchema, UpdateCurrencySchema):
     pass

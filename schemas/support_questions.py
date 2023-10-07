@@ -9,7 +9,7 @@ class CreateQuestionDocSchema(CreateBaseModel):
 class UpdateQuestionDocSchema(UpdateBaseModel, CreateQuestionDocSchema):
     pass
 
-class QuestionDocSchema(UpdateQuestionDocSchema, IdResponseSchema):
+class QuestionDocSchema(IdResponseSchema, UpdateQuestionDocSchema):
     pass
     
 
