@@ -108,6 +108,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     amount_reviews: int
     amount_countries: int
     amount_regions: int
+    has_discount: bool
     
 
 

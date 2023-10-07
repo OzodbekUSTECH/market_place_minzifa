@@ -135,6 +135,11 @@ class Tour(BaseTable):
     def amount_regions(self) -> int:
         return len(self.regions)
     
+    @hybrid_property
+    def has_discount(self) -> bool:
+        if self.prices[0].discount_percentage:
+            return True
+        return False
 
     user: Mapped["User"] = relationship(back_populates="tours", lazy="subquery")
     status: Mapped["TourStatus"] = relationship(lazy="subquery")

@@ -12,6 +12,7 @@ class FilterToursParams(BaseFilterParams):
         start_month: int = Query(None),
         query: str = Query(None),
         user_id: int = Query(None),
+        rating: int | float = Query(None),
         status_id: int = Query(None),
         duration_from: int = Query(None),
         duration_to: int = Query(None),
@@ -30,11 +31,14 @@ class FilterToursParams(BaseFilterParams):
 
         price_from: float = Query(None),
         price_to: float = Query(None),
+
+        only_with_discounts: bool = Query(False),
     ):
         self.country_id = country_id
         self.start_month = start_month 
         self.query = query
         self.user_id = user_id
+        self.rating = rating
         self.status_id = status_id
         self.duration_from = duration_from
         self.duration_to = duration_to
@@ -52,6 +56,8 @@ class FilterToursParams(BaseFilterParams):
         self.currency_id = currency_id
         self.price_from = price_from
         self.price_to = price_to
+
+        self.only_with_discounts = only_with_discounts
 
 
     def filter_item(self, tour: models.Tour, locale: LocaleHandler):
@@ -76,6 +82,9 @@ class FilterToursParams(BaseFilterParams):
 
         if self.user_id is not None:
             filters.append(tour.user_id == self.user_id)
+
+        if self.rating is not None:
+            filters.append(self.rating == tour.user.rating)
 
         # Проверка параметра status_id
         if self.status_id is not None:
@@ -139,5 +148,8 @@ class FilterToursParams(BaseFilterParams):
             
             # Use any() to check if at least one price filter condition is satisfied
             filters.append(any(price_filters))
+
+        if self.only_with_discounts:
+            filters.append(self.only_with_discounts == tour.has_discount)
         # Применение всех условий с использованием логического оператора "и" (AND)
         return all(filters)
