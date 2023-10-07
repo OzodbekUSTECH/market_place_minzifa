@@ -6,7 +6,7 @@ class CreateRegionSchema(CreateBaseModel):
     name: Union[dict[str, str], str]
 
 
-class UpdateRegionSchema(CreateRegionSchema, UpdateBaseModel):
+class UpdateRegionSchema(UpdateBaseModel, CreateRegionSchema):
     pass
 
 

@@ -42,11 +42,11 @@ class CreateUserSchema(BaseUserSchema):
     #     return v
 
 
-class UpdateUserSchema(BaseUserSchema, UpdateBaseModel):
+class UpdateUserSchema(UpdateBaseModel, BaseUserSchema):
     pass
 
-class UserSchema(UpdateUserSchema, IdResponseSchema):
-    pass
+class UserSchema(IdResponseSchema, UpdateUserSchema):
+    rating: int | float
 
 
 

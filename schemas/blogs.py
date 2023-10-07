@@ -20,7 +20,7 @@ class CreateBlogSchema(CreateBaseModel):
     media: list[UploadFile] = Field(None, exclude=True)
     country_ids: list[int] = Field(exclude=True)
 
-class UpdateBlogSchema(CreateBlogSchema, UpdateBaseModel):
+class UpdateBlogSchema(UpdateBaseModel, CreateBlogSchema):
     pass
 
 class BlogSchema(UpdateBlogSchema, IdResponseSchema):

@@ -5,8 +5,8 @@ class CreateTourActivityLevelSchema(CreateBaseModel):
     name: Union[dict[str, str], str]
     level_number: int
 
-class UpdateTourActivityLevelSchema(CreateTourActivityLevelSchema, UpdateBaseModel):
+class UpdateTourActivityLevelSchema(UpdateBaseModel, CreateTourActivityLevelSchema):
     pass
 
-class TourActivityLevelSchema(UpdateTourActivityLevelSchema, IdResponseSchema):
+class TourActivityLevelSchema(IdResponseSchema, UpdateTourActivityLevelSchema):
     pass

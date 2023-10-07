@@ -50,6 +50,8 @@ class UnitOfWork:
     support_questions: Type[repositories.SupportQuestionsRepository]
     question_docs: Type[repositories.QuestionDocsRepository]
 
+    sold_tours: Type[repositories.SoldToursRepository]
+
     
     # tour_prices: Type[TourPricesRepository]
     # TourActivitiesRepository: Type[TourActivitiesRepository]
@@ -104,6 +106,8 @@ class UnitOfWork:
 
         self.support_questions = repositories.SupportQuestionsRepository(self.session, model=models.SupportQuestion)
         self.question_docs = repositories.QuestionDocsRepository(self.session, model=models.QuestionDoc)
+
+        self.sold_tours = repositories.SoldToursRepository(self.session, model=models.SoldTour)
 
         # self.tour_prices = TourPricesRepository(self.session, model=TourPrice)
         # self.tour_activities = TourActivitiesRepository(self.session, model=TourActivity)

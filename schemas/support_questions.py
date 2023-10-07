@@ -6,7 +6,7 @@ class CreateQuestionDocSchema(CreateBaseModel):
     question_id: int
     link: str
 
-class UpdateQuestionDocSchema(CreateQuestionDocSchema, UpdateBaseModel):
+class UpdateQuestionDocSchema(UpdateBaseModel, CreateQuestionDocSchema):
     pass
 
 class QuestionDocSchema(UpdateQuestionDocSchema, IdResponseSchema):
@@ -18,9 +18,9 @@ class CreateSupportQuestionSchema(CreateBaseModel):
     answer: Union[dict[str, str], str]
     doc_links: list[str] | None = Field(None, exclude=True)
 
-class UpdateSupportQuestionSchema(CreateSupportQuestionSchema, UpdateBaseModel):
+class UpdateSupportQuestionSchema(UpdateBaseModel, CreateSupportQuestionSchema):
     pass
 
-class SupportQuestionSchema(UpdateSupportQuestionSchema, IdResponseSchema):
+class SupportQuestionSchema(IdResponseSchema, UpdateSupportQuestionSchema):
     doc_links: list[QuestionDocSchema]
 

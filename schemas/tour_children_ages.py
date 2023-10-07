@@ -4,9 +4,9 @@ from typing import Union
 class CreateTourChildrenAgeSchema(CreateBaseModel):
     name: Union[dict[str, str], str]
 
-class UpdateTourChildrenAgeSchema(CreateTourChildrenAgeSchema, UpdateBaseModel):
+class UpdateTourChildrenAgeSchema(UpdateBaseModel, CreateTourChildrenAgeSchema):
     pass
 
 
-class TourChildrenAgeSchema(UpdateTourChildrenAgeSchema, IdResponseSchema):
+class TourChildrenAgeSchema(IdResponseSchema, UpdateTourChildrenAgeSchema):
     pass

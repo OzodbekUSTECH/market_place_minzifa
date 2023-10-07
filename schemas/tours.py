@@ -12,6 +12,7 @@ from schemas.activities import ActivitySchema
 from schemas.accommodations import AccommodationSchema
 from schemas.countries import CountrySchema
 from schemas.regions import RegionSchema
+from schemas.users import UserSchema
 
 
 
@@ -76,13 +77,14 @@ class CreateTourSchema(CreateBaseModel):
     
     
 
-class UpdateTourSchema(CreateTourSchema, UpdateBaseModel):
+class UpdateTourSchema(UpdateBaseModel, CreateTourSchema):
     pass
 
-class TourSchema(UpdateTourSchema, IdResponseSchema):
+class TourSchema(IdResponseSchema, UpdateTourSchema):
     duration: int
     is_guaranteed: bool
     is_one_day_tour: bool
+    user: UserSchema
     status: TourStatusSchema
     children_age: TourChildrenAgeSchema
     activity_level: TourActivityLevelSchema
@@ -98,9 +100,11 @@ class TourSchema(UpdateTourSchema, IdResponseSchema):
     prices: list[CustomTourPriceSchema]
 
     total_free_places: int
+    
 
 
     ######################################
+    user_id: int = Field(exclude=True)
     free_places: int = Field(exclude=True)
     status_id: int = Field(exclude=True)
     children_age_id: int = Field(exclude=True)

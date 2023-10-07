@@ -5,8 +5,8 @@ class CreateActivitySchema(CreateBaseModel):
     name: Union[dict[str, str], str]
 
 
-class UpdateActivitySchema(CreateActivitySchema, UpdateBaseModel):
+class UpdateActivitySchema(UpdateBaseModel, CreateActivitySchema):
     pass
 
-class ActivitySchema(UpdateActivitySchema, IdResponseSchema):
+class ActivitySchema(IdResponseSchema, UpdateActivitySchema):
     pass

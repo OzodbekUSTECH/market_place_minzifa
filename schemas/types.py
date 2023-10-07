@@ -4,8 +4,8 @@ from typing import Union
 class CreateTypeSchema(CreateBaseModel):
     name: Union[dict[str, str], str]
 
-class UpdateTypeSchema(CreateTypeSchema, UpdateBaseModel):
+class UpdateTypeSchema(UpdateBaseModel, CreateTypeSchema):
     pass
 
-class TypeSchema(UpdateTypeSchema, IdResponseSchema):
+class TypeSchema(IdResponseSchema, UpdateTypeSchema):
     pass

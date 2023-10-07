@@ -28,18 +28,18 @@ class CreateTourCommentSchema(TourMixinBaseModel, CreateBaseModel):
     user_id: int
     comment_text: str
     rating: float | None
-    media: list
+    media: list[UploadFile] | None = Field(None, exclude=True)
     parent_comment_id: int | None
 
 
 
 #############################
-class UpdateTourCommentSchema(CreateTourCommentSchema, UpdateBaseModel):
+class UpdateTourCommentSchema(UpdateBaseModel, CreateTourCommentSchema):
     pass
 
 #############################
 
-class TourCommentReplySchema(UpdateBaseModel, IdResponseSchema):
+class TourCommentReplySchema(IdResponseSchema, UpdateBaseModel):
     user: CustomUserSchema
     parent_comment_id: int
     comment_text: str

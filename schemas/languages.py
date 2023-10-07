@@ -4,7 +4,7 @@ from schemas import  CreateBaseModel, UpdateBaseModel, IdResponseSchema
 class CreateLanguageSchema(CreateBaseModel):
     name: Union[dict[str, str], str]
 
-class UpdateLanguageSchema(CreateLanguageSchema, UpdateBaseModel):
+class UpdateLanguageSchema(UpdateBaseModel, CreateLanguageSchema):
     pass
 
 class LanguageSchema(UpdateLanguageSchema, IdResponseSchema):

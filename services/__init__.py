@@ -25,6 +25,8 @@ from services.blogs import blogs_service
 
 from services.support_questions import support_questions_service
 
+from services.sold_tours import sold_tours_service
+
 # from services.tours import ToursService
 # from services.tourprices import TourPricesService
 # from services.tour_activities import TourActivitiesService

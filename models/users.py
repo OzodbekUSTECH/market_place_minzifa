@@ -24,6 +24,23 @@ class User(BaseTable):
     is_banned: Mapped[bool] = mapped_column(default=False, server_default="false")
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
 
+    @hybrid_property
+    def rating(self):
+        total_rating = 0
+        total_comments_with_rating = 0
+
+        if self.tours:
+            for tour in self.tours:
+                total_rating += tour.rating # Учтем максимальное значение рейтинга
+                total_comments_with_rating += tour.length_comments_with_rating
+
+        if total_comments_with_rating == 0:
+            return 1  # Возвращаем значение по умолчанию (1) если нет комментариев с рейтингом
+        else:
+            return round(total_rating / total_comments_with_rating, 2)
+
+
+
     role: Mapped["Role"] = relationship(back_populates="users", lazy="selectin")
 
     travel_expert: Mapped["User"] = relationship(
@@ -44,22 +61,7 @@ class User(BaseTable):
     )
     tours: Mapped[list["Tour"]] = relationship(back_populates="user", lazy="subquery")
     
-    # @hybrid_property
-    # def rating(self):
-        
-    #     if self.tours:
-    #         all_ratings = []
-            
-    #         for tour in self.tours:
-    #             for comment in tour.tour_comments:
-    #                 if not comment.is_replied:
-    #                     all_ratings.append(comment.rating)
-    #         if all_ratings:
-    #             return sum(all_ratings) / len(all_ratings)
-    #     return 1
     
     
-    # role: Mapped["Role"] = relationship(back_populates="users", lazy="subquery")
-    # favorite_tours: Mapped[list["FavoriteTours"]] = relationship(cascade="all, delete-orphan", lazy="subquery")
-    # tours: Mapped[list["Tour"]] = relationship(back_populates="user", lazy="subquery")
+    
     

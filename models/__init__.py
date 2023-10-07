@@ -36,6 +36,8 @@ from models.blog_countries import BlogCountry
 
 from models.support_questions import QuestionDoc, SupportQuestion
 
+from models.sold_tours import SoldTour
+
 # from models.tours import Tour, IPTourView, IPAndToursView
 # from models.tourprices import TourPrice
 # from models.tour_activities import TourActivity

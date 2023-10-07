@@ -8,11 +8,12 @@ datetime_field = Field(example=datetime.now().strftime("%d.%m.%Y %H:%M:%S"), def
 
 class IdResponseSchema(BaseModel):
     id: int
+    created_at: str
 
 
 class CreateBaseModel(BaseModel):
     created_at: str = datetime_field
 
-
-class UpdateBaseModel(CreateBaseModel):
+class UpdateBaseModel(BaseModel):
+    created_at: str = Field(None , exclude=True)
     updated_at: str | None = datetime_field

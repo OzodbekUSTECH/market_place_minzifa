@@ -6,9 +6,9 @@ class CreateTourStatusSchema(CreateBaseModel):
     name: Union[dict[str, str], str]
 
 
-class UpdateTourStatusSchema(CreateTourStatusSchema, UpdateBaseModel):
+class UpdateTourStatusSchema(UpdateBaseModel, CreateTourStatusSchema):
     pass
 
 
-class TourStatusSchema(UpdateTourStatusSchema, IdResponseSchema):
+class TourStatusSchema(IdResponseSchema, UpdateTourStatusSchema):
     pass

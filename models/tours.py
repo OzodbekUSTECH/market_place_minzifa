@@ -20,7 +20,8 @@ if TYPE_CHECKING:
         Accommodation,
         Country,
         Region,
-        Currency
+        Currency,
+        TourComment
     )
 
 
@@ -100,6 +101,30 @@ class Tour(BaseTable):
     @hybrid_property
     def region_ids(self) -> list[int]:
         return [region.id for region in self.regions]
+    
+
+
+    @hybrid_property
+    def rating(self) -> int | float:
+        default = 0
+        if self.comments:
+            for comment in self.comments:
+                if comment.rating:
+                    default += comment.rating
+
+        return default
+    
+    @hybrid_property
+    def length_comments_with_rating(self) -> int:
+        default = 0
+        if self.comments:
+            for comment in self.comments:
+                if comment.rating:
+                    default += 1
+        return default
+    
+   
+
 
     user: Mapped["User"] = relationship(back_populates="tours", lazy="subquery")
     status: Mapped["TourStatus"] = relationship(lazy="subquery")
@@ -120,6 +145,7 @@ class Tour(BaseTable):
             cascade="all, delete",
             overlaps="price_instance"  # Add this parameter
         )
+    comments: Mapped[list["TourComment"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     # views: Mapped[list["IPAndToursView"]] = relationship(cascade="all, delete_orphan", lazy="subquery")
     # activities: Mapped[list["models.Activity"]] = relationship(back_populates="tour", cascade="all, delete_orphan", lazy="subquery")
     # tour_comments: Mapped[list["models.TourComment"]] = relationship(back_populates="tours", lazy="subquery")

@@ -11,7 +11,7 @@ class CreateCountrySchema(CreateBaseModel):
     filename: UploadFile | None
 
 
-class UpdateCountrySchema(CreateCountrySchema, UpdateBaseModel):
+class UpdateCountrySchema(UpdateBaseModel, CreateCountrySchema):
     pass
 
 

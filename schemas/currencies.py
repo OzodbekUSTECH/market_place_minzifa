@@ -6,7 +6,7 @@ class CreateCurrencySchema(CreateBaseModel):
     symbol: str
     exchange_rate: float | None
 
-class UpdateCurrencySchema(CreateCurrencySchema, UpdateBaseModel):
+class UpdateCurrencySchema(UpdateBaseModel, CreateCurrencySchema):
     pass
 
 class CurrencySchema(UpdateCurrencySchema, IdResponseSchema):

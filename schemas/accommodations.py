@@ -4,8 +4,8 @@ from typing import Union
 class CreateAccommodationSchema(CreateBaseModel):
     name: Union[dict[str, str], str]
 
-class UpdateAccommodationSchema(CreateAccommodationSchema, UpdateBaseModel):
+class UpdateAccommodationSchema(UpdateBaseModel, CreateAccommodationSchema):
     pass
 
-class AccommodationSchema(UpdateAccommodationSchema, IdResponseSchema):
+class AccommodationSchema(IdResponseSchema, UpdateAccommodationSchema):
     pass
