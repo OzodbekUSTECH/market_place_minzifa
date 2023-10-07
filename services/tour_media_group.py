@@ -1,4 +1,5 @@
 from database import UnitOfWork
+from schemas.tour_media_group import CreateTourMediaSchema
 from utils.exceptions import CustomExceptions
 import models
 from fastapi import UploadFile
@@ -16,10 +17,11 @@ class TourMediaGroupService:
         async with self.uow:
             response = []
             for filename in filenames:
-                media_dict = {
-                    "tour_id": tour_id,
-                    "filename": filename
-                }
+                media_dict = CreateTourMediaSchema(
+                    tour_id=tour_id,
+                    filename=filename
+                ).model_dump
+                
                 tour_media = await self.uow.tour_media_group.create(media_dict)
                 response.append(tour_media)
             
