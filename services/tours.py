@@ -7,6 +7,7 @@ from schemas.tour_accommodations import CreateTourAccommodationSchema
 from schemas.tour_countries import CreateTourCountrySchema
 from schemas.tour_regions import CreateTourRegionSchema
 from schemas.tour_prices import CreateTourPriceSchema
+from schemas.tour_days import CreateTourDaySchema, UpdateTourDaySchema
 from repositories import paginate
 import models
 from database import UnitOfWork
@@ -35,6 +36,16 @@ class ToursService:
             
             data_list = await self._create_update_prices(tour, tour_data)
             await self.uow.tour_prices.bulk_create(data_list)
+            
+            await self._bulk_create(
+                data_list=[CreateTourDaySchema(
+                    tour_id=tour.id,
+                    day=tour_day.day,
+                    name=tour_day.name,
+                    description=tour_day.description
+                ).model_dump() for tour_day in tour_data.days],
+                bulk_create_func=self.uow.tour_days.bulk_create
+            )
 
             # Создайте список словарей для категорий
             # await self._bulk_create(
@@ -125,6 +136,26 @@ class ToursService:
         for item_id in items_to_remove:
             await remove_item_func(item_id)
 
+    async def _update_tour_days(self,tour: models.Tour, tour_data: UpdateTourSchema) -> None:
+        for tour_day in tour_data.days:
+            existing_tour_day: models.TourDay = await self.uow.tour_days.get_one_by(tour_id = tour.id, day=tour_day.day)
+            if not existing_tour_day:
+                tour_day_dict = CreateTourDaySchema(
+                    tour_id=tour.id,
+                    day=tour_day.day,
+                    name=tour_day.name,
+                    description=tour_day.description,
+                ).model_dump()
+                await self.uow.tour_days.create(tour_day_dict)
+            else:
+                tour_day_dict = UpdateTourDaySchema(
+                    tour_id=tour.id,
+                    day=tour_day.day,
+                    name=tour_day.name,
+                    description=tour_day.description,
+                ).model_dump()
+                await self.uow.tour_days.update(existing_tour_day.id, tour_day_dict)
+
     async def update_tour(self, id: int, tour_data: UpdateTourSchema) -> models.Tour:
         async with self.uow:
             existing_tour: models.Tour = await self.uow.tours.get_by_id(id)
@@ -132,7 +163,8 @@ class ToursService:
             if not existing_tour:
                 raise CustomExceptions.not_found()
             
-            await self._create_update_prices(existing_tour, tour_data, update_mode=True)
+            await self._update_tour_days(existing_tour, tour_data)
+            
 
             # await self._update_items(
             #     set(existing_tour.category_ids), 

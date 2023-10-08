@@ -13,8 +13,12 @@ from schemas.accommodations import AccommodationSchema
 from schemas.countries import CountrySchema
 from schemas.regions import RegionSchema
 from schemas.users import UserSchema
+from schemas.tour_days import TourDaySchema
 
-
+class CustomCreateTourDaySchema(BaseModel):
+    day: int
+    name: dict[str, str]
+    description: dict[str, str]
 
 class CustomTourPriceSchema(BaseModel):
     currency_id: int
@@ -57,6 +61,11 @@ class CreateTourSchema(CreateBaseModel):
     main_type_id: int
 
     is_allowed_individually: bool
+
+    included_in_price: Union[dict[str, str], str]
+    not_included_in_price: Union[dict[str, str], str]
+
+    days: list[CustomCreateTourDaySchema] = Field(exclude=True)
     
     # additional_type_ids: list[int] = Field(exclude=True)
 
@@ -109,6 +118,8 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     amount_countries: int
     amount_regions: int
     has_discount: bool
+
+    days: list[TourDaySchema]
     
 
 
@@ -132,3 +143,4 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     discount_start_date: str | None = Field(None, exclude=True)
     discount_end_date: str | None = Field(None, exclude=True)
     
+    # tour_days: list | None = Field(None, exclude=True)

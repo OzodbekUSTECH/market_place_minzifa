@@ -1,5 +1,5 @@
 from models import BaseTable
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -21,7 +21,8 @@ if TYPE_CHECKING:
         Country,
         Region,
         Currency,
-        TourComment
+        TourComment,
+        TourDay
     )
 
 
@@ -55,6 +56,9 @@ class Tour(BaseTable):
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
 
     is_allowed_individually: Mapped[bool] = mapped_column(default=False, server_default="false")
+
+    included_in_price: Mapped[dict] = mapped_column(JSONB)
+    not_included_in_price: Mapped[dict] = mapped_column(JSONB)
     
     @hybrid_property
     def total_free_places(self) -> int:
@@ -163,6 +167,7 @@ class Tour(BaseTable):
             overlaps="price_instance"  # Add this parameter
         )
     comments: Mapped[list["TourComment"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
+    days: Mapped[list["TourDay"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     # views: Mapped[list["IPAndToursView"]] = relationship(cascade="all, delete_orphan", lazy="subquery")
     # activities: Mapped[list["models.Activity"]] = relationship(back_populates="tour", cascade="all, delete_orphan", lazy="subquery")
     # tour_comments: Mapped[list["models.TourComment"]] = relationship(back_populates="tours", lazy="subquery")
