@@ -20,6 +20,7 @@ from services.tour_activity_levels import tour_activity_levels_service
 from services.tours import tours_service
 from services.tour_media_group import tour_media_group_service
 from services.tour_comments import tour_comments_service
+from services.tour_days import tour_days_service
 
 from services.blogs import blogs_service
 
@@ -28,6 +29,8 @@ from services.support_questions import support_questions_service
 from services.sold_tours import sold_tours_service
 
 from services.statistics_of_views import statistics_of_views_service
+
+
 
 # from services.tours import ToursService
 # from services.tourprices import TourPricesService

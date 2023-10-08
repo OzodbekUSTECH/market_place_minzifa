@@ -17,6 +17,7 @@ from api.routers.tour_statuses import router as tour_statuses_router
 from api.routers.tour_children_ages import router as tour_children_ages_router
 from api.routers.tour_activity_levels import router as tour_activity_levels_router
 from api.routers.tours import router as tours_router
+from api.routers.tour_days import router as tour_days_router
 from api.routers.tour_media_group import router as tour_media_group_router
 from api.routers.tour_comments import router as tour_comments_router
 
@@ -55,6 +56,7 @@ all_routers = [
     tour_children_ages_router,
     tour_activity_levels_router,
     tours_router,
+    tour_days_router,
     tour_media_group_router,
     tour_comments_router,
 
