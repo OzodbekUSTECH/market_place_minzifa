@@ -1,4 +1,4 @@
-from pydantic import field_validator, Field, ConfigDict, BaseModel
+from pydantic import Field, BaseModel
 from typing import Union
 from schemas import CreateBaseModel, UpdateBaseModel, IdResponseSchema
 from schemas.tour_media_group import TourMediaSchema
@@ -14,11 +14,9 @@ from schemas.countries import CountrySchema
 from schemas.regions import RegionSchema
 from schemas.users import UserSchema
 from schemas.tour_days import TourDaySchema
+from schemas.tour_hotels import TourHotelSchema
 
-class CustomCreateTourDaySchema(BaseModel):
-    day: int
-    name: dict[str, str]
-    description: dict[str, str]
+
 
 class CustomTourPriceSchema(BaseModel):
     currency_id: int
@@ -65,7 +63,6 @@ class CreateTourSchema(CreateBaseModel):
     included_in_price: Union[dict[str, str], str]
     not_included_in_price: Union[dict[str, str], str]
 
-    days: list[CustomCreateTourDaySchema] = Field(exclude=True)
     
     # additional_type_ids: list[int] = Field(exclude=True)
 
@@ -120,6 +117,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     has_discount: bool
 
     days: list[TourDaySchema]
+    hotels: list[TourHotelSchema]
     
 
 

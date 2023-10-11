@@ -40,6 +40,9 @@ class UnitOfWork:
     tour_regions: Type[repositories.TourRegionsRepository]
     tour_prices: Type[repositories.TourPricesRepository]
     tour_days: Type[repositories.TourDaysRepository]
+    tour_day_media_groups: Type[repositories.TourDayMediaGroupsRepository]
+    tour_hotels: Type[repositories.TourHotelsRepository]
+    tour_hotel_media_groups: Type[repositories.TourHotelMediaGroupsRepository]
 
     tour_comments: Type[repositories.TourCommentsRepository]
     tour_comments_media: Type[repositories.TourCommentsMediaRepository]
@@ -100,6 +103,9 @@ class UnitOfWork:
         self.tour_regions = repositories.TourRegionsRepository(self.session, model=models.TourRegion)
         self.tour_prices = repositories.TourPricesRepository(self.session, model=models.TourPrice)
         self.tour_days = repositories.TourDaysRepository(self.session, model=models.TourDay)
+        self.tour_day_media_groups = repositories.TourDayMediaGroupsRepository(self.session, model=models.TourDayMediaGroup)
+        self.tour_hotels = repositories.TourHotelsRepository(self.session, model=models.TourHotel)
+        self.tour_hotel_media_groups = repositories.TourHotelMediaGroupsRepository(self.session, model=models.TourHotelMediaGroup)
 
 
         self.tour_comments = repositories.TourCommentsRepository(self.session, model=models.TourComment)

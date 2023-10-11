@@ -22,7 +22,8 @@ if TYPE_CHECKING:
         Region,
         Currency,
         TourComment,
-        TourDay
+        TourDay,
+        TourHotel
     )
 
 
@@ -168,6 +169,7 @@ class Tour(BaseTable):
         )
     comments: Mapped[list["TourComment"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     days: Mapped[list["TourDay"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
+    hotels: Mapped[list["TourHotel"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     # views: Mapped[list["IPAndToursView"]] = relationship(cascade="all, delete_orphan", lazy="subquery")
     # activities: Mapped[list["models.Activity"]] = relationship(back_populates="tour", cascade="all, delete_orphan", lazy="subquery")
     # tour_comments: Mapped[list["models.TourComment"]] = relationship(back_populates="tours", lazy="subquery")

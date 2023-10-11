@@ -27,7 +27,8 @@ from models.tour_accommodations import TourAccommodation
 from models.tour_countries import TourCountry
 from models.tour_regions import TourRegion
 from models.tour_prices import TourPrice
-from models.tour_days import TourDay
+from models.tour_days import TourDay, TourDayMediaGroup
+from models.tour_hotels import TourHotel, TourHotelMediaGroup
 
 
 from models.tour_comments import TourComment, TourCommentMedia

@@ -17,8 +17,9 @@ from api.routers.tour_statuses import router as tour_statuses_router
 from api.routers.tour_children_ages import router as tour_children_ages_router
 from api.routers.tour_activity_levels import router as tour_activity_levels_router
 from api.routers.tours import router as tours_router
-from api.routers.tour_days import router as tour_days_router
 from api.routers.tour_media_group import router as tour_media_group_router
+from api.routers.tour_days import router as tour_days_router
+from api.routers.tour_hotels import router as tour_hotels_router
 from api.routers.tour_comments import router as tour_comments_router
 
 from api.routers.blogs import router as blogs_router
@@ -29,13 +30,7 @@ from api.routers.sold_tours import router as sold_tours_router
 
 from api.routers.statistics_of_views import router as statistics_of_views_router
 
-# from api.routers.tours import router as tour_router
-# from api.routers.tourprices import router as tour_prices_router
-# from api.routers.tour_activities import router as tour_activities_router
-# from api.routers.favorite_tours import router as tour_favorites_router
-# from api.routers.tour_comments import router as tour_comments_router
-# from api.routers.tour_comments_media import router as tour_comments_media_router
-# from api.routers.tour_languages import router as tour_languages_router
+
 all_routers = [
     auth_router,
     users_router,
@@ -56,9 +51,11 @@ all_routers = [
     tour_children_ages_router,
     tour_activity_levels_router,
     tours_router,
-    tour_days_router,
     tour_media_group_router,
+    tour_days_router,
+    tour_hotels_router,
     tour_comments_router,
+
 
     blogs_router,
 

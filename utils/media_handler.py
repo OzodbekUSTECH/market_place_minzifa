@@ -18,6 +18,8 @@ class MediaHandler:
     tours_media_dir = settings.tours_media_dir
     blogs_media_dir = settings.blogs_media_dir
     countries_media_dir = settings.countries_media_dir
+    tour_days_media_dir = settings.tour_days_media_dir
+    tour_hotels_media_dir = settings.tour_hotels_media_dir
 
 
 
