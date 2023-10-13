@@ -22,6 +22,7 @@ from services.tour_media_group import tour_media_group_service
 from services.tour_comments import tour_comments_service
 from services.tour_days import tour_days_service
 from services.tour_hotels import tour_hotels_service
+from services.tour_hotel_types import tour_hotel_types_service
 
 from services.blogs import blogs_service
 

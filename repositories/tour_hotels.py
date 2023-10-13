@@ -6,7 +6,11 @@ class TourHotelsRepository(BaseRepository):
 class TourHotelMediaGroupsRepository(BaseRepository):
     ...
 
+class TourHotelTypesRepository(BaseRepository):
+    ...
 
+
+        
         
 
         

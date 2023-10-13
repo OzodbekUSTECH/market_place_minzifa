@@ -70,7 +70,7 @@ class CreateTourSchema(CreateBaseModel):
 
     activity_ids: list[int] = Field(exclude=True)
 
-    accommodation_ids: list[int] = Field(exclude=True)
+    # accommodation_ids: list[int] = Field(exclude=True)
 
     country_ids: list[int] = Field(exclude=True)
 
@@ -104,7 +104,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     # additional_types: list[TypeSchema]
     languages: list[LanguageSchema]
     activities: list[ActivitySchema]
-    accommodations: list[AccommodationSchema]
+    # accommodations: list[AccommodationSchema]
     countries: list[CountrySchema]
     regions: list[RegionSchema]
     prices: list[CustomTourPriceSchema]
