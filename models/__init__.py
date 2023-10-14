@@ -30,6 +30,7 @@ from models.tour_prices import TourPrice
 
 from models.tour_days import TourDay, TourDayMediaGroup
 from models.tour_hotels import TourHotel, TourHotelMediaGroup, TourHotelType
+from models.tour_imporants import TourImportant
 
 
 from models.tour_comments import TourComment, TourCommentMedia

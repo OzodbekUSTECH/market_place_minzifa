@@ -21,6 +21,7 @@ from api.routers.tour_media_group import router as tour_media_group_router
 from api.routers.tour_days import router as tour_days_router
 from api.routers.tour_hotels import router as tour_hotels_router
 from api.routers.tour_hotel_types import router as tour_hotel_types_router
+from api.routers.tour_importants import router as tour_importants_router
 from api.routers.tour_comments import router as tour_comments_router
 
 from api.routers.blogs import router as blogs_router
@@ -41,7 +42,7 @@ all_routers = [
     currencies_router,
     activities_router,
     languages_router,
-    # accommodations_router,
+    accommodations_router,
     categories_router,
     types_router,
     countries_router,
@@ -56,6 +57,7 @@ all_routers = [
     tour_days_router,
     tour_hotels_router,
     tour_hotel_types_router,
+    tour_importants_router,
     tour_comments_router,
 
 

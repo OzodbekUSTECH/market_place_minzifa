@@ -45,6 +45,7 @@ class UnitOfWork:
     tour_hotel_media_groups: Type[repositories.TourHotelMediaGroupsRepository]
 
     tour_hotel_types: Type[repositories.TourHotelTypesRepository]
+    tour_importants: Type[repositories.TourImportantsRepository]
 
     tour_comments: Type[repositories.TourCommentsRepository]
     tour_comments_media: Type[repositories.TourCommentsMediaRepository]
@@ -110,6 +111,8 @@ class UnitOfWork:
         self.tour_hotel_media_groups = repositories.TourHotelMediaGroupsRepository(self.session, model=models.TourHotelMediaGroup)
 
         self.tour_hotel_types = repositories.TourHotelTypesRepository(self.session, model=models.TourHotelType)
+        self.tour_importants = repositories.TourImportantsRepository(self.session, model=models.TourImportant)
+        
 
 
         self.tour_comments = repositories.TourCommentsRepository(self.session, model=models.TourComment)

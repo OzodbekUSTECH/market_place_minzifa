@@ -16,7 +16,7 @@ class TourHotel(TourMixin, BaseTable):
 
     
     media: Mapped[list["TourHotelMediaGroup"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
-    hotel_type: Mapped["TourHotelType"] = relationship(lazy="subquery", cascade="all, delete-orphan")
+    hotel_type: Mapped["TourHotelType"] = relationship(lazy="subquery", single_parent=True, cascade="all, delete-orphan")
 
 class TourHotelMediaGroup(BaseTable):
     __tablename__ = "tour_hotel_media_groups"

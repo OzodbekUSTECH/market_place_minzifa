@@ -15,6 +15,7 @@ from schemas.regions import RegionSchema
 from schemas.users import UserSchema
 from schemas.tour_days import TourDaySchema
 from schemas.tour_hotels import TourHotelSchema
+from schemas.tour_importants import TourImportantSchema
 
 
 
@@ -60,17 +61,17 @@ class CreateTourSchema(CreateBaseModel):
 
     is_allowed_individually: bool
 
-    included_in_price: Union[dict[str, str], str]
-    not_included_in_price: Union[dict[str, str], str]
+    included_in_price: Union[list[dict[str, str]], list[str]]
+    not_included_in_price: Union[list[dict[str, str]], list[str]]
 
-    
+
     # additional_type_ids: list[int] = Field(exclude=True)
 
     language_ids: list[int] = Field(exclude=True)
 
     activity_ids: list[int] = Field(exclude=True)
 
-    # accommodation_ids: list[int] = Field(exclude=True)
+    accommodation_ids: list[int] = Field(exclude=True)
 
     country_ids: list[int] = Field(exclude=True)
 
@@ -104,7 +105,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     # additional_types: list[TypeSchema]
     languages: list[LanguageSchema]
     activities: list[ActivitySchema]
-    # accommodations: list[AccommodationSchema]
+    accommodations: list[AccommodationSchema]
     countries: list[CountrySchema]
     regions: list[RegionSchema]
     prices: list[CustomTourPriceSchema]
@@ -118,6 +119,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
 
     days: list[TourDaySchema]
     hotels: list[TourHotelSchema]
+    importants: list[TourImportantSchema]
     
 
 

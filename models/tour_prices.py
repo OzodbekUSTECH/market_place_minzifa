@@ -18,7 +18,7 @@ class TourPrice(TourMixin, BaseTable):
 
     @hybrid_property
     def price_for_day(self) -> int:
-        return self.price // self.tour.duration
+        return round(self.price // self.tour.duration)
         
     tour: Mapped["Tour"] = relationship(
         lazy="immediate",

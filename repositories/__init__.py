@@ -29,6 +29,7 @@ from repositories.tour_prices import TourPricesRepository
 
 from repositories.tour_days import TourDaysRepository, TourDayMediaGroupsRepository
 from repositories.tour_hotels import TourHotelsRepository, TourHotelMediaGroupsRepository, TourHotelTypesRepository
+from repositories.tour_importants import TourImportantsRepository
 
 
 

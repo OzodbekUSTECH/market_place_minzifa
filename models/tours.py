@@ -1,7 +1,7 @@
 from models import BaseTable
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime
 from typing import TYPE_CHECKING
@@ -23,7 +23,8 @@ if TYPE_CHECKING:
         Currency,
         TourComment,
         TourDay,
-        TourHotel
+        TourHotel,
+        TourImportant
     )
 
 
@@ -58,8 +59,8 @@ class Tour(BaseTable):
 
     is_allowed_individually: Mapped[bool] = mapped_column(default=False, server_default="false")
 
-    included_in_price: Mapped[dict] = mapped_column(JSONB)
-    not_included_in_price: Mapped[dict] = mapped_column(JSONB)
+    included_in_price: Mapped[list[dict]] = mapped_column(JSONB)
+    not_included_in_price: Mapped[list[dict]] = mapped_column(JSONB)
     
     @hybrid_property
     def total_free_places(self) -> int:
@@ -99,9 +100,9 @@ class Tour(BaseTable):
     def activity_ids(self) -> list[int]:
         return [activity.id for activity in self.activities]
     
-    # @hybrid_property
-    # def accommodation_ids(self) -> list[int]:
-    #     return [accommodation.id for accommodation in self.accommodations]
+    @hybrid_property
+    def accommodation_ids(self) -> list[int]:
+        return [accommodation.id for accommodation in self.accommodations]
     
     @hybrid_property
     def country_ids(self) -> list[int]:
@@ -158,7 +159,7 @@ class Tour(BaseTable):
     # additional_types: Mapped[list["Type"]] = relationship(secondary="tour_additional_types", lazy="subquery",cascade="all, delete") 
     languages: Mapped[list["Language"]] = relationship(secondary="tour_languages", lazy="subquery",cascade="all, delete")
     activities: Mapped[list["Activity"]] = relationship(secondary="tour_activities", lazy="subquery",cascade="all, delete")
-    # accommodations: Mapped[list["Accommodation"]] = relationship(secondary="tour_accommodations", lazy="subquery",cascade="all, delete")
+    accommodations: Mapped[list["Accommodation"]] = relationship(secondary="tour_accommodations", lazy="subquery",cascade="all, delete")
     countries: Mapped[list["Country"]] = relationship(secondary="tour_countries", lazy="subquery",cascade="all, delete")
     regions: Mapped[list["Region"]] = relationship(secondary="tour_regions", lazy="subquery",cascade="all, delete")
     prices: Mapped[list["Currency"]] = relationship(
@@ -170,7 +171,7 @@ class Tour(BaseTable):
     comments: Mapped[list["TourComment"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     days: Mapped[list["TourDay"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     hotels: Mapped[list["TourHotel"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
-    
+    importants: Mapped[list["TourImportant"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     
     # views: Mapped[list["IPAndToursView"]] = relationship(cascade="all, delete_orphan", lazy="subquery")
     # activities: Mapped[list["models.Activity"]] = relationship(back_populates="tour", cascade="all, delete_orphan", lazy="subquery")
