@@ -40,8 +40,8 @@ class CreateTourSchema(CreateBaseModel):
     user_id: int
     status_id: int
     
-    age_group_from: int = Field(ge=18, le=100)
-    age_group_to: int = Field(ge=18, le=100)
+    age_group_from: int = Field(le=100)
+    age_group_to: int = Field(le=100)
 
     children_age_id: int
     activity_level_id: int
