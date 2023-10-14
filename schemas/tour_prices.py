@@ -3,7 +3,7 @@ from schemas import CreateBaseModel, TourMixinBaseModel
 
 class CreateTourPriceSchema(TourMixinBaseModel, CreateBaseModel):
     currency_id: int
-    price: int
+    price: int | float
     discount_percentage: float | None = None
     new_price: float | None = None
     discount_start_date: str | None
