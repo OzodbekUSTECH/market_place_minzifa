@@ -21,6 +21,7 @@ class CreateTourDaySchema(TourMixinBaseModel, CreateBaseModel):
     name: Union[dict[str, str], str]
     description: Union[dict[str, str], str]
     region_id: int
+    photos: list[UploadFile] = Field(None, exclude=True)
 
 class UpdateTourDaySchema(UpdateBaseModel, CreateTourDaySchema):
     pass

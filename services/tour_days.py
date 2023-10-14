@@ -14,7 +14,16 @@ class TourDaysService:
 
     async def create_tour_day(self, day_data: CreateTourDaySchema) -> models.TourDay:
         async with self.uow:
-            tour_day = await self.uow.tour_days.create(day_data.model_dump())
+            tour_day:models.TourDay = await self.uow.tour_days.create(day_data.model_dump())
+            if day_data.photos:
+                filenames = await MediaHandler.save_media(day_data.photos, MediaHandler.tour_days_media_dir)
+                await self.uow.tour_day_media_groups.bulk_create(
+                    data_list=[CreateTourDayMediaGroup(
+                        tour_day_id=tour_day.id,
+                        filename = filename
+                    ).model_dump() for filename in filenames]
+                )
+                
             await self.uow.commit()
             return tour_day
 

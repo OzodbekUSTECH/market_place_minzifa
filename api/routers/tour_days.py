@@ -1,6 +1,8 @@
 
 from schemas import IdResponseSchema
-from fastapi import APIRouter, UploadFile
+from fastapi import APIRouter, UploadFile, File, Form
+import json
+from utils.exceptions import CustomExceptions
 from services import tour_days_service
 from schemas.tour_days import (
     CreateTourDaySchema,
@@ -14,8 +16,34 @@ router = APIRouter(
 
 @router.post('', response_model=IdResponseSchema)
 async def create_tour_day(
-    day_data: CreateTourDaySchema
+    day: int = Form(),
+    name: str = Form(),
+    description: str = Form(),
+    region_id: str = Form(),
+    photo_1: UploadFile = File(None),
+    photo_2: UploadFile = File(None),
+    photo_3: UploadFile = File(None)
 ):
+    """
+    For example:
+    - form data name: {"en": "string", "ru": "string"}
+    - form data description: {"en": "string", "ru": "string"}
+    """
+    try:
+        name_dict = json.loads(name)
+        description_dict = json.loads(description)
+        
+    except:
+        raise CustomExceptions.conflict("Invalid JSON format for title or description field, should be dict") 
+    
+    photos = [file for file in [photo_1, photo_2, photo_3] if file is not None]
+    day_data = CreateTourDaySchema(
+        day = day,
+        name=name_dict,
+        description=description_dict,
+        region_id=region_id,
+        photos=photos
+    )
     return await tour_days_service.create_tour_day(day_data)
 
 @router.post('/media')

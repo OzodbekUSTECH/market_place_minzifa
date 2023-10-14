@@ -1,5 +1,7 @@
 from schemas import IdResponseSchema
-from fastapi import APIRouter, UploadFile
+from fastapi import APIRouter, UploadFile, File, Form
+import json
+from utils.exceptions import CustomExceptions
 from services import tour_hotels_service
 from schemas.tour_hotels import CreateTourHotelSchema, UpdateTourHotelSchema
 
@@ -10,7 +12,30 @@ router = APIRouter(
 
 
 @router.post("", response_model=IdResponseSchema)
-async def create_tour_hotel(hotel_data: CreateTourHotelSchema):
+async def create_tour_hotel(
+    name: str = Form(),
+    short_description: str | None = Form(None),
+    stars: int | None = Form(None),
+    photos: list[UploadFile] = File()
+):
+    """
+    For example:
+    - form data name: {"en": "string", "ru": "string"}
+    - form data short_description: {"en": "string", "ru": "string"}
+    """
+    try:
+        name_dict = json.loads(name)
+        short_description_dict = json.loads(short_description)
+        
+    except:
+        raise CustomExceptions.conflict("Invalid JSON format for title or description field, should be dict") 
+    
+    hotel_data = CreateTourHotelSchema(
+        name=name_dict,
+        short_description=short_description_dict,
+        stars=stars,
+        photos=photos,
+    )
     return await tour_hotels_service.create_hotel(hotel_data)
 
 
