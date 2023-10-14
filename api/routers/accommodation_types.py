@@ -15,7 +15,7 @@ router = APIRouter(
 
 @router.post('', response_model=IdResponseSchema)
 async def create_accommodation_type(
-    type_data: CreateAccommodationTypeSchema, response
+    type_data: CreateAccommodationTypeSchema
 ):
     return await accommodation_types_service.create_type(type_data)
 
