@@ -23,9 +23,13 @@ async def create_tour_comment(
     user_id: int = Form(),
     comment_text: str = Form(),
     rating: float | None = Form(None, ge=1, le=5),
-    media: list[UploadFile] = File(None),
+    photo_1: UploadFile = File(None),
+    photo_2: UploadFile = File(None),
+    photo_3: UploadFile = File(None),
     parent_comment_id: int = Form(None),
 ):
+    media = [file for file in [photo_1, photo_2, photo_3] if file is not None]
+
     comment_data = CreateTourCommentSchema(
         tour_id=tour_id,
         user_id=user_id,
