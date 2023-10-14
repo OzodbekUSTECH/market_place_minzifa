@@ -10,6 +10,7 @@ from schemas.tour_activity_levels import TourActivityLevelSchema
 from schemas.languages import LanguageSchema
 from schemas.activities import ActivitySchema
 from schemas.accommodations import AccommodationSchema
+from schemas.accommodation_types import AccommodationTypeSchema
 from schemas.countries import CountrySchema
 from schemas.regions import RegionSchema
 from schemas.users import UserSchema
@@ -73,6 +74,9 @@ class CreateTourSchema(CreateBaseModel):
 
     accommodation_ids: list[int] = Field(exclude=True)
 
+    accommodation_type_ids: list[int] = Field(exclude=True)
+
+
     country_ids: list[int] = Field(exclude=True)
 
     region_ids: list[int] = Field(exclude=True)
@@ -106,6 +110,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     languages: list[LanguageSchema]
     activities: list[ActivitySchema]
     accommodations: list[AccommodationSchema]
+    accommodation_types: list[AccommodationTypeSchema]
     countries: list[CountrySchema]
     regions: list[RegionSchema]
     prices: list[CustomTourPriceSchema]

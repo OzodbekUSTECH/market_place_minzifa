@@ -25,6 +25,7 @@ class UnitOfWork:
     types: Type[repositories.TypesRepository]
     countries: Type[repositories.CountriesRepository]
     regions: Type[repositories.RegionsRepository]
+    accommodation_types: Type[repositories.AccommodationTypesRepository]
 
     tour_statuses: Type[repositories.TourStatusesRepository]
     tour_children_ages: Type[repositories.TourChildrenAgesRepository]
@@ -36,6 +37,7 @@ class UnitOfWork:
     tour_languages: Type[repositories.TourLanguagesRepository]
     tour_activities: Type[repositories.TourActivitiesRepository]
     tour_accommodations: Type[repositories.TourAccommodationsRepository]
+    tour_accommodation_types: Type[repositories.TourAccommodationTypesRepository]
     tour_countries: Type[repositories.TourCountriesRepository]
     tour_regions: Type[repositories.TourRegionsRepository]
     tour_prices: Type[repositories.TourPricesRepository]
@@ -44,7 +46,6 @@ class UnitOfWork:
     tour_hotels: Type[repositories.TourHotelsRepository]
     tour_hotel_media_groups: Type[repositories.TourHotelMediaGroupsRepository]
 
-    tour_hotel_types: Type[repositories.TourHotelTypesRepository]
     tour_importants: Type[repositories.TourImportantsRepository]
 
     tour_comments: Type[repositories.TourCommentsRepository]
@@ -90,7 +91,7 @@ class UnitOfWork:
         self.types = repositories.TypesRepository(self.session, model=models.Type)
         self.countries = repositories.CountriesRepository(self.session, model= models.Country)
         self.regions = repositories.RegionsRepository(self.session, model=models.Region)
-
+        self.accommodation_types = repositories.AccommodationTypesRepository(self.session, model=models.AccommodationType)
 
         self.tour_statuses = repositories.TourStatusesRepository(self.session, model=models.TourStatus)
         self.tour_children_ages = repositories.TourChildrenAgesRepository(self.session, model=models.TourChildrenAge)
@@ -102,6 +103,7 @@ class UnitOfWork:
         self.tour_languages = repositories.TourLanguagesRepository(self.session, model=models.TourLanguage)
         self.tour_activities = repositories.TourActivitiesRepository(self.session, model=models.TourActivity)
         self.tour_accommodations = repositories.TourAccommodationsRepository(self.session, model=models.TourAccommodation)
+        self.tour_accommodation_types = repositories.TourAccommodationTypesRepository(self.session, model=models.TourAccommodationType)
         self.tour_countries = repositories.TourCountriesRepository(self.session, model=models.TourCountry)
         self.tour_regions = repositories.TourRegionsRepository(self.session, model=models.TourRegion)
         self.tour_prices = repositories.TourPricesRepository(self.session, model=models.TourPrice)
@@ -110,7 +112,6 @@ class UnitOfWork:
         self.tour_hotels = repositories.TourHotelsRepository(self.session, model=models.TourHotel)
         self.tour_hotel_media_groups = repositories.TourHotelMediaGroupsRepository(self.session, model=models.TourHotelMediaGroup)
 
-        self.tour_hotel_types = repositories.TourHotelTypesRepository(self.session, model=models.TourHotelType)
         self.tour_importants = repositories.TourImportantsRepository(self.session, model=models.TourImportant)
         
 

@@ -12,6 +12,7 @@ from models.categories import Category
 from models.types import Type
 from models.countries import Country
 from models.regions import Region
+from models.accommodation_types import AccommodationType
 
 
 from models.tour_statuses import TourStatus
@@ -24,12 +25,13 @@ from models.tour_media_group import TourMedia
 from models.tour_languages import TourLanguage
 from models.tour_activities import TourActivity
 from models.tour_accommodations import TourAccommodation
+from models.tour_accommodation_types import TourAccommodationType
 from models.tour_countries import TourCountry
 from models.tour_regions import TourRegion
 from models.tour_prices import TourPrice
 
 from models.tour_days import TourDay, TourDayMediaGroup
-from models.tour_hotels import TourHotel, TourHotelMediaGroup, TourHotelType
+from models.tour_hotels import TourHotel, TourHotelMediaGroup
 from models.tour_imporants import TourImportant
 
 

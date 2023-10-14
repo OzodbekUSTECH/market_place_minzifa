@@ -11,7 +11,10 @@ from services.categories import categories_service
 from services.types import types_service
 from services.countries import countries_service
 from services.regions import regions_service
-from services.tourprices import tour_prices_service
+from services.accommodation_types import accommodation_types_service
+
+
+
 
 
 from services.tour_statuses import tour_statuses_service
@@ -22,7 +25,7 @@ from services.tour_media_group import tour_media_group_service
 from services.tour_comments import tour_comments_service
 from services.tour_days import tour_days_service
 from services.tour_hotels import tour_hotels_service
-from services.tour_hotel_types import tour_hotel_types_service
+from services.tourprices import tour_prices_service
 from services.tour_importants import tour_importants_service
 
 from services.blogs import blogs_service

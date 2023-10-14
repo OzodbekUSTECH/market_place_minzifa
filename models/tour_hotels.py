@@ -10,13 +10,13 @@ class TourHotel(TourMixin, BaseTable):
     __tablename__ = 'tour_hotels'
     
     name: Mapped[dict] = mapped_column(JSONB)
-    hotel_type_id: Mapped[int] = mapped_column(ForeignKey("tour_hotel_types.id"))
+    # hotel_type_id: Mapped[int] = mapped_column(ForeignKey("tour_hotel_types.id"))
     short_description: Mapped[dict | None] = mapped_column(JSONB)
     stars: Mapped[int | None]
 
     
     media: Mapped[list["TourHotelMediaGroup"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
-    hotel_type: Mapped["TourHotelType"] = relationship(lazy="subquery", single_parent=True, cascade="all, delete-orphan")
+    # hotel_type: Mapped["TourHotelType"] = relationship(lazy="subquery", single_parent=True, cascade="all, delete-orphan")
 
 class TourHotelMediaGroup(BaseTable):
     __tablename__ = "tour_hotel_media_groups"
@@ -28,10 +28,5 @@ class TourHotelMediaGroup(BaseTable):
     def photo_url(self):
         return f"{settings.TOUR_HOTEL_MEDIA_URL}{self.filename}"
     
-################################
-class TourHotelType(BaseTable):
-    __tablename__ = 'tour_hotel_types'
-
-    name: Mapped[dict] = mapped_column(JSONB)
 
 

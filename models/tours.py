@@ -24,7 +24,8 @@ if TYPE_CHECKING:
         TourComment,
         TourDay,
         TourHotel,
-        TourImportant
+        TourImportant,
+        AccommodationType
     )
 
 
@@ -105,6 +106,10 @@ class Tour(BaseTable):
         return [accommodation.id for accommodation in self.accommodations]
     
     @hybrid_property
+    def accommodation_type_ids(self) -> list[int]:
+        return [accommodation_type.id for accommodation_type in self.accommodation_types]
+
+    @hybrid_property
     def country_ids(self) -> list[int]:
         return [country.id for country in self.countries]
     
@@ -160,6 +165,7 @@ class Tour(BaseTable):
     languages: Mapped[list["Language"]] = relationship(secondary="tour_languages", lazy="subquery",cascade="all, delete")
     activities: Mapped[list["Activity"]] = relationship(secondary="tour_activities", lazy="subquery",cascade="all, delete")
     accommodations: Mapped[list["Accommodation"]] = relationship(secondary="tour_accommodations", lazy="subquery",cascade="all, delete")
+    accommodation_types: Mapped[list["AccommodationType"]] = relationship(secondary="tour_accommodation_types", lazy="subquery", cascade="all, delete")
     countries: Mapped[list["Country"]] = relationship(secondary="tour_countries", lazy="subquery",cascade="all, delete")
     regions: Mapped[list["Region"]] = relationship(secondary="tour_regions", lazy="subquery",cascade="all, delete")
     prices: Mapped[list["Currency"]] = relationship(

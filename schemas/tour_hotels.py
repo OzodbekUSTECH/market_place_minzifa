@@ -15,21 +15,12 @@ class TourHotelMediaGroup(IdResponseSchema, CreateTourHotelMediaGroup):
     filename: str = Field(exclude=True)
 ##################################
 
-class CreateTourHotelTypeSchema(CreateBaseModel):
-    name: Union[dict[str, str], str]
-    
-class UpdateTourHotelTypeSchema(UpdateBaseModel, CreateTourHotelTypeSchema):
-    pass
-
-class TourHotelTypeSchema(IdResponseSchema, UpdateTourHotelTypeSchema):
-    pass
 
 ##########################
 class CreateTourHotelSchema(TourMixinBaseModel, CreateBaseModel):
     name: Union[dict[str, str], str]
     short_description: Union[dict[str, str], str, None]
     stars: int | None
-    hotel_type_id: int
 
 class UpdateTourHotelSchema(UpdateBaseModel, CreateTourHotelSchema):
     pass
@@ -37,7 +28,5 @@ class UpdateTourHotelSchema(UpdateBaseModel, CreateTourHotelSchema):
 
 class TourHotelSchema(IdResponseSchema, UpdateTourHotelSchema):
     media: list[TourHotelMediaGroup]
-    hotel_type: TourHotelTypeSchema
 
-    hotel_type_id: int = Field(exclude=True)
     

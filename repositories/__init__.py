@@ -12,6 +12,7 @@ from repositories.categories import CategoriesRepository
 from repositories.types import TypesRepository
 from repositories.countries import CountriesRepository
 from repositories.regions import RegionsRepository
+from repositories.accommodation_types import AccommodationTypesRepository
 
 from repositories.tour_statuses import TourStatusesRepository
 from repositories.tour_children_ages import TourChildrenAgesRepository
@@ -23,12 +24,13 @@ from repositories.tour_media_group import TourMediaGroupRepository
 from repositories.tour_languages import TourLanguagesRepository
 from repositories.tour_activities import TourActivitiesRepository
 from repositories.tour_accommodations import TourAccommodationsRepository
+from repositories.tour_accommodation_types import TourAccommodationTypesRepository
 from repositories.tour_countries import TourCountriesRepository
 from repositories.tour_regions import TourRegionsRepository
 from repositories.tour_prices import TourPricesRepository
 
 from repositories.tour_days import TourDaysRepository, TourDayMediaGroupsRepository
-from repositories.tour_hotels import TourHotelsRepository, TourHotelMediaGroupsRepository, TourHotelTypesRepository
+from repositories.tour_hotels import TourHotelsRepository, TourHotelMediaGroupsRepository
 from repositories.tour_importants import TourImportantsRepository
 
 

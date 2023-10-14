@@ -4,6 +4,7 @@ from schemas.tours import CreateTourSchema, UpdateTourSchema
 from schemas.tour_languages import CreateTourLanguageSchema
 from schemas.tour_activities import CreateTourActivitySchema
 from schemas.tour_accommodations import CreateTourAccommodationSchema
+from schemas.tour_accommodation_types import CreateTourAccommodationTypeSchema
 from schemas.tour_countries import CreateTourCountrySchema
 from schemas.tour_regions import CreateTourRegionSchema
 from schemas.tour_prices import CreateTourPriceSchema
@@ -57,9 +58,15 @@ class ToursService:
                 data_list=[CreateTourActivitySchema(tour_id=tour.id, activity_id=activity_id).model_dump() for activity_id in tour_data.activity_ids],
                 bulk_create_func=self.uow.tour_activities.bulk_create
             )
+
             await self._bulk_create(
                 data_list = [CreateTourAccommodationSchema(tour_id=tour.id, accommodation_id=accommodation_id).model_dump() for accommodation_id in tour_data.accommodation_ids],
                 bulk_create_func=self.uow.tour_accommodations.bulk_create
+            )
+
+            await self._bulk_create(
+                data_list = [CreateTourAccommodationTypeSchema(tour_id=tour.id, accommodation_type_id=accommodation_type_id).model_dump() for accommodation_type_id in tour_data.accommodation_type_ids],
+                bulk_create_func=self.uow.tour_accommodation_types.bulk_create
             )
 
             await self._bulk_create(
@@ -207,6 +214,21 @@ class ToursService:
                 lambda accommodation_id: self.uow.tour_accommodations.delete_by(
                     tour_id=existing_tour.id,
                     accommodation_id=accommodation_id
+                )
+            )
+
+            await self._update_items(
+                set(existing_tour.accommodation_type_ids),
+                set(tour_data.accommodation_type_ids),
+                lambda accommodation_type_id: self.uow.tour_accommodation_types.create(
+                    CreateTourAccommodationTypeSchema(
+                        tour_id=existing_tour.id,
+                        accommodation_type_id=accommodation_type_id
+                    ).model_dump()
+                ),
+                lambda accommodation_type_id: self.uow.tour_accommodation_types.delete_by(
+                    tour_id=existing_tour.id,
+                    accommodation_id=accommodation_type_id
                 )
             )
 
