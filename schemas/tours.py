@@ -79,7 +79,7 @@ class CreateTourSchema(CreateBaseModel):
 
     country_ids: list[int] = Field(exclude=True)
 
-    region_ids: list[int] = Field(exclude=True)
+    region_ids: list[int] | None = Field(None, exclude=True)
 
     currency_id: int = Field(exclude=True)
     price: int = Field(exclude=True)
