@@ -1,6 +1,6 @@
-# from schemas import  CreateBaseModel, TourMixinBaseModel
+from schemas import  CreateBaseModel, TourMixinBaseModel
 
-# class CreateTourAdditionalTypeSchema(TourMixinBaseModel, CreateBaseModel):
+class CreateTourAdditionalTypeSchema(TourMixinBaseModel, CreateBaseModel):
     
-#     type_id: int
+    type_id: int
 

@@ -89,9 +89,9 @@ class Tour(BaseTable):
     # def category_ids(self) -> list[int]:
     #     return [category.id for category in self.categories]
     
-    # @hybrid_property
-    # def additional_type_ids(self) -> list[int]:
-    #     return [additional_type.id for additional_type in self.additional_types]
+    @hybrid_property
+    def additional_type_ids(self) -> list[int]:
+        return [additional_type.id for additional_type in self.additional_types]
     
     @hybrid_property
     def language_ids(self) -> list[int]:
@@ -161,7 +161,7 @@ class Tour(BaseTable):
     category: Mapped["Category"] = relationship(lazy="subquery")
     # categories: Mapped[list["Category"]] = relationship(secondary="tour_categories", lazy="subquery", cascade='all,delete')
     main_type: Mapped["Type"] = relationship(lazy="subquery")
-    # additional_types: Mapped[list["Type"]] = relationship(secondary="tour_additional_types", lazy="subquery",cascade="all, delete") 
+    additional_types: Mapped[list["Type"]] = relationship(secondary="tour_additional_types", lazy="subquery",cascade="all, delete") 
     languages: Mapped[list["Language"]] = relationship(secondary="tour_languages", lazy="subquery",cascade="all, delete")
     activities: Mapped[list["Activity"]] = relationship(secondary="tour_activities", lazy="subquery",cascade="all, delete")
     accommodations: Mapped[list["Accommodation"]] = relationship(secondary="tour_accommodations", lazy="subquery",cascade="all, delete")

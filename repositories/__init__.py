@@ -20,7 +20,7 @@ from repositories.tour_activity_levels import TourActivityLevelsRepository
 from repositories.tours import ToursRepository
 from repositories.tour_media_group import TourMediaGroupRepository
 # from repositories.tour_categories import TourCategoriesRepository
-# from repositories.tour_additional_types import TourAdditionalTypesRepository
+from repositories.tour_additional_types import TourAdditionalTypesRepository
 from repositories.tour_languages import TourLanguagesRepository
 from repositories.tour_activities import TourActivitiesRepository
 from repositories.tour_accommodations import TourAccommodationsRepository

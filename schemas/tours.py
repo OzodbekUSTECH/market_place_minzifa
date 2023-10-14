@@ -66,7 +66,7 @@ class CreateTourSchema(CreateBaseModel):
     not_included_in_price: Union[list[dict[str, str]], list[str]]
 
 
-    # additional_type_ids: list[int] = Field(exclude=True)
+    additional_type_ids: list[int] | None = Field(None, exclude=True)
 
     language_ids: list[int] = Field(exclude=True)
 
@@ -106,7 +106,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     category: CategorySchema
     # categories: list[CategorySchema]
     main_type: TypeSchema
-    # additional_types: list[TypeSchema]
+    additional_types: list[TypeSchema]
     languages: list[LanguageSchema]
     activities: list[ActivitySchema]
     accommodations: list[AccommodationSchema]

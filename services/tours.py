@@ -1,6 +1,6 @@
 from schemas.tours import CreateTourSchema, UpdateTourSchema
 # from schemas.tour_categories import CreateTourCategorySchema
-# from schemas.tour_additional_types import CreateTourAdditionalTypeSchema
+from schemas.tour_additional_types import CreateTourAdditionalTypeSchema
 from schemas.tour_languages import CreateTourLanguageSchema
 from schemas.tour_activities import CreateTourActivitySchema
 from schemas.tour_accommodations import CreateTourAccommodationSchema
@@ -44,10 +44,10 @@ class ToursService:
             #     data_list=[CreateTourCategorySchema(tour_id=tour.id, category_id=category_id).model_dump() for category_id in tour_data.category_ids],
             #     bulk_create_func=self.uow.tour_categories.bulk_create
             # )
-            # await self._bulk_create(
-            #     data_list=[CreateTourAdditionalTypeSchema(tour_id=tour.id, type_id=additional_type_id).model_dump() for additional_type_id in tour_data.additional_type_ids],
-            #     bulk_create_func=self.uow.tour_additional_types.bulk_create
-            # )
+            await self._bulk_create(
+                data_list=[CreateTourAdditionalTypeSchema(tour_id=tour.id, type_id=additional_type_id).model_dump() for additional_type_id in tour_data.additional_type_ids],
+                bulk_create_func=self.uow.tour_additional_types.bulk_create
+            )
 
             await self._bulk_create(
                 data_list=[CreateTourLanguageSchema(tour_id=tour.id, language_id=language_id).model_dump() for language_id in tour_data.language_ids],
@@ -158,20 +158,20 @@ class ToursService:
             #     )
             # )
 
-            # await self._update_items(
-            #     set(existing_tour.additional_type_ids), 
-            #     set(tour_data.additional_type_ids),
-            #     lambda additional_type_id: self.uow.tour_additional_types.create(
-            #         CreateTourAdditionalTypeSchema(
-            #             tour_id=existing_tour.id,
-            #             type_id=additional_type_id
-            #         ).model_dump()
-            #     ),
-            #     lambda additional_type_id: self.uow.tour_additional_types.delete_by(
-            #         tour_id=existing_tour.id,
-            #         type_id=additional_type_id
-            #     )
-            # )
+            await self._update_items(
+                set(existing_tour.additional_type_ids), 
+                set(tour_data.additional_type_ids),
+                lambda additional_type_id: self.uow.tour_additional_types.create(
+                    CreateTourAdditionalTypeSchema(
+                        tour_id=existing_tour.id,
+                        type_id=additional_type_id
+                    ).model_dump()
+                ),
+                lambda additional_type_id: self.uow.tour_additional_types.delete_by(
+                    tour_id=existing_tour.id,
+                    type_id=additional_type_id
+                )
+            )
 
             await self._update_items(
                 set(existing_tour.language_ids),
