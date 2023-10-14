@@ -17,7 +17,7 @@ class TourHotelTypesService:
         
     async def get_hotel_types(self):
         async with self.uow:
-            return await self.uow.tour_hotel_types
+            return await self.uow.tour_hotel_types.get_all()
         
     async def get_hotel_type_by_id(self, id: int) -> models.TourHotelType:
         async with self.uow:
