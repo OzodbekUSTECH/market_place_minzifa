@@ -70,7 +70,7 @@ class CreateTourSchema(CreateBaseModel):
 
     language_ids: list[int] = Field(exclude=True)
 
-    activity_ids: list[int] = Field(exclude=True)
+    activity_ids: list[int] | None = Field(None, exclude=True)
 
     accommodation_ids: list[int] = Field(exclude=True)
 

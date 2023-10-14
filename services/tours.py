@@ -54,10 +54,11 @@ class ToursService:
                 bulk_create_func=self.uow.tour_languages.bulk_create
             )
 
-            await self._bulk_create(
-                data_list=[CreateTourActivitySchema(tour_id=tour.id, activity_id=activity_id).model_dump() for activity_id in tour_data.activity_ids],
-                bulk_create_func=self.uow.tour_activities.bulk_create
-            )
+            if tour_data.activity_ids:
+                await self._bulk_create(
+                    data_list=[CreateTourActivitySchema(tour_id=tour.id, activity_id=activity_id).model_dump() for activity_id in tour_data.activity_ids],
+                    bulk_create_func=self.uow.tour_activities.bulk_create
+                )
 
             await self._bulk_create(
                 data_list = [CreateTourAccommodationSchema(tour_id=tour.id, accommodation_id=accommodation_id).model_dump() for accommodation_id in tour_data.accommodation_ids],
@@ -187,20 +188,21 @@ class ToursService:
                 )
             )
 
-            await self._update_items(
-                set(existing_tour.activity_ids),
-                set(tour_data.activity_ids),
-                lambda activity_id: self.uow.tour_activities.create(
-                    CreateTourActivitySchema(
-                        tour_id=existing_tour.id,
-                        activity_id=activity_id
-                    ).model_dump()
-                ),
-                lambda activity_id: self.uow.tour_activities.delete_by(
-                    tour_id = existing_tour.id,
-                    activity_id = activity_id
+            if tour_data.activity_ids:
+                await self._update_items(
+                    set(existing_tour.activity_ids),
+                    set(tour_data.activity_ids),
+                    lambda activity_id: self.uow.tour_activities.create(
+                        CreateTourActivitySchema(
+                            tour_id=existing_tour.id,
+                            activity_id=activity_id
+                        ).model_dump()
+                    ),
+                    lambda activity_id: self.uow.tour_activities.delete_by(
+                        tour_id = existing_tour.id,
+                        activity_id = activity_id
+                    )
                 )
-            )
 
             await self._update_items(
                 set(existing_tour.accommodation_ids),
