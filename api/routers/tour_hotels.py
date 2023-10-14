@@ -13,6 +13,7 @@ router = APIRouter(
 
 @router.post("", response_model=IdResponseSchema)
 async def create_tour_hotel(
+    tour_id: int = Form(),
     name: str = Form(),
     short_description: str | None = Form(None),
     stars: int | None = Form(None),
@@ -31,6 +32,7 @@ async def create_tour_hotel(
         raise CustomExceptions.conflict("Invalid JSON format for title or description field, should be dict") 
     
     hotel_data = CreateTourHotelSchema(
+        tour_id=tour_id,
         name=name_dict,
         short_description=short_description_dict,
         stars=stars,

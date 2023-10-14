@@ -16,6 +16,7 @@ router = APIRouter(
 
 @router.post('', response_model=IdResponseSchema)
 async def create_tour_day(
+    tour_id: int = Form(),
     day: int = Form(),
     name: str = Form(),
     description: str = Form(),
@@ -38,6 +39,7 @@ async def create_tour_day(
     
     photos = [file for file in [photo_1, photo_2, photo_3] if file is not None]
     day_data = CreateTourDaySchema(
+        tour_id=tour_id,
         day = day,
         name=name_dict,
         description=description_dict,
