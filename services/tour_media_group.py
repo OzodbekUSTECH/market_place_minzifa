@@ -13,26 +13,25 @@ class TourMediaGroupService:
             tour_id: int,
             media_group: list[UploadFile]
     ) -> list[models.TourMedia]:
-        filenames = await MediaHandler.save_media(media_group, MediaHandler.tours_media_dir)
         async with self.uow:
-            response = []
-            for filename in filenames:
-                media_dict = CreateTourMediaSchema(
-                    tour_id=tour_id,
-                    filename=filename
-                ).model_dump
+            tour: models.Tour = await self.uow.tours.get_by_id(tour_id)
+            filenames = await MediaHandler.save_media(media_group, MediaHandler.tours_media_dir)
                 
-                tour_media = await self.uow.tour_media_group.create(media_dict)
-                response.append(tour_media)
+            await self.uow.tour_media_group.bulk_create(
+                    data_list=[CreateTourMediaSchema(
+                        tour_id=tour.id,
+                        filename=filename
+                    ).model_dump() for filename in filenames]
+            )
             
             await self.uow.commit()
-            return response
         
     
         
     async def delete_media(self, id: int) -> models.TourMedia:
         async with self.uow:
-            tour_media = await self.uow.tour_media_group.delete(id)
+            tour_media: models.TourMedia = await self.uow.tour_media_group.get_by_id(id)
+            await self.uow.tour_media_group.delete(id)
             await self.uow.commit()
             return tour_media
         

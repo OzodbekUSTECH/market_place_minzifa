@@ -8,7 +8,7 @@ router = APIRouter(
 )
 
 
-@router.post("", response_model=list[IdResponseSchema])
+@router.post("")
 async def create_media_group_for_tour(tour_id: int, media_group: list[UploadFile]):
     return await tour_media_group_service.create_media_group(tour_id, media_group)
 
