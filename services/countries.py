@@ -6,44 +6,43 @@ import models
 
 
 class CountriesService:
-    def __init__(self):
-        self.uow = UnitOfWork()
+    
 
-    async def create_country(self, country_data: CreateCountrySchema) -> models.Country:
+    async def create_country(self, uow: UnitOfWork, country_data: CreateCountrySchema) -> models.Country:
         country_dict = country_data.model_dump()
         filename = await MediaHandler.save_media(country_data.filename, MediaHandler.countries_media_dir)
         country_dict["filename"] = filename
-        async with self.uow:
-            country = await self.uow.countries.create(country_dict)
-            await self.uow.commit()
+        async with uow:
+            country = await uow.countries.create(country_dict)
+            await uow.commit()
             return country
         
-    async def get_list_of_countries(self) -> list[models.Country]:
-        async with self.uow:
-            return await self.uow.countries.get_all()
+    async def get_list_of_countries(self, uow: UnitOfWork,) -> list[models.Country]:
+        async with uow:
+            return await uow.countries.get_all()
         
-    async def get_country_by_id(self, id: int) -> models.Country:
-        async with self.uow:
-            return await self.uow.countries.get_by_id(id)
+    async def get_country_by_id(self, uow: UnitOfWork, id: int) -> models.Country:
+        async with uow:
+            return await uow.countries.get_by_id(id)
         
-    async def update_country(self, id: int, country_data: UpdateCountrySchema) -> models.Country:
+    async def update_country(self, uow: UnitOfWork, id: int, country_data: UpdateCountrySchema) -> models.Country:
         country_dict = country_data.model_dump(exclude={"filename"})
         if country_data.filename:
             filename = await MediaHandler.save_media(country_data.filename, MediaHandler.countries_media_dir)
             country_dict["filename"] = filename
-        async with self.uow:
-            country = await self.uow.countries.update(id, country_dict)
-            await self.uow.commit()
+        async with uow:
+            country = await uow.countries.update(id, country_dict)
+            await uow.commit()
             return country
         
-    async def delete_country(self, id: int) -> models.Country:
-        async with self.uow:
-            country = await self.uow.countries.delete(id)
-            await self.uow.commit()
+    async def delete_country(self, uow: UnitOfWork, id: int) -> models.Country:
+        async with uow:
+            country = await uow.countries.delete(id)
+            await uow.commit()
             return country
         
-    async def parse_all_countries(self):
-        async with self.uow:
+    async def parse_all_countries(self, uow: UnitOfWork):
+        async with uow:
             countries = [
                 {"ru": "Алжир", "en": "Algeria"},
                 {"ru": "Андорра", "en": "Andorra"},
@@ -279,9 +278,9 @@ class CountriesService:
                 c_dict = {
                     "name": country
                 }
-                await self.uow.countries.create(c_dict)    
+                await uow.countries.create(c_dict)    
 
-            await self.uow.commit()
+            await uow.commit()
 
     
 

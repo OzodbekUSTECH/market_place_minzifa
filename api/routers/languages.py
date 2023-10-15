@@ -5,6 +5,7 @@ from services import languages_service
 from repositories import Page
 from schemas import IdResponseSchema
 from utils.locale_handler import LocaleHandler
+from database import UOWDependency
 
 router = APIRouter(
     prefix="/languages",
@@ -14,6 +15,7 @@ router = APIRouter(
 
 @router.post("", response_model=IdResponseSchema)
 async def create_language(
+    uow: UOWDependency,
     language_data: CreateLanguageSchema,
 ):
     """
@@ -24,15 +26,16 @@ async def create_language(
         "en": "Language in english"\n
     }
     """
-    return await languages_service.create_language(language_data)
+    return await languages_service.create_language(uow, language_data)
 
 
 @router.get("/{locale}", response_model=Page[LanguageSchema])
 @LocaleHandler.serialize_one_all_models_by_locale
 async def get_list_of_languages(
+    uow: UOWDependency,
     locale: Annotated[LocaleHandler, Depends()],
 ):
-    return await languages_service.get_list_of_languages()
+    return await languages_service.get_list_of_languages(uow)
 
 
 
@@ -40,14 +43,16 @@ async def get_list_of_languages(
 @router.get("/{locale}/{id}", response_model=LanguageSchema)
 @LocaleHandler.serialize_one_all_models_by_locale
 async def get_language_by_id(
+    uow: UOWDependency,
     locale: Annotated[LocaleHandler, Depends()],
     id: int,
 ):
-    return  await languages_service.get_language_by_id(id)
+    return  await languages_service.get_language_by_id(uow, id)
 
 
 @router.put("/{id}", response_model=IdResponseSchema)
 async def update_language(
+    uow: UOWDependency,
     id: int,
     language_data: UpdateLanguageSchema,
 ):
@@ -60,7 +65,7 @@ async def update_language(
     }
     
     """
-    return await languages_service.update_language(id, language_data)
+    return await languages_service.update_language(uow, id, language_data)
 
 
 @router.delete("/{id}", response_model=IdResponseSchema)

@@ -9,6 +9,7 @@ from schemas.activities import (
 )
 from schemas import IdResponseSchema
 from utils.locale_handler import LocaleHandler
+from database import UOWDependency
 
 router = APIRouter(
     prefix="/activities",
@@ -18,6 +19,7 @@ router = APIRouter(
 
 @router.post("", response_model=IdResponseSchema)
 async def create_activity(
+    uow: UOWDependency,
     activity_data: CreateActivitySchema,
 ) -> ActivitySchema:
     """
@@ -28,28 +30,31 @@ async def create_activity(
         "en": "Acitivity in english"\n
     }
     """
-    return await activities_service.create_activity(activity_data)
+    return await activities_service.create_activity(uow, activity_data)
 
 
 @router.get("/{locale}", response_model=Page[ActivitySchema])
 @LocaleHandler.serialize_one_all_models_by_locale
 async def get_list_of_activities(
+    uow: UOWDependency,
     locale: Annotated[LocaleHandler, Depends()],
 ) -> list[ActivitySchema]:
-    return await activities_service.get_list_of_activities()
+    return await activities_service.get_list_of_activities(uow)
 
 
 @router.get("/{locale}/{id}", response_model=ActivitySchema)
 @LocaleHandler.serialize_one_all_models_by_locale
 async def get_activity_by_id(
+    uow: UOWDependency,
     locale: Annotated[LocaleHandler, Depends()],
     id: int,
 ) -> ActivitySchema:
-    return await activities_service.get_activity_by_id(id)
+    return await activities_service.get_activity_by_id(uow, id)
 
 
 @router.put("/{id}", response_model=IdResponseSchema)
 async def update_activity(
+    uow: UOWDependency,
     id: int,
     activity_data: UpdateActivitySchema,
 ) -> ActivitySchema:
@@ -61,11 +66,12 @@ async def update_activity(
         "en": "Acitivity in english"\n
     }
     """
-    return await activities_service.update_activity(id, activity_data)
+    return await activities_service.update_activity(uow, id, activity_data)
 
 
 @router.delete("/{id}", response_model=IdResponseSchema)
 async def delete_activity(
+    uow: UOWDependency,
     id: int,
 ) -> ActivitySchema:
-    return await activities_service.delete_activity(id)
+    return await activities_service.delete_activity(uow, id)

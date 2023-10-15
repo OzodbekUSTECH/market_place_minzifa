@@ -1,42 +1,39 @@
-from repositories import Pagination
 from schemas.support_questions import (
     CreateSupportQuestionSchema, 
     CreateQuestionDocSchema, 
     UpdateSupportQuestionSchema, 
-    UpdateQuestionDocSchema
 )
 from database import UnitOfWork
 from utils.exceptions import CustomExceptions
 import models
 
 class SupportQuestionsService:
-    def __init__(self):
-        self.uow = UnitOfWork()
+    
 
-    async def create_support_question(self, question_data: CreateSupportQuestionSchema) -> models.SupportQuestion:
+    async def create_support_question(self, uow: UnitOfWork, question_data: CreateSupportQuestionSchema) -> models.SupportQuestion:
         question_dict = question_data.model_dump()
-        async with self.uow:
-            support_question: models.SupportQuestion = await self.uow.support_questions.create(question_dict)
+        async with uow:
+            support_question: models.SupportQuestion = await uow.support_questions.create(question_dict)
 
             if question_data.doc_links:
-                await self.uow.question_docs.bulk_create(
+                await uow.question_docs.bulk_create(
                     data_list=[CreateQuestionDocSchema(
                         question_id=support_question.id,
                         link= doc_link
                     ).model_dump() for doc_link in question_data.doc_links]
                 )
 
-            await self.uow.commit()
+            await uow.commit()
 
             return support_question
         
-    async def get_list_of_questions(self) -> list[models.SupportQuestion]:
-        async with self.uow:
-            return await self.uow.support_questions.get_all()
+    async def get_list_of_questions(self, uow: UnitOfWork) -> list[models.SupportQuestion]:
+        async with uow:
+            return await uow.support_questions.get_all()
 
-    async def get_question_by_id(self, id: int) -> models.SupportQuestion:
-        async with self.uow:
-            return await self.uow.support_questions.get_by_id(id)
+    async def get_question_by_id(self, uow: UnitOfWork, id: int) -> models.SupportQuestion:
+        async with uow:
+            return await uow.support_questions.get_by_id(id)
     
 
     async def _update_items(
@@ -57,9 +54,9 @@ class SupportQuestionsService:
 
 
 
-    async def update_question(self, id: int, question_data: UpdateSupportQuestionSchema) -> models.SupportQuestion:
-        async with self.uow:
-            existing_question: models.SupportQuestion = await self.uow.support_questions.get_by_id(id)
+    async def update_question(self, uow: UnitOfWork, id: int, question_data: UpdateSupportQuestionSchema) -> models.SupportQuestion:
+        async with uow:
+            existing_question: models.SupportQuestion = await uow.support_questions.get_by_id(id)
 
             if not existing_question:
                 raise CustomExceptions.not_found()
@@ -67,7 +64,7 @@ class SupportQuestionsService:
             if question_data.doc_links is None:
                 # If doc_links is None, remove all existing links
                 for doc_link in existing_question.question_doc_links:
-                    await self.uow.question_docs.delete_by(
+                    await uow.question_docs.delete_by(
                         question_id=existing_question.id,
                         link=doc_link
                     )
@@ -75,13 +72,13 @@ class SupportQuestionsService:
                 await self._update_items(
                     set(existing_question.question_doc_links),
                     set(question_data.doc_links),
-                    lambda doc_link: self.uow.question_docs.create(
+                    lambda doc_link: uow.question_docs.create(
                         CreateQuestionDocSchema(
                             question_id=existing_question.id,
                             link=doc_link
                         ).model_dump()
                     ),
-                    lambda doc_link: self.uow.question_docs.delete_by(
+                    lambda doc_link: uow.question_docs.delete_by(
                         question_id=existing_question.id,
                         link=doc_link
                     )
@@ -89,16 +86,16 @@ class SupportQuestionsService:
 
             question_dict = question_data.model_dump()
             
-            updated_support_question = await self.uow.support_questions.update(id, question_dict)
+            updated_support_question = await uow.support_questions.update(id, question_dict)
 
-            await self.uow.commit()
+            await uow.commit()
             return updated_support_question
 
         
-    async def delete_question(self, id: int) -> models.SupportQuestion:
-        async with self.uow:
-            question = await self.uow.support_questions.delete(id)
-            await self.uow.commit()
+    async def delete_question(self, uow: UnitOfWork, id: int) -> models.SupportQuestion:
+        async with uow:
+            question = await uow.support_questions.delete(id)
+            await uow.commit()
             return question
             
             

@@ -1,6 +1,4 @@
 from typing import Type, Union
-from utils.locale_handler import LocaleHandler
-from sqlalchemy.ext.declarative import DeclarativeMeta
 
 import models
 
@@ -64,14 +62,7 @@ class UnitOfWork:
     
 
     
-    # tour_prices: Type[TourPricesRepository]
-    # TourActivitiesRepository: Type[TourActivitiesRepository]
-    # favorite_tours: Type[FavoriteToursRepository]
-    # tour_comments: Type[TourCommentsRepository]
-    # tour_comments_media: Type[TourCommentsMediaRepository]
-    # ip_tour_view: Type[IPTourViewRepository]
-    # ip_and_tours_view: Type[IPAndToursViewRepository]
-    # tour_lagnuages = Type[TourLanguagesRepository]
+  
 
 
     def __init__(self):
@@ -129,17 +120,7 @@ class UnitOfWork:
         self.sold_tours = repositories.SoldToursRepository(self.session, model=models.SoldTour)
 
         self.statistics_of_views = repositories.StatisticsOfViewsRepository(self.session, model=models.StatisticOfViews)
-
-        # self.tour_prices = TourPricesRepository(self.session, model=TourPrice)
-        # self.tour_activities = TourActivitiesRepository(self.session, model=TourActivity)
-        # self.favorite_tours = FavoriteToursRepository(self.session, model=FavoriteTours)
-        # self.tour_comments = TourCommentsRepository(self.session, model=TourComment)
-        # self.tour_comments_media = TourCommentsMediaRepository(self.session, model=TourCommentMedia)
-        # self.ip_tour_view = IPTourViewRepository(self.session, model=IPTourView)
-        # self.ip_and_tours_view = IPAndToursViewRepository(self.session, model=IPAndToursView)
-        # self.languages = LanguagesRepository(self.session, model=Language)
-        # self.tour_lagnuages = TourLanguagesRepository(self.session, model=TourLanguage)
-
+        
     async def __aexit__(self, *args):
         await self.session.close()
 
@@ -148,3 +129,7 @@ class UnitOfWork:
 
     async def rollback(self):
         await self.session.rollback()
+
+from fastapi import Depends
+from typing import Annotated
+UOWDependency = Annotated[UnitOfWork, Depends(UnitOfWork)]

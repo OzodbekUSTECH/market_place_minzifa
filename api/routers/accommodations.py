@@ -9,12 +9,16 @@ from schemas.accommodations import (
 )
 from schemas import IdResponseSchema
 from utils.locale_handler import LocaleHandler
+from database import UOWDependency
 
 router = APIRouter(prefix="/accommodations", tags=["Accomodations"])
 
 
 @router.post("", response_model=IdResponseSchema)
-async def create_accommodation(accommodation_data: CreateAccommodationSchema):
+async def create_accommodation(
+    uow: UOWDependency,
+    accommodation_data: CreateAccommodationSchema
+):
     """
     - name: dict[str, str]\n
     for example:\n
@@ -24,23 +28,34 @@ async def create_accommodation(accommodation_data: CreateAccommodationSchema):
     }
     
     """
-    return await accommodations_service.create_accommodation(accommodation_data)
+    return await accommodations_service.create_accommodation(uow, accommodation_data)
 
 
 @router.get("/{locale}", response_model=Page[AccommodationSchema])
 @LocaleHandler.serialize_one_all_models_by_locale
-async def get_list_of_accommodations(locale: Annotated[LocaleHandler, Depends()]):
-    return await accommodations_service.get_list_of_accommodations()
+async def get_list_of_accommodations(
+    uow: UOWDependency,
+    locale: Annotated[LocaleHandler, Depends()]
+):
+    return await accommodations_service.get_list_of_accommodations(uow)
 
 
 @router.get("/{locale}/{id}", response_model=AccommodationSchema)
 @LocaleHandler.serialize_one_all_models_by_locale
-async def get_accommodation_by_id(id: int, locale: Annotated[LocaleHandler, Depends()]):
-    return await accommodations_service.get_accommodation_by_id(id)
+async def get_accommodation_by_id(
+    uow: UOWDependency,
+    locale: Annotated[LocaleHandler, Depends()],
+    id: int 
+):
+    return await accommodations_service.get_accommodation_by_id(uow, id)
 
 
 @router.put("/{id}", response_model=IdResponseSchema)
-async def update_accommodation(id: int, accommodation_data: UpdateAccommodationSchema):
+async def update_accommodation(
+    uow: UOWDependency,
+    id: int, 
+    accommodation_data: UpdateAccommodationSchema
+):
     """
     - name: dict[str, str]\n
     for example:\n
@@ -50,9 +65,12 @@ async def update_accommodation(id: int, accommodation_data: UpdateAccommodationS
     }
     
     """
-    return await accommodations_service.update_accommodation(id, accommodation_data)
+    return await accommodations_service.update_accommodation(uow, id, accommodation_data)
 
 
 @router.delete("/{id}", response_model=IdResponseSchema)
-async def delete_accommodation(id: int):
-    return await accommodations_service.delete_accommodation(id)
+async def delete_accommodation(
+    uow: UOWDependency,
+    id: int
+):
+    return await accommodations_service.delete_accommodation(uow, id)

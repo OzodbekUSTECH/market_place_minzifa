@@ -7,6 +7,7 @@ from schemas import IdResponseSchema
 from utils.locale_handler import LocaleHandler
 import json
 from utils.exceptions import CustomExceptions
+from database import UOWDependency
 
 router = APIRouter(
     prefix="/countries",
@@ -19,6 +20,7 @@ router = APIRouter(
 
 @router.post("", response_model=IdResponseSchema)
 async def create_country(
+    uow: UOWDependency,
     name: str = Form(),
     title: str = Form(),
     meta_description: str | None = Form(None),
@@ -48,23 +50,31 @@ async def create_country(
         description=description_dict,
         filename=photo
     )
-    return await countries_service.create_country(country_data)
+    return await countries_service.create_country(uow, country_data)
 
 
 @router.get("/{locale}", response_model=Page[CountrySchema])
 @LocaleHandler.serialize_one_all_models_by_locale
-async def get_list_of_countries(locale: Annotated[LocaleHandler, Depends()]):
-    return await countries_service.get_list_of_countries()
+async def get_list_of_countries(
+    uow: UOWDependency,
+    locale: Annotated[LocaleHandler, Depends()]
+):
+    return await countries_service.get_list_of_countries(uow)
 
 
 @router.get("/{locale}/{id}", response_model=CountrySchema)
 @LocaleHandler.serialize_one_all_models_by_locale
-async def get_country_by_id(locale: Annotated[LocaleHandler, Depends()], id: int):
-    return await countries_service.get_country_by_id(id)
+async def get_country_by_id(
+    uow: UOWDependency, 
+    locale: Annotated[LocaleHandler, Depends()], 
+    id: int
+):
+    return await countries_service.get_country_by_id(uow,  id)
 
 
 @router.put("/{id}", response_model=IdResponseSchema)
 async def update_country(
+    uow: UOWDependency,
     id: int,
     name: str = Form(),
     title: str = Form(),
@@ -94,9 +104,9 @@ async def update_country(
         description=description_dict,
         filename=photo
     )
-    return await countries_service.update_country(id, country_data)
+    return await countries_service.update_country(uow, id, country_data)
 
 
 @router.delete("/{id}", response_model=IdResponseSchema)
-async def delete_country(id: int):
-    return await countries_service.delete_country(id)
+async def delete_country(uow: UOWDependency, id: int):
+    return await countries_service.delete_country(uow, id)

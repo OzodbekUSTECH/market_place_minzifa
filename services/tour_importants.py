@@ -7,25 +7,24 @@ from database import UnitOfWork
 import models
 
 class TourImportantsService:
-    def __init__(self):
-        self.uow = UnitOfWork()
+    
 
-    async def create_tour_important(self, data: CreateTourImportantSchema) -> models.TourImportant:
-        async with self.uow:
-            tour_important = await self.uow.tour_importants.create(data.model_dump())
-            await self.uow.commit()
+    async def create_tour_important(self, uow: UnitOfWork, data: CreateTourImportantSchema) -> models.TourImportant:
+        async with uow:
+            tour_important = await uow.tour_importants.create(data.model_dump())
+            await uow.commit()
             return tour_important
     
-    async def update_tour_important(self, id: int, data: UpdateTourImportantSchema) -> models.TourImportant:
-        async with self.uow:
-            tour_important = await self.uow.tour_importants.update(id, data.model_dump())
-            await self.uow.commit()
+    async def update_tour_important(self, uow: UnitOfWork, id: int, data: UpdateTourImportantSchema) -> models.TourImportant:
+        async with uow:
+            tour_important = await uow.tour_importants.update(id, data.model_dump())
+            await uow.commit()
             return tour_important
         
-    async def delete_tour_important(self, id: int) -> models.TourImportant:
-        async with self.uow:
-            tour_important = await self.uow.tour_importants.delete(id)
-            await self.uow.commit()
+    async def delete_tour_important(self, uow: UnitOfWork, id: int) -> models.TourImportant:
+        async with uow:
+            tour_important = await uow.tour_importants.delete(id)
+            await uow.commit()
             return tour_important
         
 tour_importants_service = TourImportantsService()

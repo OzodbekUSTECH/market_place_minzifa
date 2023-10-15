@@ -1,23 +1,21 @@
 from schemas.statistics_of_views import CreateStatisticView
 from database import UnitOfWork
-from utils.exceptions import CustomExceptions
 import models
 import datetime
 class StatisticsOfViewsService:
-    def __init__(self):
-        self.uow = UnitOfWork()
+    
 
-    async def increase_statistics_views(self):
+    async def increase_statistics_views(self, uow: UnitOfWork):
         current_date = datetime.datetime.now().strftime("%d.%m.%Y")
-        async with self.uow:
-            current_date_statistics = await self.uow.statistics_of_views.get_one_by(date=current_date)
+        async with uow:
+            current_date_statistics = await uow.statistics_of_views.get_one_by(date=current_date)
             if not current_date_statistics:
-                current_date_statistics: models.StatisticOfViews = await self.uow.statistics_of_views.create(CreateStatisticView(date=current_date).model_dump())
+                current_date_statistics: models.StatisticOfViews = await uow.statistics_of_views.create(CreateStatisticView(date=current_date).model_dump())
 
             await current_date_statistics.increase_view_counter()
-            await self.uow.commit()
+            await uow.commit()
 
-    async def get_percentage_statistics(self):
+    async def get_percentage_statistics(self, uow: UnitOfWork):
         today = datetime.date.today()
         one_day_ago = today - datetime.timedelta(days=1)
         seven_days_ago = today - datetime.timedelta(days=7)
@@ -28,11 +26,11 @@ class StatisticsOfViewsService:
         seven_days_ago_str = seven_days_ago.strftime("%d.%m.%Y")
         thirty_days_ago_str = thirty_days_ago.strftime("%d.%m.%Y")
 
-        async with self.uow:
-            today_statistics = await self.uow.statistics_of_views.get_one_by(date=today_str)
-            one_day_ago_statistics = await self.uow.statistics_of_views.get_one_by(date=one_day_ago_str)
-            seven_days_ago_statistics = await self.uow.statistics_of_views.get_one_by(date=seven_days_ago_str)
-            thirty_days_ago_statistics = await self.uow.statistics_of_views.get_one_by(date=thirty_days_ago_str)
+        async with uow:
+            today_statistics = await uow.statistics_of_views.get_one_by(date=today_str)
+            one_day_ago_statistics = await uow.statistics_of_views.get_one_by(date=one_day_ago_str)
+            seven_days_ago_statistics = await uow.statistics_of_views.get_one_by(date=seven_days_ago_str)
+            thirty_days_ago_statistics = await uow.statistics_of_views.get_one_by(date=thirty_days_ago_str)
 
             # Получаем общее количество просмотров за каждый период
             total_views_today = today_statistics.views if today_statistics else 0
@@ -59,9 +57,9 @@ class StatisticsOfViewsService:
 
 
 
-    async def get_statistics_by_period(self, start_date: str | None, end_date: str | None) -> list[models.StatisticOfViews]:
-        async with self.uow:
-            return await self.uow.statistics_of_views.get_by_period(start_date, end_date)          
+    async def get_statistics_by_period(self, uow: UnitOfWork, start_date: str | None, end_date: str | None) -> list[models.StatisticOfViews]:
+        async with uow:
+            return await uow.statistics_of_views.get_by_period(start_date, end_date)          
         
 
 statistics_of_views_service = StatisticsOfViewsService()

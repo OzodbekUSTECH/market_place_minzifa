@@ -9,6 +9,7 @@ from schemas.roles import (
 from schemas import IdResponseSchema
 from repositories import Page
 from utils.locale_handler import LocaleHandler
+from database import UOWDependency
 
 router = APIRouter(
     prefix="/roles",
@@ -18,6 +19,7 @@ router = APIRouter(
 
 @router.post("", response_model=IdResponseSchema)
 async def create_role(
+    uow: UOWDependency,
     role_data: CreateRoleSchema,
 ) -> RoleSchema:
     """
@@ -28,12 +30,13 @@ async def create_role(
         "en": "Name of the role in english"\n
     }
     """
-    return await roles_service.create_role(role_data)
+    return await roles_service.create_role(uow, role_data)
 
 
 @router.get("/{locale}", response_model=Page[RoleSchema])
 @LocaleHandler.serialize_one_all_models_by_locale
 async def get_list_of_roles(
+    uow: UOWDependency,
     locale: Annotated[LocaleHandler, Depends()],
 ) -> list[RoleSchema]:
     """
@@ -41,12 +44,13 @@ async def get_list_of_roles(
     - ru/en/etc: returns data in chosen language
     - returns all languages if your LOCALE doesnt exist
     """
-    return await roles_service.get_all_roles()
+    return await roles_service.get_all_roles(uow)
 
 
 @router.get("/{locale}/{id}", name="get role by ID", response_model=RoleSchema)
 @LocaleHandler.serialize_one_all_models_by_locale
 async def get_role_data_by_id(
+    uow: UOWDependency,
     locale: Annotated[LocaleHandler, Depends()],
     id: int,
 ) -> RoleSchema:
@@ -55,11 +59,12 @@ async def get_role_data_by_id(
     - ru/en/etc: returns data in chosen language
     - returns all languages if your LOCALE doesnt exist
     """
-    return await roles_service.get_role_by_id(id)
+    return await roles_service.get_role_by_id(uow, id)
 
 
 @router.put("/{id}", response_model=IdResponseSchema)
 async def update_role(
+    uow: UOWDependency,
     id: int,
     role_data: UpdateRoleSchema,
 ) -> RoleSchema:
@@ -71,11 +76,12 @@ async def update_role(
         "en": "Name of the role in english"\n
     }
     """
-    return await roles_service.update_role(id, role_data)
+    return await roles_service.update_role(uow, id, role_data)
 
 
 @router.delete("/{id}", response_model=IdResponseSchema)
 async def delete_role(
+    uow: UOWDependency,
     id: int,
 ) -> RoleSchema:
-    return await roles_service.delete_role(id)
+    return await roles_service.delete_role(uow, id)
