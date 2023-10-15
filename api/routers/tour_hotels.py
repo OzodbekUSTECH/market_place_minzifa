@@ -28,7 +28,7 @@ async def create_tour_hotel(
     """
     try:
         name_dict = json.loads(name)
-        short_description_dict = json.loads(short_description)
+        short_description_dict = json.loads(short_description) if short_description else None
         
     except:
         raise CustomExceptions.conflict("Invalid JSON format for title or description field, should be dict") 
