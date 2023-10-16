@@ -16,15 +16,6 @@ class LocaleHandler:
     async def get_model_fields_by_locale(models: Union[list[BaseModel], BaseModel], locale):
         async def process_attribute(attr_value):
             # Process a single attribute (dictionary)
-            # Process a BaseModel
-            if isinstance(attr_value, BaseModel):
-                for key, value in attr_value.__dict__.items():
-                    if isinstance(value, dict):
-                        localized_value = value.get(locale.get_language, None)
-                        if localized_value is not None:
-                            setattr(attr_value, key, localized_value)
-
-
             if isinstance(attr_value, dict):
                 localized_value = attr_value.get(locale.get_language, None)
                 if localized_value is not None:
@@ -37,7 +28,19 @@ class LocaleHandler:
                 localized_values = [item.get(locale.get_language) for item in attr_value if item.get(locale.get_language)]
                 return localized_values
 
-            
+            # Process a BaseModel
+            if isinstance(attr_value, BaseModel):
+                for key, value in attr_value.__dict__.items():
+                    if isinstance(value, dict):
+                        localized_value = value.get(locale.get_language, None)
+                        if localized_value is not None:
+                            setattr(attr_value, key, localized_value)
+                    elif isinstance(value, BaseModel):
+                        for key2, value2 in value.__dict__.items():
+                            if isinstance(value2, dict):
+                                localized_value2 = value.get(locale.get_language, None)
+                                if localized_value2 is not None:
+                                    setattr(value, key2, localized_value2)
 
             # Process a list of models
             if isinstance(attr_value, list):
