@@ -14,27 +14,28 @@ class LocaleHandler:
     
     @staticmethod
     async def get_model_fields_by_locale(models: Union[list[BaseModel], BaseModel], locale):
-        async def process_attribute(attr_value):
-            # Process a single attribute (dictionary)
+        async def process_attribute(attr_value, locale):
+    # Process a single attribute (dictionary)
             if isinstance(attr_value, dict):
-                localized_value = attr_value.get(locale.get_language, None)
-                if localized_value is not None:
-                    return localized_value
-                else:
-                    raise ValueError(f"Key not found for locale {locale.get_language}")
+                if isinstance(attr_value.get('name'), dict):
+                    localized_value = attr_value.get('name', {}).get(locale.get_language, None)
+                    if localized_value is not None:
+                        return localized_value
+                return attr_value
 
             # Process a list of dictionaries
             if isinstance(attr_value, list) and all(isinstance(item, dict) for item in attr_value):
-                localized_values = [item.get(locale.get_language) for item in attr_value if item.get(locale.get_language)]
+                localized_values = [item.get('name', {}).get(locale.get_language) for item in attr_value if item.get('name', {}).get(locale.get_language)]
                 return localized_values
 
             # Process a BaseModel
             if isinstance(attr_value, BaseModel):
                 for key, value in attr_value.__dict__.items():
                     if isinstance(value, dict):
-                        localized_value = value.get(locale.get_language, None)
-                        if localized_value is not None:
-                            setattr(attr_value, key, localized_value)
+                        if isinstance(value.get('name'), dict):
+                            localized_value = value.get('name', {}).get(locale.get_language, None)
+                            if localized_value is not None:
+                                setattr(attr_value, key, localized_value)
 
             # Process a list of models
             if isinstance(attr_value, list):
@@ -42,9 +43,10 @@ class LocaleHandler:
                     if not isinstance(sub_model, int):
                         for sub_attr_name, sub_attr_value in sub_model.__dict__.items():
                             if isinstance(sub_attr_value, dict):
-                                sub_localized_value = sub_attr_value.get(locale.get_language, None)
-                                if sub_localized_value is not None:
-                                    setattr(sub_model, sub_attr_name, sub_localized_value)
+                                if isinstance(sub_attr_value.get('name'), dict):
+                                    sub_localized_value = sub_attr_value.get('name', {}).get(locale.get_language, None)
+                                    if sub_localized_value is not None:
+                                        setattr(sub_model, sub_attr_name, sub_localized_value)
                 return attr_value
 
         # Ensure models is a list
