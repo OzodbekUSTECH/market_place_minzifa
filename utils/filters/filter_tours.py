@@ -8,7 +8,7 @@ from utils.filters.base import BaseFilterParams
 class FilterToursParams(BaseFilterParams):
     def __init__(
         self,
-        country_id: int | None = Query(None),
+        country_id: int | None = None,
         region_id: int | None= Query(None),
         start_month: int | None= Query(None),
         query: str | None= Query(None),
