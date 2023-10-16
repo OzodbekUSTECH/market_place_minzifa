@@ -14,7 +14,7 @@ class LocaleHandler:
     
     @staticmethod
     async def get_model_fields_by_locale(models: Union[list[BaseModel], BaseModel], locale):
-        async def process_attribute(attr_value):
+        async def process_attribute(attr_value, locale):
             # Process a single attribute (dictionary)
             if isinstance(attr_value, dict):
                 localized_value = attr_value.get(locale.get_language, None)
@@ -35,6 +35,12 @@ class LocaleHandler:
                         localized_value = value.get(locale.get_language, None)
                         if localized_value is not None:
                             setattr(attr_value, key, localized_value)
+                    if isinstance(value, BaseModel):  # Handle nested BaseModel
+                        for sub_key, sub_value in value.__dict__.items():
+                            if isinstance(sub_value, dict):
+                                localized_sub_value = sub_value.get(locale.get_language, None)
+                                if localized_sub_value is not None:
+                                    setattr(value, sub_key, localized_sub_value)
 
             # Process a list of models
             if isinstance(attr_value, list):
@@ -45,7 +51,14 @@ class LocaleHandler:
                                 sub_localized_value = sub_attr_value.get(locale.get_language, None)
                                 if sub_localized_value is not None:
                                     setattr(sub_model, sub_attr_name, sub_localized_value)
-                return attr_value
+                            if isinstance(sub_attr_value, BaseModel):  # Handle nested BaseModel
+                                for sub_key, sub_value in sub_attr_value.__dict__.items():
+                                    if isinstance(sub_value, dict):
+                                        localized_sub_value = sub_value.get(locale.get_language, None)
+                                        if localized_sub_value is not None:
+                                            setattr(sub_attr_value, sub_key, localized_sub_value)
+
+            return attr_value
 
         # Ensure models is a list
         if not isinstance(models, list):
