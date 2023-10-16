@@ -47,6 +47,9 @@ from repositories.support_questions import SupportQuestionsRepository, QuestionD
 from repositories.sold_tours import SoldToursRepository
 
 from repositories.statistics_of_views import StatisticsOfViewsRepository
+
+from repositories.forms import CallBackFormsRepository, ApplicationFormsRepository, AskQuestionFormsRepository
+
 # from repositories.tourprices import TourPricesRepository
 # from repositories.tour_activities import TourActivitiesRepository
 # from repositories.favorite_tours import FavoriteToursRepository

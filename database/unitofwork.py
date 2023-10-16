@@ -60,7 +60,9 @@ class UnitOfWork:
 
     statistics_of_views: Type[repositories.StatisticsOfViewsRepository]
     
-
+    call_back_forms: Type[repositories.CallBackFormsRepository]
+    application_forms: Type[repositories.ApplicationFormsRepository]
+    ask_question_forms: Type[repositories.AskQuestionFormsRepository]
     
   
 
@@ -120,6 +122,10 @@ class UnitOfWork:
         self.sold_tours = repositories.SoldToursRepository(self.session, model=models.SoldTour)
 
         self.statistics_of_views = repositories.StatisticsOfViewsRepository(self.session, model=models.StatisticOfViews)
+
+        self.call_back_forms = repositories.CallBackFormsRepository(self.session, model=models.CallBackForm)
+        self.application_forms = repositories.ApplicationFormsRepository(self.session, model=models.ApplicationForm)
+        self.ask_question_forms = repositories.AskQuestionFormsRepository(self.session, model=models.AskQuestionForm)
         
     async def __aexit__(self, *args):
         await self.session.close()

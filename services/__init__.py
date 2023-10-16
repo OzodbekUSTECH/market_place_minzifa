@@ -35,6 +35,8 @@ from services.sold_tours import sold_tours_service
 
 from services.statistics_of_views import statistics_of_views_service
 
+from services.forms import forms_service
+
 
 
 # from services.tours import ToursService
