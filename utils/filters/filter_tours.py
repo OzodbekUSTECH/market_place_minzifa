@@ -1,4 +1,5 @@
 from fastapi import Query
+from pydantic import Field
 from fuzzywuzzy import fuzz
 import models
 from utils.locale_handler import LocaleHandler
@@ -8,7 +9,7 @@ from utils.filters.base import BaseFilterParams
 class FilterToursParams(BaseFilterParams):
     def __init__(
         self,
-        country_id: int | None = None,
+        country_id: int | None = Field(None),
         region_id: int | None= Query(None),
         start_month: int | None= Query(None),
         query: str | None= Query(None),
