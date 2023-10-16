@@ -58,7 +58,7 @@ class LocaleHandler:
                                         if localized_value2 is not None:
                                             setattr(value, key2, localized_value2)
 
-                return attr_value
+            return attr_value
 
         # Ensure models is a list
         if not isinstance(models, list):
