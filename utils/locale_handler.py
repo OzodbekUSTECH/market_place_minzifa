@@ -35,12 +35,6 @@ class LocaleHandler:
                         localized_value = value.get(locale.get_language, None)
                         if localized_value is not None:
                             setattr(attr_value, key, localized_value)
-                    elif isinstance(value, BaseModel):
-                        for key2, value2 in value.__dict__.items():
-                            if isinstance(value2, dict):
-                                localized_value2 = value2.get(locale.get_language, None)
-                                if localized_value2 is not None:
-                                    setattr(value, key2, localized_value2)
 
             # Process a list of models
             if isinstance(attr_value, list):
@@ -51,14 +45,7 @@ class LocaleHandler:
                                 sub_localized_value = sub_attr_value.get(locale.get_language, None)
                                 if sub_localized_value is not None:
                                     setattr(sub_model, sub_attr_name, sub_localized_value)
-                            elif isinstance(value, BaseModel):
-                                for key2, value2 in value.__dict__.items():
-                                    if isinstance(value2, dict):
-                                        localized_value2 = value2.get(locale.get_language, None)
-                                        if localized_value2 is not None:
-                                            setattr(value, key2, localized_value2)
-
-            return attr_value
+                return attr_value
 
         # Ensure models is a list
         if not isinstance(models, list):
