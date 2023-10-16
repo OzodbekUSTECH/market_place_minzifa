@@ -52,7 +52,7 @@ class LocaleHandler:
                                 sub_localized_value = sub_attr_value.get(locale.get_language, None)
                                 if sub_localized_value is not None:
                                     setattr(sub_model, sub_attr_name, sub_localized_value)
-                return attr_value
+                # return attr_value
 
         # Ensure models is a list
         if not isinstance(models, list):
