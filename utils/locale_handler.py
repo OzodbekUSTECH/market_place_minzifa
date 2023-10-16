@@ -38,7 +38,7 @@ class LocaleHandler:
                     elif isinstance(value, BaseModel):
                         for key2, value2 in value.__dict__.items():
                             if isinstance(value2, dict):
-                                localized_value2 = value.get(locale.get_language, None)
+                                localized_value2 = value2.get(locale.get_language, None)
                                 if localized_value2 is not None:
                                     setattr(value, key2, localized_value2)
 
