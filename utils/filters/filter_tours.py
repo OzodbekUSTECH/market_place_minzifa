@@ -80,7 +80,7 @@ class FilterToursParams(BaseFilterParams):
             filters.append(self.start_month == tour.start_month)
 
         # Проверка параметра query
-        if self.query != 0:
+        if self.query != "0":
             filters.append(
                 fuzz.partial_ratio(
                     self.query.lower(), tour.title[locale.get_language].lower()
