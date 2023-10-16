@@ -35,12 +35,13 @@ class LocaleHandler:
                         localized_value = value.get(locale.get_language, None)
                         if localized_value is not None:
                             setattr(attr_value, key, localized_value)
-                    elif isinstance(value, BaseModel):
-                        for key2, value2 in value.__dict__.items():
-                            if isinstance(value2, dict):
-                                localized_value2 = value2.get(locale.get_language, None)
-                                if localized_value2 is not None:
-                                    setattr(value, key2, localized_value2)
+                        else:
+                            if isinstance(value, BaseModel):
+                                for key2, value2 in value.__dict__.items():
+                                    if isinstance(value2, dict):
+                                        localized_value2 = value2.get(locale.get_language, None)
+                                        if localized_value2 is not None:
+                                            setattr(value, key2, localized_value2)
 
             # Process a list of models
             if isinstance(attr_value, list):
