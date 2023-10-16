@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends, Form
 from services import users_service
 from schemas.users import (
     CreateUserSchema,
-    UserSchema,
     UpdateUserSchema,
     UserSchemaWithTravelExpertAndEmployees
 )
@@ -27,21 +26,23 @@ async def create_user(
     return await users_service.register_user(uow, user_data, locale)
 
 
-@router.get("", response_model=Page[UserSchemaWithTravelExpertAndEmployees])
-async def get_list_of_users(uow: UOWDependency):
-    return await users_service.get_list_of_users(uow)
-
-@router.get('/role/{role_id}', response_model=Page[UserSchemaWithTravelExpertAndEmployees])
-async def get_list_of_users_of_role(
+@router.get("/{locale}", response_model=Page[UserSchemaWithTravelExpertAndEmployees])
+@LocaleHandler.serialize_one_all_models_by_locale
+async def get_list_of_users(
     uow: UOWDependency,
-    role_id: int,
+    locale: Annotated[LocaleHandler, Depends()],
+    role_id: int | None = None,
 ):
-    return await users_service.get_list_of_users_by_role_id(uow, role_id)
+    return await users_service.get_list_of_users(uow, role_id)
 
-@router.get("/{id}", response_model=UserSchemaWithTravelExpertAndEmployees)
+
+
+@router.get("/{locale}/{id}", response_model=UserSchemaWithTravelExpertAndEmployees)
+@LocaleHandler.serialize_one_all_models_by_locale
 async def get_user_by_id(
     uow: UOWDependency,
-    id: int
+    id: int,
+    locale: Annotated[LocaleHandler, Depends()]
 ):
     return await users_service.get_user_by_id(uow, id)
 

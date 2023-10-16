@@ -1,7 +1,7 @@
 import re
 from pydantic import BaseModel, EmailStr, field_validator, Field
 from schemas import  CreateBaseModel, UpdateBaseModel, IdResponseSchema
-
+from schemas.roles import RoleSchema
 
 class BaseUserSchema(CreateBaseModel):
     first_name: str
@@ -48,6 +48,9 @@ class UpdateUserSchema(UpdateBaseModel, BaseUserSchema):
 class UserSchema(IdResponseSchema, UpdateUserSchema):
     rating: int | float
     amount_reviews: int
+    role: RoleSchema
+
+    role_id: int = Field(exclude=True)
 
 
 class UserSchemaWithTravelExpertAndEmployees(UserSchema):

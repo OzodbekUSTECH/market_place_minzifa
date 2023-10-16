@@ -48,6 +48,8 @@ from models.statistics_of_views import StatisticOfViews
 
 from models.forms import CallBackForm, ApplicationForm, AskQuestionForm
 
+from models.orders import Order
+
 # from models.tours import Tour, IPTourView, IPAndToursView
 # from models.tourprices import TourPrice
 # from models.tour_activities import TourActivity

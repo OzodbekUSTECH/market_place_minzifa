@@ -1,14 +1,27 @@
-from models import BaseTable
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import JSONB
+from models import BaseTable, TourMixin
+from sqlalchemy import ForeignKey, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from models import (
+        User,
+        Tour
+    )
 
-class BaseOrder(BaseTable):
-    __abstract__ = True
+class Order(TourMixin, BaseTable):
+    __tablename__ = "orders"
 
-    tour_id: Mapped[int] = mapped_column(ForeignKey("tours.id"))
-    name: Mapped[str]
-    email: Mapped[str]
-    phone_number: Mapped[str]
+    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
+    name: Mapped[str | None]
+    email: Mapped[str | None]
+    phone_number: Mapped[str | None]
+    start_date: Mapped[str | None]
+    end_date: Mapped[str | None]
+    amount_of_participants: Mapped[int]
+    is_private_request: Mapped[bool]
+    wishes: Mapped[str | None] = mapped_column(Text)
 
-    participants: Mapped[int] = mapped_column(default=1, server_default="1")
+    user: Mapped["User"] = relationship(lazy="subquery")
+    tour: Mapped["Tour"] = relationship(lazy="subquery")
+
+

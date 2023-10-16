@@ -71,3 +71,9 @@ class BaseRepository:
         stmt = select(self.model).filter_by(**filters)
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
+    
+    async def get_all_by(self, **filters) -> list:
+        stmt = select(self.model).filter_by(**filters)
+        result = await self.session.execute(stmt)
+        return result.scalars().all()
+    

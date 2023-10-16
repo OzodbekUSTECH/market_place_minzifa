@@ -34,6 +34,8 @@ from api.routers.statistics_of_views import router as statistics_of_views_router
 
 from api.routers.forms import router as forms_router
 
+from api.routers.orders import router as orders_router
+
 all_routers = [
     auth_router,
     users_router,
@@ -70,7 +72,9 @@ all_routers = [
 
     statistics_of_views_router,
 
-    forms_router
+    forms_router,
+    
+    orders_router
     # maillist_router,
     # roles_router,
     # travelermanagers_router,

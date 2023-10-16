@@ -40,14 +40,17 @@ class UsersService:
                 user=user, locale=locale)
             return user
         
-    async def get_list_of_users(self, uow: UnitOfWork) -> list[models.User]:
+    async def get_list_of_users(
+            self, 
+            uow: UnitOfWork,
+            role_id: int | None,
+        ) -> list[models.User]:
         async with uow:
+            if role_id:
+                return paginate(await uow.users.get_all_by(role_id=role_id))
             return await uow.users.get_all()
         
-    async def get_list_of_users_by_role_id(self, uow: UnitOfWork, role_id: int) -> list[models.User]:
-        async with uow:
-            role: models.Role = await uow.roles.get_by_id(role_id)
-            return paginate(role.users)
+    
 
     async def get_user_by_id(self, uow: UnitOfWork, id: int) -> models.User:
         async with uow:

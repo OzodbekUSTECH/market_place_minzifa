@@ -1,5 +1,6 @@
 from schemas import IdResponseSchema
-from fastapi import APIRouter
+from typing import Annotated
+from fastapi import APIRouter, Depends
 from repositories import Page
 from services import accommodation_types_service
 from schemas.accommodation_types import (
@@ -7,6 +8,8 @@ from schemas.accommodation_types import (
     UpdateAccommodationTypeSchema,
     AccommodationTypeSchema,
 )
+from utils.locale_handler import LocaleHandler
+
 from database import UOWDependency
 
 router = APIRouter(
@@ -22,16 +25,20 @@ async def create_accommodation_type(
 ):
     return await accommodation_types_service.create_type(uow, type_data)
 
-@router.get('', response_model=Page[AccommodationTypeSchema])
+@router.get('/{locale}', response_model=Page[AccommodationTypeSchema])
+@LocaleHandler.serialize_one_all_models_by_locale
 async def get_accommodation_types(
     uow: UOWDependency,
+    locale: Annotated[LocaleHandler, Depends()]
 ):
     return await accommodation_types_service.get_types(uow)
 
-@router.get("/{id}", response_model=AccommodationTypeSchema)
+@router.get("/{locale}/{id}", response_model=AccommodationTypeSchema)
+@LocaleHandler.serialize_one_all_models_by_locale
 async def get_accommodation_type_by_id(
     uow: UOWDependency, 
-    id: int
+    id: int,
+    locale: Annotated[LocaleHandler, Depends()]
 ):
     return await accommodation_types_service.get_type_by_id(uow, id)
 

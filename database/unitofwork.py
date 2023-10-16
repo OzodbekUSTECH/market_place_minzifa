@@ -63,6 +63,8 @@ class UnitOfWork:
     call_back_forms: Type[repositories.CallBackFormsRepository]
     application_forms: Type[repositories.ApplicationFormsRepository]
     ask_question_forms: Type[repositories.AskQuestionFormsRepository]
+
+    orders: Type[repositories.OrdersRepository]
     
   
 
@@ -127,6 +129,8 @@ class UnitOfWork:
         self.application_forms = repositories.ApplicationFormsRepository(self.session, model=models.ApplicationForm)
         self.ask_question_forms = repositories.AskQuestionFormsRepository(self.session, model=models.AskQuestionForm)
         
+        self.orders = repositories.OrdersRepository(self.session, model=models.Order)
+
     async def __aexit__(self, *args):
         await self.session.close()
 
