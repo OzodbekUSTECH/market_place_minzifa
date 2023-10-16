@@ -11,7 +11,7 @@ class FilterToursParams(BaseFilterParams):
         country_id: int = Query(0),
         region_id: int = Query(0),
         start_month: int = Query(0),
-        query: str = Query(0),
+        query: int | str = Query(0),
         user_id: int = Query(0),
         rating: int | float = Query(0),
         status_id: int = Query(0),
