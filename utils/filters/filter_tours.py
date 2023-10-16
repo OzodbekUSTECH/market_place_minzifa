@@ -9,6 +9,7 @@ class FilterToursParams(BaseFilterParams):
     def __init__(
         self,
         country_id: int = Query(None),
+        region_id: int = Query(None),
         start_month: int = Query(None),
         query: str = Query(None),
         user_id: int = Query(None),
@@ -35,6 +36,7 @@ class FilterToursParams(BaseFilterParams):
         only_with_discounts: bool = Query(False),
     ):
         self.country_id = country_id
+        self.region_id = region_id
         self.start_month = start_month 
         self.query = query
         self.user_id = user_id
@@ -67,6 +69,9 @@ class FilterToursParams(BaseFilterParams):
         #проверка параметра country_id
         if self.country_id is not None:
             filters.append(self.country_id in tour.country_ids)
+
+        if self.region_id is not None:
+            filters.append(self.region_id in tour.region_ids)
 
         #проверка параметра start_month
         if self.start_month is not None:
