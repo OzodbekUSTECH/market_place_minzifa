@@ -36,7 +36,7 @@ class LocaleHandler:
                         if localized_value is not None:
                             setattr(attr_value, key, localized_value)
                         else:
-                            if isinstance(value, BaseModel):
+                            # if isinstance(value, BaseModel):
                                 for key2, value2 in value.__dict__.items():
                                     if isinstance(value2, dict):
                                         localized_value2 = value2.get(locale.get_language, None)
@@ -53,7 +53,7 @@ class LocaleHandler:
                                 if sub_localized_value is not None:
                                     setattr(sub_model, sub_attr_name, sub_localized_value)
                                 else:
-                                    if isinstance(value, BaseModel):
+                                    # if isinstance(value, BaseModel):
                                         for key2, value2 in value.__dict__.items():
                                             if isinstance(value2, dict):
                                                 localized_value2 = value2.get(locale.get_language, None)
