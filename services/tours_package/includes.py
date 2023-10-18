@@ -20,7 +20,7 @@ class IncludesInPriceService:
                     name=data.name,
                 ).model_dump() for data in includes_data]
             )
-            
+            await uow.commit()
 
     async def create_include_in_price(self, uow: UnitOfWork, include_data: CreateIncludeInPriceSchema) -> models.IncludeInPrice:
         async with uow:

@@ -1,4 +1,5 @@
 from schemas.tours_package.excludes import (
+    CreateMultipleExcludeInPrice,
     CreateExcludeInPriceSchema,
     UpdateExcludeInPriceSchema,
 )
@@ -6,6 +7,22 @@ from database import UnitOfWork
 import models
 
 class ExcludesInPriceService:
+
+    async def create_multiple_excludes_in_price(
+            self, 
+            uow: UnitOfWork,
+            tour_id: int, 
+            excludes_data: list[CreateMultipleExcludeInPrice]
+        ) -> None:
+        async with uow:
+            tour: models.Tour = await uow.tours.get_by_id(tour_id)
+            await uow.tour_excludes.bulk_create(
+                data_list=[CreateExcludeInPriceSchema(
+                    tour_id=tour.id,
+                    name=data.name,
+                ).model_dump() for data in excludes_data]
+            )
+            await uow.commit()
 
     async def create_exclude_in_price(self, uow: UnitOfWork, exclude_data: CreateExcludeInPriceSchema) -> models.IncludeInPrice:
         async with uow:

@@ -1,6 +1,10 @@
 from schemas import  CreateBaseModel, UpdateBaseModel, IdResponseSchema, TourMixinBaseModel
 from typing import Union
 
+class CreateMultipleExcludeInPrice(CreateBaseModel):
+    name: Union[dict[str, str], str]
+
+
 class CreateExcludeInPriceSchema(TourMixinBaseModel, CreateBaseModel):
     name: Union[dict[str, str], str]
 
