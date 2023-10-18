@@ -33,8 +33,8 @@ from repositories.tour_days import TourDaysRepository, TourDayMediaGroupsReposit
 from repositories.tour_hotels import TourHotelsRepository, TourHotelMediaGroupsRepository
 from repositories.tour_importants import TourImportantsRepository
 
-from repositories.tours.includes import IncludesInPriceRepository
-from repositories.tours.excludes import ExcludesInPriceRepository
+from repositories.tours_package.includes import IncludesInPriceRepository
+from repositories.tours_package.excludes import ExcludesInPriceRepository
 
 
 
