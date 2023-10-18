@@ -24,8 +24,8 @@ from api.routers.accommodation_types import router as accommodation_types_router
 from api.routers.tour_importants import router as tour_importants_router
 from api.routers.tour_comments import router as tour_comments_router
 
-from api.routers.tours.includes import router as tour_includes_router
-from api.routers.tours.excludes import router as tour_excludes_router
+from api.routers.tours_package.includes import router as tour_includes_router
+from api.routers.tours_package.excludes import router as tour_excludes_router
 
 from api.routers.blogs import router as blogs_router
 

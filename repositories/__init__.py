@@ -53,9 +53,3 @@ from repositories.statistics_of_views import StatisticsOfViewsRepository
 from repositories.forms import CallBackFormsRepository, ApplicationFormsRepository, AskQuestionFormsRepository
 
 from repositories.orders import OrdersRepository
-# from repositories.tourprices import TourPricesRepository
-# from repositories.tour_activities import TourActivitiesRepository
-# from repositories.favorite_tours import FavoriteToursRepository
-# from repositories.tour_comments import TourCommentsRepository
-# from repositories.tour_comments_media import TourCommentsMediaRepository
-# from repositories.tour_languages import TourLanguagesRepository
