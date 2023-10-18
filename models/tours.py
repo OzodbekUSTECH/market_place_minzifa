@@ -176,7 +176,7 @@ class Tour(BaseTable):
             cascade="all, delete",
             overlaps="price_instance"  # Add this parameter
         )
-    comments: Mapped[list["TourComment"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
+    comments: Mapped[list["TourComment"]] = relationship(lazy="immediate", cascade="all, delete-orphan")
     days: Mapped[list["TourDay"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     hotels: Mapped[list["TourHotel"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     importants: Mapped[list["TourImportant"]] = relationship(lazy="subquery", cascade="all, delete-orphan")

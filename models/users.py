@@ -69,7 +69,6 @@ class User(BaseTable):
         overlaps="travel_expert"  # Add this parameter
     )
     tours: Mapped[list["Tour"]] = relationship(back_populates="user", lazy="immediate")
-    role: Mapped["Role"] = relationship(lazy="subquery")    
     
     
     
