@@ -64,8 +64,8 @@ class CreateTourSchema(CreateBaseModel):
 
     is_allowed_individually: bool
 
-    included_in_price: Union[list[dict[str, str]], list[str]]
-    not_included_in_price: Union[list[dict[str, str]], list[str]]
+    # included_in_price: Union[list[dict[str, str]], list[str]]
+    # not_included_in_price: Union[list[dict[str, str]], list[str]]
 
 
     additional_type_ids: list[int] | None = Field(None, exclude=True)
