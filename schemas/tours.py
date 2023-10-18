@@ -17,6 +17,8 @@ from schemas.users import UserSchema
 from schemas.tour_days import TourDaySchema
 from schemas.tour_hotels import TourHotelSchema
 from schemas.tour_importants import TourImportantSchema
+from schemas.tours_package.includes import IncludeInPriceSchema
+from schemas.tours_package.excludes import ExcludeInPriceSchema
 
 
 
@@ -125,6 +127,8 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     days: list[TourDaySchema]
     hotels: list[TourHotelSchema]
     importants: list[TourImportantSchema]
+    includes_in_price: list[IncludeInPriceSchema]
+    excludes_in_price: list[ExcludeInPriceSchema]
     
 
 

@@ -30,6 +30,9 @@ from models.tour_countries import TourCountry
 from models.tour_regions import TourRegion
 from models.tour_prices import TourPrice
 
+from models.tours_package.excludes import ExcludeInPrice
+from models.tours_package.includes import IncludeInPrice
+
 from models.tour_days import TourDay, TourDayMediaGroup
 from models.tour_hotels import TourHotel, TourHotelMediaGroup
 from models.tour_imporants import TourImportant

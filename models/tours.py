@@ -25,7 +25,9 @@ if TYPE_CHECKING:
         TourDay,
         TourHotel,
         TourImportant,
-        AccommodationType
+        AccommodationType,
+        IncludeInPrice,
+        ExcludeInPrice
     )
 
 
@@ -60,8 +62,8 @@ class Tour(BaseTable):
 
     is_allowed_individually: Mapped[bool] = mapped_column(default=False, server_default="false")
 
-    included_in_price: Mapped[list[dict]] = mapped_column(JSONB)
-    not_included_in_price: Mapped[list[dict]] = mapped_column(JSONB)
+    # included_in_price: Mapped[list[dict]] = mapped_column(JSONB)
+    # not_included_in_price: Mapped[list[dict]] = mapped_column(JSONB)
     
     @hybrid_property
     def total_free_places(self) -> int:
@@ -178,51 +180,6 @@ class Tour(BaseTable):
     days: Mapped[list["TourDay"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     hotels: Mapped[list["TourHotel"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     importants: Mapped[list["TourImportant"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
+    includes_in_price: Mapped[list["IncludeInPrice"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
+    excludes_in_price: Mapped[list["ExcludeInPrice"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     
-    # views: Mapped[list["IPAndToursView"]] = relationship(cascade="all, delete_orphan", lazy="subquery")
-    # activities: Mapped[list["models.Activity"]] = relationship(back_populates="tour", cascade="all, delete_orphan", lazy="subquery")
-    # tour_comments: Mapped[list["models.TourComment"]] = relationship(back_populates="tours", lazy="subquery")
-    # languages: Mapped[list["models.TourLanguage"]] = relationship(cascade="all, delete_orphan", lazy="subquery")
-    # status: Mapped["models.TourStatus"] = relationship(back_populates="tours", lazy="subquery")
-    # prices: Mapped[list["models.TourPrice"]] = relationship(cascade="all, delete", lazy="subquery")
-
-    # @hybrid_property
-    # def amount_comments(self):
-    #     return len(self.tour_comments)
-
-    # @hybrid_property
-    # def amount_views(self):
-    #     amount = 0
-    #     for view in self.views:
-    #         amount += view.visited_times
-    #     return amount
-
-    # def get_list_of_language_ids(self):
-    #     res = []
-    #     for language in self.languages:
-    #         res.append(language.language_id)
-    #     return res
-
-
-# class IPTourView(BaseTable):
-#     __tablename__ = 'ip_tour_views'
-
-
-#     ip_address = Column(String, nullable=False)
-#     viewed_tours = relationship("IPAndToursView", lazy="subquery")
-
-#     def get_list_of_tour_ids(self):
-#         tour_ids = []
-#         for instance in self.viewed_tours:
-#             tour_ids.append(instance.tour_id)
-#         return tour_ids
-
-# class IPAndToursView(BaseTable):
-#     __tablename__ = 'ip_and_tours_views'
-
-#     ip_id = Column(Integer, ForeignKey("ip_tour_views.id"), nullable=False)
-#     visited_times = Column(Integer, default=0)
-#     tour_id = Column(Integer, ForeignKey("tours.id"), nullable=False)
-
-#     def increase_visited_times(self):
-#         self.visited_times += 1

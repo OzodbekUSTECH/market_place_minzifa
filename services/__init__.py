@@ -27,6 +27,9 @@ from services.tour_days import tour_days_service
 from services.tour_hotels import tour_hotels_service
 from services.tour_importants import tour_importants_service
 
+from services.tours_package.includes import tour_includes_service
+from services.tours_package.excludes import tour_excludes_service
+
 from services.blogs import blogs_service
 
 from services.support_questions import support_questions_service

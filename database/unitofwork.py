@@ -46,6 +46,9 @@ class UnitOfWork:
 
     tour_importants: Type[repositories.TourImportantsRepository]
 
+    tour_includes: Type[repositories.IncludesInPriceRepository]
+    tour_excludes: Type[repositories.ExcludesInPriceRepository]
+
     tour_comments: Type[repositories.TourCommentsRepository]
     tour_comments_media: Type[repositories.TourCommentsMediaRepository]
 
@@ -109,6 +112,8 @@ class UnitOfWork:
 
         self.tour_importants = repositories.TourImportantsRepository(self.session, model=models.TourImportant)
         
+        self.tour_includes = repositories.IncludesInPriceRepository(self.session, model=models.IncludeInPrice)
+        self.tour_excludes = repositories.ExcludesInPriceRepository(self.session, model=models.ExcludeInPrice)
 
 
         self.tour_comments = repositories.TourCommentsRepository(self.session, model=models.TourComment)
