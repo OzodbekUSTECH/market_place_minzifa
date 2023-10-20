@@ -49,4 +49,4 @@ volumes:
   tours-media-volume:
   countries-media-volume:
   days-media-volume:
-  # hotels-media-volume:
+  hotels-media-volume:
