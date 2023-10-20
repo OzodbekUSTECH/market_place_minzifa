@@ -152,7 +152,7 @@ class ParsersService:
                 tour_data = CreateTourSchema(
                     title=title,
                     description=description,
-                    user_id = 2,
+                    user_id = 1,
                     status_id = 1,
                     map_link = tour["map"],
                     age_group_from=8,
@@ -190,12 +190,13 @@ class ParsersService:
                     for tour_photo in tour_photos:
                         photo_obj = ParseHandler.tours_media_url + tour_photo["photo"] + "." + tour_photo["photoext"]
                         filename = await MediaHandler.save_media_from_url(photo_obj, MediaHandler.tours_media_dir)
-                        tour_photo_dict = CreateTourMediaSchema(
-                            tour_id=created_tour.id,
-                            filename=filename
-                        ).model_dump()
-                        data_photos.append(tour_photo_dict)
-                    
+                        if filename:
+                            tour_photo_dict = CreateTourMediaSchema(
+                                tour_id=created_tour.id,
+                                filename=filename
+                            ).model_dump()
+                            data_photos.append(tour_photo_dict)
+                        
                     await uow.tour_media_group.bulk_create(data_photos)
 
             await uow.commit()
