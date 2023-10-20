@@ -280,7 +280,8 @@ class ParsersService:
                                         filename=filename
                                     ).model_dump()
                                     hotel_photo_list.append(hotel_photo_dict)
-                            await uow.tour_hotel_media_groups.bulk_create(hotel_photo_list)
+                            if hotel_photo_list:
+                                await uow.tour_hotel_media_groups.bulk_create(hotel_photo_list)
 
             await uow.commit()
 
