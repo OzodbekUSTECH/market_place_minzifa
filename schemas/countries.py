@@ -19,4 +19,4 @@ class UpdateCountrySchema(UpdateBaseModel, CreateCountrySchema):
 class CountrySchema(IdResponseSchema, UpdateCountrySchema):
     photo_url: str | None
 
-    filename: str = Field(None, exclude=True)
+    filename: str | None = Field(None, exclude=True)
