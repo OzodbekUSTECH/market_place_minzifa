@@ -28,7 +28,7 @@ services:
       - countries-media-volume:/code/media/countries/  # Ваш том (volume) для media
       - types-media-volume:/code/media/types/  # Ваш том (volume) для media
       - days-media-volume:/code/media/tour_days/  # Ваш том (volume) для media
-      - hotels-media-volume:/code/media/tour_hotel/  # Ваш том (volume) для media
+      - hotels-media-volume:/code/media/tour_hotels/  # Ваш том (volume) для media
       # ... Другие объявленные volumes ...
 
   pgadmin:
