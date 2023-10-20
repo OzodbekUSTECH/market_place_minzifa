@@ -26,6 +26,8 @@ services:
       - tour_comments-media-volume:/code/media/tour_comments/  # Ваш том (volume) для media
       - tours-media-volume:/code/media/tours/  # Ваш том (volume) для media
       - countries-media-volume:/code/media/countries/  # Ваш том (volume) для media
+      - types-media-volume:/code/media/types/  # Ваш том (volume) для media
+      - days-media-volume:/code/media/tour_days/  # Ваш том (volume) для media
       # ... Другие объявленные volumes ...
 
   pgadmin:
@@ -45,3 +47,4 @@ volumes:
   tour_comments-media-volume:
   tours-media-volume:
   countries-media-volume:
+  days-media-volume:
