@@ -5,7 +5,7 @@ from typing import Union
 class CreateRegionSchema(CreateBaseModel):
     name: Union[dict[str, str], str]
     country_id: int
-    description: Union[dict[str, str], str, None]
+    description: Union[dict[str | None, str | None], str, None]
     meta_description: Union[dict[str, str], str, None]
 
 class UpdateRegionSchema(UpdateBaseModel, CreateRegionSchema):

@@ -73,7 +73,7 @@ class Settings(BaseSettings):
         return f"{settings.MEDIA_URL}{self.types_media_dir}"
 
     api_v1_prefix: str = "/v1"
-    development: bool = True
+    development: bool = False
     db: DbSettings = DbSettings()
     
     
