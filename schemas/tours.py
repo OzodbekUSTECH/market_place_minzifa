@@ -42,15 +42,15 @@ class CreateTourSchema(CreateBaseModel):
     description: Union[dict[str, str], str]
     user_id: int
     status_id: int
-    
+    map_link: str | None
     age_group_from: int = Field(le=100)
     age_group_to: int = Field(le=100)
 
     children_age_id: int
     activity_level_id: int
 
-    start_date: str
-    end_date: str
+    start_date: str | None
+    end_date: str | None
 
     total_places: int
     free_places: int
@@ -74,12 +74,12 @@ class CreateTourSchema(CreateBaseModel):
 
     activity_ids: list[int] | None = Field(None, exclude=True)
 
-    accommodation_ids: list[int] = Field(exclude=True)
+    accommodation_ids: list[int] | None = Field(None, exclude=True)
 
-    accommodation_type_ids: list[int] = Field(exclude=True)
+    accommodation_type_ids: list[int] | None = Field(None, exclude=True)
 
 
-    country_ids: list[int] = Field(exclude=True)
+    country_ids: list[int] | None = Field(None, exclude=True)
 
     region_ids: list[int] | None = Field(None, exclude=True)
 
@@ -97,9 +97,9 @@ class UpdateTourSchema(UpdateBaseModel, CreateTourSchema):
     pass
 
 class TourSchema(IdResponseSchema, UpdateTourSchema):
-    duration: int
+    duration: int | None
     is_guaranteed: bool
-    is_one_day_tour: bool
+    is_one_day_tour: bool | None
     user: UserSchema
     status: TourStatusSchema
     children_age: TourChildrenAgeSchema
@@ -122,7 +122,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     amount_reviews: int
     amount_countries: int
     amount_regions: int
-    has_discount: bool
+    has_discount: bool | None
 
     days: list[TourDaySchema]
     hotels: list[TourHotelSchema]

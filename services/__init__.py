@@ -42,6 +42,8 @@ from services.forms import forms_service
 
 from services.orders import orders_service
 
+from services.parser import parser_service
+
 # from services.tours import ToursService
 # from services.tourprices import TourPricesService
 # from services.tour_activities import TourActivitiesService

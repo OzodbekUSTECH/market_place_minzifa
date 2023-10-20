@@ -42,6 +42,7 @@ class Settings(BaseSettings):
     countries_media_dir: str = "countries/"
     tour_days_media_dir: str = "tour_days/"
     tour_hotels_media_dir: str = "tour_hotels/"
+    types_media_dir: str = "types/"
 
     @property
     def TOURS_MEDIA_URL(self):
@@ -67,9 +68,12 @@ class Settings(BaseSettings):
     def TOUR_HOTEL_MEDIA_URL(self):
         return f"{settings.MEDIA_URL}{self.tour_hotels_media_dir}"
 
+    @property
+    def TYPES_MEDIA_URL(self):
+        return f"{settings.MEDIA_URL}{self.types_media_dir}"
 
     api_v1_prefix: str = "/v1"
-    development: bool = False
+    development: bool = True
     db: DbSettings = DbSettings()
     
     

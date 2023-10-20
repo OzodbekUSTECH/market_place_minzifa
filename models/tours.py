@@ -38,7 +38,7 @@ class Tour(BaseTable):
     description: Mapped[dict] = mapped_column(type_=JSONB)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     status_id: Mapped[int] = mapped_column(ForeignKey("tour_statuses.id"))
-
+    map_link: Mapped[str | None]
     age_group_from: Mapped[int]
     age_group_to: Mapped[int]
 
@@ -48,8 +48,8 @@ class Tour(BaseTable):
         ForeignKey("tour_activity_levels.id")
     )
 
-    start_date: Mapped[str]
-    end_date: Mapped[str]
+    start_date: Mapped[str | None]
+    end_date: Mapped[str | None]
 
     total_places: Mapped[int]
     free_places: Mapped[int]
@@ -71,21 +71,28 @@ class Tour(BaseTable):
     
     @hybrid_property
     def start_month(self) -> int:
-        # Преобразование строки start_date в объект даты
-        start_date_obj = datetime.strptime(self.start_date, "%d.%m.%Y")
-        # Извлечение месяца в виде числа (1-12)
-        return start_date_obj.month
-
+        if self.start_date:
+            # Преобразование строки start_date в объект даты
+            start_date_obj = datetime.strptime(self.start_date, "%d.%m.%Y")
+            # Извлечение месяца в виде числа (1-12)
+            return start_date_obj.month
+            
+        return 0
+    
     @hybrid_property
     def duration(self) -> int:
-        start_date = datetime.strptime(self.start_date, "%d.%m.%Y")
-        end_date = datetime.strptime(self.end_date, "%d.%m.%Y")
-        delta = end_date - start_date
-        return delta.days
+        if self.start_date:
+            start_date = datetime.strptime(self.start_date, "%d.%m.%Y")
+            end_date = datetime.strptime(self.end_date, "%d.%m.%Y")
+            delta = end_date - start_date
+            return delta.days
+        return 0
 
     @hybrid_property
-    def is_one_day_tour(self) -> bool:
-        return self.duration == 1
+    def is_one_day_tour(self) -> bool | None:
+        if self.duration:
+            return self.duration == 1
+        return None
 
     # @hybrid_property
     # def category_ids(self) -> list[int]:
@@ -149,10 +156,12 @@ class Tour(BaseTable):
         return len(self.regions)
     
     @hybrid_property
-    def has_discount(self) -> bool:
-        if self.prices[0].discount_percentage:
-            return True
-        return False
+    def has_discount(self) -> bool | None:
+        if self.prices:
+            if self.prices[0].discount_percentage:
+                return True
+            return False
+        return None
 
     user: Mapped["User"] = relationship(back_populates="tours", lazy="subquery")
     status: Mapped["TourStatus"] = relationship(lazy="subquery")

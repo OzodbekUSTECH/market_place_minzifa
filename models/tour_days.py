@@ -14,7 +14,7 @@ class TourDay(TourMixin, BaseTable):
     day: Mapped[int]
     name: Mapped[dict] = mapped_column(JSONB)
     description: Mapped[dict] = mapped_column(JSONB)
-    region_id: Mapped[int] = mapped_column(ForeignKey("regions.id"))
+    region_id: Mapped[int | None] = mapped_column(ForeignKey("regions.id"))
 
     region: Mapped["Region"] = relationship(lazy="subquery")
     media: Mapped[list["TourDayMediaGroup"]] = relationship(lazy="subquery", cascade="all, delete-orphan")

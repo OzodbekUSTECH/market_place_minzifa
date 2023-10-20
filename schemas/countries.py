@@ -8,7 +8,7 @@ class CreateCountrySchema(CreateBaseModel):
     title: Union[dict[str, str], str]
     meta_description: Union[dict[str, str], str, None]
     description: Union[dict[str, str], str, None]
-    filename: UploadFile | None
+    filename: UploadFile | None | str
 
 
 class UpdateCountrySchema(UpdateBaseModel, CreateCountrySchema):

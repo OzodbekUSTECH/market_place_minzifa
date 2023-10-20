@@ -11,7 +11,7 @@ class TourHotel(TourMixin, BaseTable):
     
     name: Mapped[dict] = mapped_column(JSONB)
     # hotel_type_id: Mapped[int] = mapped_column(ForeignKey("tour_hotel_types.id"))
-    short_description: Mapped[dict | None] = mapped_column(JSONB)
+    description: Mapped[dict | None] = mapped_column(JSONB)
     stars: Mapped[int | None]
 
     

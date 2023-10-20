@@ -28,59 +28,64 @@ class ToursService:
 
     async def create_tour(self, uow: UnitOfWork, tour_data: CreateTourSchema) -> models.Tour:
         tour_dict = tour_data.model_dump()
-        async with uow:
-            tour: models.Tour = await uow.tours.create(tour_dict)
-            
-            
-            data_list = await self._create_update_prices(uow, tour, tour_data)
-            await uow.tour_prices.bulk_create(data_list)
-            
-            
+        # async with uow:
+        tour: models.Tour = await uow.tours.create(tour_dict)
+        
+        
+        data_list = await self._create_update_prices(uow, tour, tour_data)
+        await uow.tour_prices.bulk_create(data_list)
+        
+        
 
-            # Создайте список словарей для категорий
-            # await self._bulk_create(
-            #     data_list=[CreateTourCategorySchema(tour_id=tour.id, category_id=category_id).model_dump() for category_id in tour_data.category_ids],
-            #     bulk_create_func=uow.tour_categories.bulk_create
-            # )
+        # Создайте список словарей для категорий
+        # await self._bulk_create(
+        #     data_list=[CreateTourCategorySchema(tour_id=tour.id, category_id=category_id).model_dump() for category_id in tour_data.category_ids],
+        #     bulk_create_func=uow.tour_categories.bulk_create
+        # )
+        if tour_data.additional_type_ids:
             await self._bulk_create(
                 data_list=[CreateTourAdditionalTypeSchema(tour_id=tour.id, type_id=additional_type_id).model_dump() for additional_type_id in tour_data.additional_type_ids],
                 bulk_create_func=uow.tour_additional_types.bulk_create
             )
 
+        await self._bulk_create(
+            data_list=[CreateTourLanguageSchema(tour_id=tour.id, language_id=language_id).model_dump() for language_id in tour_data.language_ids],
+            bulk_create_func=uow.tour_languages.bulk_create
+        )
+
+        if tour_data.activity_ids:
             await self._bulk_create(
-                data_list=[CreateTourLanguageSchema(tour_id=tour.id, language_id=language_id).model_dump() for language_id in tour_data.language_ids],
-                bulk_create_func=uow.tour_languages.bulk_create
+                data_list=[CreateTourActivitySchema(tour_id=tour.id, activity_id=activity_id).model_dump() for activity_id in tour_data.activity_ids],
+                bulk_create_func=uow.tour_activities.bulk_create
             )
 
-            if tour_data.activity_ids:
-                await self._bulk_create(
-                    data_list=[CreateTourActivitySchema(tour_id=tour.id, activity_id=activity_id).model_dump() for activity_id in tour_data.activity_ids],
-                    bulk_create_func=uow.tour_activities.bulk_create
-                )
-
+        if tour_data.accommodation_ids:
             await self._bulk_create(
                 data_list = [CreateTourAccommodationSchema(tour_id=tour.id, accommodation_id=accommodation_id).model_dump() for accommodation_id in tour_data.accommodation_ids],
                 bulk_create_func=uow.tour_accommodations.bulk_create
             )
-
+        
+        if tour_data.accommodation_type_ids:
             await self._bulk_create(
                 data_list = [CreateTourAccommodationTypeSchema(tour_id=tour.id, accommodation_type_id=accommodation_type_id).model_dump() for accommodation_type_id in tour_data.accommodation_type_ids],
                 bulk_create_func=uow.tour_accommodation_types.bulk_create
             )
 
+        if tour_data.country_ids:
             await self._bulk_create(
                 data_list=[CreateTourCountrySchema(tour_id=tour.id, country_id=country_id).model_dump() for country_id in tour_data.country_ids],
                 bulk_create_func=uow.tour_countries.bulk_create
             )
 
+        if tour_data.region_ids:
             await self._bulk_create(
                 data_list=[CreateTourRegionSchema(tour_id=tour.id, region_id=region_id).model_dump() for region_id in tour_data.region_ids],
                 bulk_create_func=uow.tour_regions.bulk_create
             )
-            
         
-            await uow.commit()
-            return tour
+        return tour
+        # await uow.commit()
+        # return tour
 
     async def _delete_expired_discounts(self, uow: UnitOfWork) -> bool:
         

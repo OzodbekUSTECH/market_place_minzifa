@@ -1,0 +1,1210 @@
+[
+    {
+        "id": "1",
+        "type_id": "1",
+        "title": "Входные билеты в музеи, для посещения достопримечательностей, памятников",
+        "icon": "fa fa-ticket-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "2",
+        "type_id": "1",
+        "title": "Гид - экскурсовод (Сертифицированные)",
+        "icon": "fa fa-user",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "3",
+        "type_id": "1",
+        "title": "Транспорт во время экскурсий",
+        "icon": "fa fa-car",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "4",
+        "type_id": "1",
+        "title": "ЖД билеты эконом класса",
+        "icon": "fa fa-train",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "7",
+        "type_id": "1",
+        "title": "Размещение в 3* отелях (согласно программе)+ Завтраки",
+        "icon": "fa fa-bed",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "8",
+        "type_id": "1",
+        "title": "Полный пансион(Завтрак + Обед + Ужин)",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "9",
+        "type_id": "1",
+        "title": "Встречи и проводы в аэропорт",
+        "icon": "fa fa-handshake",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "10",
+        "type_id": "1",
+        "title": "Международные перелеты в Узбекистан и обратно",
+        "icon": "fa fa-plane",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "11",
+        "type_id": "1",
+        "title": "Плата за фото и видеосъемку в музеях и памятников",
+        "icon": "fa fa-money-bill-wave",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "12",
+        "type_id": "1",
+        "title": "Дополнительные услуги в отелях",
+        "icon": "fa fa-info-circle",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "13",
+        "type_id": "1",
+        "title": "Чаевые для гида и водителей ",
+        "icon": "fa fa-money-bill-wave",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "14",
+        "type_id": "1",
+        "title": "Дополнительный досуг",
+        "icon": "fa fa-camera-retro",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "15",
+        "type_id": "2",
+        "title": "Доступность отелей не гарантируется, зависит от наличия в момент Вашего заказа!",
+        "icon": "fa fa-bed",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "16",
+        "type_id": "2",
+        "title": "При отсутствии в наличии билетов на поезд &ldquo;Афросиаб&rdquo; Ташкент - Бухара, Самарканд - Ташкент,\r\n      билеты будут приобретаться на поезд &ldquo;Шарк&rdquo;, &ldquo;Регистан&rdquo;, который прибывает на 2,5\r\n      часа позже",
+        "icon": "fa fa-train",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "17",
+        "type_id": "2",
+        "title": "Услуги гида по датам вылета и прилета не входят в цену, за исключением, если стоит экскурсия в этот\r\n      день.",
+        "icon": "fa fa-user",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "18",
+        "type_id": "2",
+        "title": "Компания оставляет за собой право корректировать согласованные ставки. Кроме того, компания оставляет за      собой право пересмотреть и скорректировать согласованные ставки в запрашиваемый период темпов      девальвации местной валюты (Uzb) по отношению к иностранной валюте На уровне 5% и больше.",
+        "icon": "fa fa-info-circle",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "19",
+        "type_id": "2",
+        "title": "Отели: Заезд после 13:00, Выезд до 12:00",
+        "icon": "fa fa-bed",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "20",
+        "type_id": "2",
+        "title": "Организационные детали для экскурсий",
+        "icon": "fa fa-info-circle",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "24",
+        "type_id": "1",
+        "title": "Полупансион (Завтрак + Обед)",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "40",
+        "type_id": "1",
+        "title": "Дополнительный завтрак в отеле в первый день в Ташкенте!",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "41",
+        "type_id": "1",
+        "title": "Участие группы в приготовлении сумаляка ",
+        "icon": "fas fa-seedling",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "43",
+        "type_id": "1",
+        "title": "Услуги стилиста ",
+        "icon": "far fa-hand-paper",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "44",
+        "type_id": "1",
+        "title": "Романтический ужин ",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "45",
+        "type_id": "3",
+        "title": "Национальные костюмы",
+        "icon": "fas fa-user-tie",
+        "price": "20",
+        "archive": "0"
+    },
+    {
+        "id": "46",
+        "type_id": "3",
+        "title": "Мастер класс по сюзанне и плову",
+        "icon": "fab fa-get-pocket",
+        "price": "15",
+        "archive": "0"
+    },
+    {
+        "id": "47",
+        "type_id": "1",
+        "title": "Мастер класс по приготовлению Плова в нац доме ",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "48",
+        "type_id": "1",
+        "title": "Внутренний авиаперелет Ташкент - Ургенч",
+        "icon": "fa fa-plane",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "49",
+        "type_id": "1",
+        "title": "Полупансион (Обед или Ужин)",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "50",
+        "type_id": "1",
+        "title": "Мастер класс по приготовлению лагмана",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "51",
+        "type_id": "1",
+        "title": "Катание на Верблюде (в юртовом лагере)",
+        "icon": "fas fa-horse",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "53",
+        "type_id": "1",
+        "title": "Фольклорно-музыкальная программа",
+        "icon": "fas fa-music",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "54",
+        "type_id": "1",
+        "title": "Винная дегустация",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "55",
+        "type_id": "1",
+        "title": "Поездка в банк и помощь с оформлением карт",
+        "icon": "fas fa-money-check-alt",
+        "price": "120",
+        "archive": "0"
+    },
+    {
+        "id": "56",
+        "type_id": "1",
+        "title": "Транспорт наземный в течение маршрута",
+        "icon": "fa fa-car",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "57",
+        "type_id": "1",
+        "title": "Билеты на канатную дорогу",
+        "icon": "fa fa-ticket-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "59",
+        "type_id": "1",
+        "title": "Приветственный или прощальный Ужин",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "60",
+        "type_id": "1",
+        "title": "Мастер класс по керамике",
+        "icon": "fas fa-hands",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "61",
+        "type_id": "1",
+        "title": "Обеспечение речными гидами, снаряжением для рафтинга (рафты, катамараны, весла, неопреновые гидрокостюмы, спасательные жилеты, каски)",
+        "icon": "fas fa-ship",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "62",
+        "type_id": "1",
+        "title": "Международные перелеты ",
+        "icon": "fa fa-plane",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "63",
+        "type_id": "1",
+        "title": "Ланч боксы согласно программе (Lunch Box)",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "64",
+        "type_id": "1",
+        "title": "Мастер класс по приготовлению мант в нац доме  + Обед",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "65",
+        "type_id": "1",
+        "title": "Новогодний Ужин в Самарканде",
+        "icon": "fas fa-music",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "66",
+        "type_id": "1",
+        "title": "Полный пансион в Юртовом Лагере (Завтрак + Обед + Ужин)",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "67",
+        "type_id": "1",
+        "title": "Ранний заезд в отеле согласно программе в первый день",
+        "icon": "fa fa-bed",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "68",
+        "type_id": "1",
+        "title": "Шампанское в номере бонусом от компании",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "69",
+        "type_id": "1",
+        "title": "Гид - экскурсовод в сопровождении (для группы)",
+        "icon": "fa fa-user",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "70",
+        "type_id": "1",
+        "title": "Фоторепортаж в Самарканде (на знаменитой площади Регистан)",
+        "icon": "fa fa-camera-retro",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "71",
+        "type_id": "1",
+        "title": "Мастер класс по приготовлению знаменитого блюда хорезмской кухни — Шивит оши (Зеленая лапша)  + Обед",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "72",
+        "type_id": "1",
+        "title": "Дегустация традиционной узбекской каши - Халиса + Обед",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "73",
+        "type_id": "1",
+        "title": "Поездка в горы ( Ташкент - Чимган, Чарвак - Ташкент)",
+        "icon": "fa fa-car",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "74",
+        "type_id": "1",
+        "title": "Поездка на бумажную фабрику Кунья Мерос (производство знаменитой Самаркандской бумаги)",
+        "icon": "fa fa-ticket-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "75",
+        "type_id": "1",
+        "title": "Поездка в ковровую фабрику “Худжум” узнаем как изготавливают шелковые ковры",
+        "icon": "fa fa-ticket-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "76",
+        "type_id": "1",
+        "title": "Рождественский ужин от компании в ресторане",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "77",
+        "type_id": "1",
+        "title": "Дистанционный Аудиогид - для прослушивания гида на расстоянии ",
+        "icon": "fas fa-headphones-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "78",
+        "type_id": "1",
+        "title": "НДС включен",
+        "icon": "fa fa-money-bill-wave",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "79",
+        "type_id": "1",
+        "title": "Транспорт во время экскурсий (Мерседес)",
+        "icon": "fa fa-car",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "80",
+        "type_id": "1",
+        "title": "Встречи и проводы в аэропорт и Ж\/Д вокзал (Мерседес)",
+        "icon": "fa fa-handshake",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "81",
+        "type_id": "1",
+        "title": "Обеды - 7 раз (Первое, второе , салат и дисерты, чай, вода)  ",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "85",
+        "type_id": "1",
+        "title": "Мастер класс по приготовлению Ханум в нац доме в Бухаре",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "86",
+        "type_id": "1",
+        "title": "Шампанское в номере бонусом от компании",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "87",
+        "type_id": "1",
+        "title": "Тур Сбор оплачивается самостоятельно в отеле ",
+        "icon": "fa fa-money-bill-wave",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "88",
+        "type_id": "1",
+        "title": "Полный пансион (за исключением мастер классов)",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "89",
+        "type_id": "1",
+        "title": "Проживание в юртах",
+        "icon": "fa fa-bed",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "90",
+        "type_id": "1",
+        "title": "Полупансион в юртах: завтрак, ужин",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "91",
+        "type_id": "1",
+        "title": "Прощальный ужин  с фольклорным шоу",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "92",
+        "type_id": "1",
+        "title": "Чайная дегустация в чайном домике",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "93",
+        "type_id": "1",
+        "title": "Приветственный ужин в ресторане",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "94",
+        "type_id": "1",
+        "title": "Проживание в отеле согласно программе Deluxe Room + Завтраки",
+        "icon": "fa fa-bed",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "95",
+        "type_id": "1",
+        "title": "Тур Сбор в отеле ",
+        "icon": "fa fa-money-bill-wave",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "96",
+        "type_id": "1",
+        "title": "Питьевая вода (2 по 0,5 литр на 1 чел в день)",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "97",
+        "type_id": "1",
+        "title": "Демонстрация с Золотым Орлом",
+        "icon": "fa fa-camera-retro",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "98",
+        "type_id": "1",
+        "title": "Шырдак шоу в Кочкорке",
+        "icon": "fa fa-money-bill-wave",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "99",
+        "type_id": "1",
+        "title": "Аренда лошадей, услуги конюха и его ассистента (по программе)",
+        "icon": "fas fa-horse",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "100",
+        "type_id": "1",
+        "title": "Транспорт во время экскурсий (с кондиционером)",
+        "icon": "fa fa-car",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "101",
+        "type_id": "1",
+        "title": "1 ужин + 1 завтрак в юртовом лагере",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "102",
+        "type_id": "1",
+        "title": "Вечный город комплекса Silk Road Samarkand",
+        "icon": "fa fa-car",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "103",
+        "type_id": "1",
+        "title": "Прощальный ужин на ферме",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "104",
+        "type_id": "1",
+        "title": "Поездка на лавандовую ферму",
+        "icon": "fa fa-tractor",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "105",
+        "type_id": "1",
+        "title": "Внутренний перелет Тегеран – Шираз ",
+        "icon": "fa fa-plane",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "106",
+        "type_id": "1",
+        "title": "Визовая поддержка",
+        "icon": "fas fa-passport",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "107",
+        "type_id": "1",
+        "title": "Экскурсии, не описанные в программе",
+        "icon": "fa fa-user",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "108",
+        "type_id": "1",
+        "title": "Заявление для оформления визы в Иран",
+        "icon": "fa fa-passport",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "109",
+        "type_id": "1",
+        "title": "Необходимый туристический пакет (Туристическая страховка, Sim-карта, Банковская карта)",
+        "icon": "fa fa-address-card",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "110",
+        "type_id": "1",
+        "title": "Освежающий напиток в середине дня",
+        "icon": "fa fa-cocktail",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "111",
+        "type_id": "1",
+        "title": "Внутренний рейс Тегеран - Шираз",
+        "icon": "fa fa-plane",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "112",
+        "type_id": "1",
+        "title": "Служба поддержки доступна 24\/7",
+        "icon": "fa fa-headset",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "113",
+        "type_id": "1",
+        "title": "Международные рейсы Москва- Тегеран - Москва.",
+        "icon": "fa fa-plane",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "114",
+        "type_id": "1",
+        "title": "Виза по прибытию (цена варьируется от 75-80 евро).",
+        "icon": "fa fa-passport",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "115",
+        "type_id": "1",
+        "title": "Обеды и ужины.",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "116",
+        "type_id": "1",
+        "title": "Медицинская страховка.",
+        "icon": "fa fa-clinic-medical",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "117",
+        "type_id": "1",
+        "title": "Напитки, личные расходы.",
+        "icon": "fa fa-cocktail",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "118",
+        "type_id": "1",
+        "title": "   Получение референс кода для визы",
+        "icon": "fa fa-passport",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "119",
+        "type_id": "1",
+        "title": "Мастер-класс в иранской семье.",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "120",
+        "type_id": "1",
+        "title": "Традиционные восточные наряды для фотосессии",
+        "icon": "fa fa-camera",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "121",
+        "type_id": "1",
+        "title": "10 фотографий каждого человека в Кешме, сделанных профессиональным фотографом. ",
+        "icon": "fa fa-camera",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "122",
+        "type_id": "1",
+        "title": "Внутрение авиа перелеты",
+        "icon": "fa fa-plane",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "123",
+        "type_id": "1",
+        "title": " Размещение в лучших 3 * (двухместное размещение)",
+        "icon": "fa fa-hotel",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "124",
+        "type_id": "1",
+        "title": "входные билеты (канатная дорога в Тбилиси, фуникулер в Тбилиси, Уплисцихе, парк Боржоми)",
+        "icon": "fa fa-ticket-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "126",
+        "type_id": "1",
+        "title": "Дегустация вина на винодельне",
+        "icon": "fa fa-wine-glass",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "127",
+        "type_id": "1",
+        "title": "Внедорожники в Казбеги",
+        "icon": "fa fa-car",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "128",
+        "type_id": "1",
+        "title": "Размещение в лучших 4* и  5* отелях",
+        "icon": "fa fa-bed",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "129",
+        "type_id": "1",
+        "title": "Размещение в лучших 4* отелях ",
+        "icon": "fa fa-hotel",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "130",
+        "type_id": "1",
+        "title": "Следующие услуги  (по желанию)  составляют  100 евро: Стоимость пляжа в Кише, парк пингвинов, Круизный лайнер в Кише, Корабль-аквариум в Кише, Подземный город в Кише, Канатная дорога Киш.",
+        "icon": "fa fa-money-bill-wave",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "131",
+        "type_id": "1",
+        "title": "Оформление визы по прилету в Тегеран",
+        "icon": "fa fa-passport",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "132",
+        "type_id": "1",
+        "title": "Раний заезд в отель",
+        "icon": "fa fa-hotel",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "133",
+        "type_id": "1",
+        "title": " Размещение в общей треккинговой палатке (включая спальный коврик, спальный мешок и подушку), включая завтрак.",
+        "icon": "fa fa-bed",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "134",
+        "type_id": "1",
+        "title": "Фиксированное питание (2 ужина) в местах, где нет мест общественного питания, где питание необходимо заказывать заранее",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "135",
+        "type_id": "1",
+        "title": "Туристическая виза Туркменистана от 85+4 USD на человека, при получении в аэропорту Ашхабада (может быть изменена; зависит от гражданства)",
+        "icon": "fa fa-passport",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "136",
+        "type_id": "1",
+        "title": " Все прочие расходы и услуги, не указанные в разделе \"Включено\"",
+        "icon": "fa fa-money-bill-wave",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "137",
+        "type_id": "1",
+        "title": "миграционный налог Туркменистана 10+4 USD на человека, оплачивается в аэропорту Ашхабада (подлежит изменению)",
+        "icon": "fa fa-money-bill-wave",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "138",
+        "type_id": "1",
+        "title": "Трансферы по маршруту",
+        "icon": "fa fa-car",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "139",
+        "type_id": "1",
+        "title": "Проживание в отелях в стандартных номерах",
+        "icon": "fa fa-bed",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "140",
+        "type_id": "1",
+        "title": "Питание: Завтраки в отелях ",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "141",
+        "type_id": "1",
+        "title": " Международный перелет (от 245 дол.США. Зависит от сезонности, наличия мест на рейсе,  авиакомпаний-перевозчиков)",
+        "icon": "fa fa-plane",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "143",
+        "type_id": "1",
+        "title": "Страховой полис",
+        "icon": "fa fa-clinic-medical",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "144",
+        "type_id": "1",
+        "title": " Банковские услуги",
+        "icon": "fa fa-info-circle",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "145",
+        "type_id": "1",
+        "title": "Дегустация вина в Шато Мухрани",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "146",
+        "type_id": "1",
+        "title": "Дегустация вина на винодельне в Кахети",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "147",
+        "type_id": "1",
+        "title": "Кулинарный мастер-класс  и обед на виноделье в Кахети",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "148",
+        "type_id": "1",
+        "title": "Минеральная вода (1л\/день\/чел.)",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "149",
+        "type_id": "1",
+        "title": "Плата за услуги носильщика",
+        "icon": "fa fa-luggage-cart",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "150",
+        "type_id": "1",
+        "title": "Гид - экскурсовод в сопровождении (Сертифицированные)",
+        "icon": "fa fa-user",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "151",
+        "type_id": "1",
+        "title": "9 обедов и 1 ужин",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "152",
+        "type_id": "1",
+        "title": "Входные билеты на указанные в маршруте объекты.",
+        "icon": "fa fa-ticket-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "153",
+        "type_id": "1",
+        "title": "Чай в пакетиках и травяной чай, одна минеральная вода в день на человека.",
+        "icon": "fa fa-coffee",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "154",
+        "type_id": "1",
+        "title": "Профессиональная фотосъемка (5 фотографий на человека)",
+        "icon": "fa fa-camera",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "155",
+        "type_id": "1",
+        "title": "два внутренних рейса Тегеран-Кешм и Кешм-Шираз.",
+        "icon": "fa fa-plane",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "156",
+        "type_id": "1",
+        "title": "Гид, говорящий на английском, французском, немецком, русском или испанском языках.",
+        "icon": "fa fa-user-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "157",
+        "type_id": "1",
+        "title": " Необходимый туристический пакет (туристическая страховка и Sim-карта с vpn)",
+        "icon": "fa fa-address-card",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "158",
+        "type_id": "1",
+        "title": "Международные рейсы",
+        "icon": "fa fa-plane",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "159",
+        "type_id": "1",
+        "title": "Ужины",
+        "icon": "fa fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "160",
+        "type_id": "1",
+        "title": "Виза по прибытии ",
+        "icon": "fa fa-passport",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "161",
+        "type_id": "1",
+        "title": "RSG - русскоговорящий гид",
+        "icon": "fa fa-user",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "162",
+        "type_id": "1",
+        "title": "НДС+ Тур сбор включен в стоимость",
+        "icon": "fa fa-money-bill-wave",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "163",
+        "type_id": "1",
+        "title": "Музей виноделия при винном заводе Ховренко и дегустация узбекских вин",
+        "icon": "fas fa-wine-glass-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "164",
+        "type_id": "1",
+        "title": " Посещение вечного города в Самарканде",
+        "icon": "fa fa-city",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "165",
+        "type_id": "1",
+        "title": "Питание: ужин (местные чайханы и рестораны, предлагающие национальную узбекскую кухню), за исключением в разделе “Включено”!",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "166",
+        "type_id": "1",
+        "title": "Размещение в юрте, в гостевом доме согласно заказу",
+        "icon": "fa fa-hotel",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "167",
+        "type_id": "1",
+        "title": "Прогулка на лошадях",
+        "icon": "fa fa-solid fa-horse",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "168",
+        "type_id": "1",
+        "title": "Рыбалка и пляжный отдых",
+        "icon": "fa fa-fish",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "169",
+        "type_id": "1",
+        "title": "Гид экскурсовод в сопровождении (сертифицированный) ",
+        "icon": "fa fa-user",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "170",
+        "type_id": "1",
+        "title": "Встречи и проводы в жд вокзалах и в аэропорту",
+        "icon": "fa fa-handshake",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "171",
+        "type_id": "1",
+        "title": "Размещение в лучших 3* и  4* отелях",
+        "icon": "fa fa-bed",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "172",
+        "type_id": "1",
+        "title": "Мастер-класс по выпечке хлеба и приготовлению чурчхелы на винном заводе.",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "173",
+        "type_id": "1",
+        "title": "Новогодний вечерний Ташкент - обзорная на транспорте",
+        "icon": "fas fa-music",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "174",
+        "type_id": "1",
+        "title": "Поднос багажа",
+        "icon": "fa fa-suitcase",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "175",
+        "type_id": "1",
+        "title": "Входные билеты на канатную дорогу в курортной зоне Амирсой ",
+        "icon": "fa-ticket-alt",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "176",
+        "type_id": "1",
+        "title": "Тур на коньячный завод с дегустацией ",
+        "icon": "fa solid fa-horse",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "177",
+        "type_id": "1",
+        "title": "Грузинское застолье в семье + дегустация + мастер-классы ",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "178",
+        "type_id": "1",
+        "title": "Новогодний ужин",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    },
+    {
+        "id": "179",
+        "type_id": "1",
+        "title": "3 Обеда (  30 декабря, 2 января, 3 января )",
+        "icon": "fas fa-utensils",
+        "price": "0",
+        "archive": "0"
+    }
+]

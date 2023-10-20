@@ -20,7 +20,7 @@ class CreateTourDaySchema(TourMixinBaseModel, CreateBaseModel):
     day: int
     name: Union[dict[str, str], str]
     description: Union[dict[str, str], str]
-    region_id: int
+    region_id: int | None
     photos: list[UploadFile] = Field(None, exclude=True)
 
 class UpdateTourDaySchema(UpdateBaseModel, CreateTourDaySchema):
@@ -28,7 +28,7 @@ class UpdateTourDaySchema(UpdateBaseModel, CreateTourDaySchema):
 
 
 class TourDaySchema(IdResponseSchema, UpdateTourDaySchema):
-    region: RegionSchema
+    region: RegionSchema | None
     media: list[TourDayMediaGroup]
-
-    region_id: int = Field(exclude=True)
+        
+    region_id: int | None = Field(None, exclude=True)

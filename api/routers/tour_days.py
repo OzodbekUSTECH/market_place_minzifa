@@ -23,7 +23,7 @@ async def create_tour_day(
     day: int = Form(),
     name: str = Form(),
     description: str = Form(),
-    region_id: str = Form(),
+    region_id: str | None = Form(None),
     photo_1: UploadFile = File(None),
     photo_2: UploadFile = File(None),
     photo_3: UploadFile = File(None)

@@ -39,7 +39,10 @@ from api.routers.forms import router as forms_router
 
 from api.routers.orders import router as orders_router
 
+from api.routers.parser import router as parser_router
+
 all_routers = [
+    parser_router,
     auth_router,
     users_router,
     roles_router,

@@ -17,7 +17,7 @@ async def create_tour_hotel(
     uow: UOWDependency,
     tour_id: int = Form(),
     name: str = Form(),
-    short_description: str | None = Form(None),
+    description: str | None = Form(None),
     stars: int | None = Form(None),
     photos: list[UploadFile] = File()
 ):
@@ -28,7 +28,7 @@ async def create_tour_hotel(
     """
     try:
         name_dict = json.loads(name)
-        short_description_dict = json.loads(short_description) if short_description else None
+        description_dict = json.loads(description) if description else None
         
     except:
         raise CustomExceptions.conflict("Invalid JSON format for title or description field, should be dict") 
@@ -36,7 +36,7 @@ async def create_tour_hotel(
     hotel_data = CreateTourHotelSchema(
         tour_id=tour_id,
         name=name_dict,
-        short_description=short_description_dict,
+        description=description_dict,
         stars=stars,
         photos=photos,
     )

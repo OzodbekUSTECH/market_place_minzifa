@@ -19,7 +19,7 @@ class TourHotelMediaGroup(IdResponseSchema, CreateTourHotelMediaGroup):
 ##########################
 class CreateTourHotelSchema(TourMixinBaseModel, CreateBaseModel):
     name: Union[dict[str, str], str]
-    short_description: Union[dict[str, str], str, None]
+    description: Union[dict[str, str], str, None]
     stars: int | None
     photos: list[UploadFile] = Field(None, exclude=True)
 
