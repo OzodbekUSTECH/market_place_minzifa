@@ -165,7 +165,7 @@ class ParsersService:
                     free_places=tour["travellers"],
                     is_guaranteed=True,
                     category_id=1,
-                    main_type_id=25,
+                    main_type_id=5,
                     is_allowed_individually=True,
                     additional_type_ids=None,
                     language_ids=[1],
