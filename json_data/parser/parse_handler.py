@@ -58,7 +58,8 @@ class ParseHandler:
     @staticmethod
     def get_tours():
         tours = ParseHandler.parse_json_file(ParseHandler.tours)
-        return tours
+        quanti = len(tours) // 2
+        return tours[:quanti]
     
     @staticmethod
     def get_tour_photos(tour_id: str):
