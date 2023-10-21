@@ -139,7 +139,7 @@ class ParseHandler:
     def get_hotel_photos_by_hotel_id(hotel_id: str):
         photos = ParseHandler.parse_json_file(ParseHandler.hotel_photos)
         hotel_photos = list(filter(lambda item: item["hotelid"] == hotel_id, photos))
-        return hotel_photos
+        return hotel_photos[:3]
     
 
     @staticmethod
