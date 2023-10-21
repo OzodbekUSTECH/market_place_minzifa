@@ -283,7 +283,7 @@ class ParsersService:
                             if hotel_photo_list:
                                 await uow.tour_hotel_media_groups.bulk_create(hotel_photo_list)
 
-                await uow.commit()
+            await uow.commit()
 
     async def parse_includes_and_excludes(self):
         uow = UnitOfWork()
