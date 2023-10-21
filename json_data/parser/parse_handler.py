@@ -58,7 +58,7 @@ class ParseHandler:
     @staticmethod
     def get_tours():
         tours = ParseHandler.parse_json_file(ParseHandler.tours)
-        return tours[:10]
+        return tours[:3]
     
     @staticmethod
     def get_tour_photos(tour_id: str):
