@@ -152,7 +152,7 @@ class ParsersService:
                 tour_data = CreateTourSchema(
                     title=title,
                     description=description,
-                    user_id = 1,
+                    user_id = 2,
                     status_id = 1,
                     map_link = tour["map"],
                     age_group_from=8,

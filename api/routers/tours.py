@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from services import tours_service
 from repositories import Page
-from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema
+from schemas.tours import CreateTourSchema, UpdateTourSchema, TourSchema, OneTourSchema
 from schemas import IdResponseSchema
 from utils.locale_handler import LocaleHandler
 from utils.filters.filter_tours import FilterToursParams
@@ -32,7 +32,7 @@ async def get_list_of_tours(
     return await tours_service.get_list_of_tours(uow, filter_params, locale)
 
 
-@router.get("/{locale}/{id}", response_model=TourSchema)
+@router.get("/{locale}/{id}", response_model=OneTourSchema)
 @LocaleHandler.serialize_one_all_models_by_locale
 async def get_tour_by_id(
     uow: UOWDependency,

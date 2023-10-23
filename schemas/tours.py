@@ -102,19 +102,19 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     is_one_day_tour: bool | None
     user: UserSchema
     status: TourStatusSchema
-    children_age: TourChildrenAgeSchema
-    activity_level: TourActivityLevelSchema
+    # children_age: TourChildrenAgeSchema
+    # activity_level: TourActivityLevelSchema
     photos: list[TourMediaSchema]
     category: CategorySchema
     # categories: list[CategorySchema]
     main_type: TypeSchema
-    additional_types: list[TypeSchema]
-    languages: list[LanguageSchema]
-    activities: list[ActivitySchema]
-    accommodations: list[AccommodationSchema]
-    accommodation_types: list[AccommodationTypeSchema]
-    countries: list[CountrySchema]
-    regions: list[RegionSchema]
+    # additional_types: list[TypeSchema]
+    # languages: list[LanguageSchema]
+    # activities: list[ActivitySchema]
+    # accommodations: list[AccommodationSchema]
+    # accommodation_types: list[AccommodationTypeSchema]
+    # countries: list[CountrySchema]
+    # regions: list[RegionSchema]
     prices: list[CustomTourPriceSchema]
 
     total_free_places: int
@@ -124,11 +124,11 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     amount_regions: int
     has_discount: bool | None
 
-    days: list[TourDaySchema]
-    hotels: list[TourHotelSchema]
-    importants: list[TourImportantSchema]
-    includes_in_price: list[IncludeInPriceSchema]
-    excludes_in_price: list[ExcludeInPriceSchema]
+    # days: list[TourDaySchema]
+    # hotels: list[TourHotelSchema]
+    # importants: list[TourImportantSchema]
+    # includes_in_price: list[IncludeInPriceSchema]
+    # excludes_in_price: list[ExcludeInPriceSchema]
     
 
 
@@ -153,3 +153,23 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     discount_end_date: str | None = Field(None, exclude=True)
     
     # tour_days: list | None = Field(None, exclude=True)
+
+class OneTourSchema(TourSchema):
+    children_age: TourChildrenAgeSchema
+    activity_level: TourActivityLevelSchema
+
+    additional_types: list[TypeSchema]
+    languages: list[LanguageSchema]
+    activities: list[ActivitySchema]
+    accommodations: list[AccommodationSchema]
+    accommodation_types: list[AccommodationTypeSchema]
+    countries: list[CountrySchema]
+    regions: list[RegionSchema]
+
+    days: list[TourDaySchema]
+    hotels: list[TourHotelSchema]
+    importants: list[TourImportantSchema]
+    includes_in_price: list[IncludeInPriceSchema]
+    excludes_in_price: list[ExcludeInPriceSchema]
+
+    
