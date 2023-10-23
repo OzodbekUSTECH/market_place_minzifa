@@ -29,13 +29,13 @@ class LocaleHandler:
                 return localized_values
 
             # Process a BaseModel
-            if isinstance(attr_value, BaseModel):
+            if isinstance(attr_value, BaseModel) or isinstance(attr_value, md.BaseTable):
                 for key, value in attr_value.__dict__.items():
                     if isinstance(value, dict):
                         localized_value = value.get(locale.get_language, None)
                         if localized_value is not None:
                             setattr(attr_value, key, localized_value)
-                    elif isinstance(value, BaseModel):
+                    elif isinstance(value, BaseModel) or isinstance(value, md.BaseTable):
                         for sub_key, sub_value in value.__dict__.items():
                             if isinstance(sub_value, dict):
                                 sub_localized_value = sub_value.get(locale.get_language, None)
