@@ -27,6 +27,11 @@ class BaseRepository:
             stmt = stmt.order_by(self.model.id)
             
         return await paginate(self.session, stmt)
+    
+    async def get_all_without_pagination(self):
+        stmt = select(self.model)
+        result = await self.session.execute(stmt)
+        return result.scalars().all()
 
     async def get_by_id(self, id: int) -> dict:
         stmt = select(self.model).where(self.model.id == id)

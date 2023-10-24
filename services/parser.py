@@ -364,6 +364,16 @@ class ParsersService:
 
             await uow.commit()
 
+    
+    async def set_tour_leader_for_all_tours(self):
+        uow = UnitOfWork()
+        async with uow:
+            tours: list[models.Tour] = await uow.tours.get_all_without_pagination()
+            for tour in tours:
+                tour.tour_leader_id = 3
+            
+            await uow.commit()
+
 
                             
 

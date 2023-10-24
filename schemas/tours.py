@@ -41,6 +41,7 @@ class CreateTourSchema(CreateBaseModel):
     title: Union[dict[str, str], str]
     description: Union[dict[str, str], str]
     user_id: int
+    tour_leader_id: int
     status_id: int
     map_link: str | None
     age_group_from: int = Field(le=100)
@@ -100,7 +101,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     duration: int | None
     is_guaranteed: bool
     is_one_day_tour: bool | None
-    user: UserSchema
+    # user: UserSchema
     status: TourStatusSchema
     # children_age: TourChildrenAgeSchema
     # activity_level: TourActivityLevelSchema
@@ -133,7 +134,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
 
 
     ######################################
-    user_id: int = Field(exclude=True)
+    # user_id: int = Field(exclude=True)
     free_places: int = Field(exclude=True)
     status_id: int = Field(exclude=True)
     children_age_id: int = Field(exclude=True)
@@ -155,6 +156,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     # tour_days: list | None = Field(None, exclude=True)
 
 class OneTourSchema(TourSchema):
+    # tour_leader: UserSchema
     children_age: TourChildrenAgeSchema
     activity_level: TourActivityLevelSchema
 

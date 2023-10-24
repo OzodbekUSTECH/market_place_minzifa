@@ -37,6 +37,7 @@ class Tour(BaseTable):
     title: Mapped[dict] = mapped_column(type_=JSONB)
     description: Mapped[dict] = mapped_column(type_=JSONB)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    tour_leader_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     status_id: Mapped[int] = mapped_column(ForeignKey("tour_statuses.id"))
     map_link: Mapped[str | None]
     age_group_from: Mapped[int]
@@ -163,7 +164,8 @@ class Tour(BaseTable):
             return False
         return None
 
-    user: Mapped["User"] = relationship(back_populates="tours", lazy="subquery")
+    user: Mapped["User"] = relationship(back_populates="tours", foreign_keys=[user_id], lazy="subquery")
+    tour_leader: Mapped["User"] = relationship(back_populates="leader_tours", foreign_keys=[tour_leader_id], lazy="subquery",)
     status: Mapped["TourStatus"] = relationship(lazy="subquery")
     children_age: Mapped["TourChildrenAge"] = relationship(lazy="subquery")
     activity_level: Mapped["TourActivityLevel"] = relationship(lazy="subquery")

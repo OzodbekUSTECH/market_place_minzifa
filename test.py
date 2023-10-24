@@ -77,3 +77,8 @@
 # #     json.dump(t_tour_day_data, file, ensure_ascii=False, indent=4)
 
 # # print("Файл 't_tour_day.json' был успешно переписан с правильной нумерацией дней и в виде массива с запятыми между объектами.")
+
+import asyncio
+from services import parser_service
+
+asyncio.run(parser_service.set_tour_leader_for_all_tours())
