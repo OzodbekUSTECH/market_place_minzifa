@@ -19,7 +19,7 @@ from schemas.tour_hotels import TourHotelSchema
 from schemas.tour_importants import TourImportantSchema
 from schemas.tours_package.includes import IncludeInPriceSchema
 from schemas.tours_package.excludes import ExcludeInPriceSchema
-
+from schemas.roles import RoleSchema
 
 
 class CustomTourPriceSchema(BaseModel):
@@ -33,7 +33,13 @@ class CustomTourPriceSchema(BaseModel):
     new_price: float | None
     discount_start_date: str | None
     discount_end_date: str | None
-
+##################################
+# class TourLeaderSchema(IdResponseSchema):
+#     first_name: str
+#     last_name: str
+#     about: str
+#     role: RoleSchema
+    
 
 
 
@@ -156,7 +162,7 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     # tour_days: list | None = Field(None, exclude=True)
 
 class OneTourSchema(TourSchema):
-    # tour_leader: UserSchema
+    # tour_leader: TourLeaderSchema
     children_age: TourChildrenAgeSchema
     activity_level: TourActivityLevelSchema
 
