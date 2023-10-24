@@ -13,5 +13,7 @@ class Country(BaseTable):
 
     @property
     def photo_url(self) -> str:
-        return f"{settings.COUNTRY_MEDIA_URL}{self.filename}"
+        if self.filename:
+            return f"{settings.COUNTRY_MEDIA_URL}{self.filename}"
+        return None
 
