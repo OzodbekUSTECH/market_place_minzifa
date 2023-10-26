@@ -17,7 +17,7 @@ class RegionsService:
     async def get_list_of_regions(self, uow: UnitOfWork, country_id: int | None) -> list[models.Region]:
         async with uow:
             if country_id:
-                return paginate(await uow.regions.get_all_by(country_id=country_id))
+                return await uow.regions.get_all_by(country_id=country_id)
             return await uow.regions.get_all()
         
     async def get_region_by_id(self, uow: UnitOfWork, id: int) -> models.Region:

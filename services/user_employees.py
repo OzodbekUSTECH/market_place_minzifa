@@ -52,7 +52,7 @@ class UserEmployeesService:
         
     async def get_employees_of_travel_expert(self, uow: UnitOfWork, travel_expert_id: int) -> list[models.User]:
         async with uow:
-            return paginate(await uow.user_employees.get_all_by(travel_expert_id=travel_expert_id))
+            return await uow.user_employees.get_all_by(travel_expert_id=travel_expert_id)
 
 
     async def delete_user_employee(

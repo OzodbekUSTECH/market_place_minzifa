@@ -33,6 +33,7 @@ async def create_include_in_price(
     return await tour_includes_service.create_include_in_price(uow, include_data)
 
 @router.get('/{locale}/{id}', response_model=Page[IncludeInPriceSchema])
+@LocaleHandler.serialize_one_all_models_by_locale
 async def get_includes_in_price_of_tour(
     uow: UOWDependency,
     locale: Annotated[LocaleHandler, Depends()],
