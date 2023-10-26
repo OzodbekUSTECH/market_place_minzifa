@@ -52,22 +52,26 @@ class User(BaseTable):
 
     role: Mapped["Role"] = relationship(back_populates="users", lazy="selectin")
 
-    travel_expert: Mapped["User"] = relationship(
-        secondary="user_employees",
-        primaryjoin="User.id == UserEmployee.employee_id",
-        secondaryjoin="User.id == UserEmployee.user_id",
-        lazy="immediate",
-        overlaps="employees"  # Add this parameter
-    )
+    # @hybrid_property
+    # def travel_expert_id(self) -> int | None:
+    #     return self.travel_expert.id
+    
+    # travel_expert: Mapped["User"] = relationship(
+    #     secondary="user_employees",
+    #     primaryjoin="User.id == UserEmployee.employee_id",
+    #     secondaryjoin="User.id == UserEmployee.user_id",
+    #     lazy="immediate",
+    #     overlaps="employees"  # Add this parameter
+    # )
 
-    # Отношение к путешественникам (множественное отношение)
-    employees: Mapped[list["User"]] = relationship(
-        secondary="user_employees",
-        primaryjoin="User.id == UserEmployee.user_id",
-        secondaryjoin="User.id == UserEmployee.employee_id",
-        lazy="immediate",
-        overlaps="travel_expert"  # Add this parameter
-    )
+    # # Отношение к путешественникам (множественное отношение)
+    # employees: Mapped[list["User"]] = relationship(
+    #     secondary="user_employees",
+    #     primaryjoin="User.id == UserEmployee.user_id",
+    #     secondaryjoin="User.id == UserEmployee.employee_id",
+    #     lazy="immediate",
+    #     overlaps="travel_expert"  # Add this parameter
+    # )
     tours: Mapped[list["Tour"]] = relationship(
         back_populates="user", 
         lazy="subquery",

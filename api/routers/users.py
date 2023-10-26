@@ -5,7 +5,7 @@ from services import users_service
 from schemas.users import (
     CreateUserSchema,
     UpdateUserSchema,
-    UserSchemaWithTravelExpertAndEmployees
+    UserSchema
 )
 from schemas import IdResponseSchema
 from repositories import Page
@@ -26,23 +26,19 @@ async def create_user(
     return await users_service.register_user(uow, user_data, locale)
 
 
-@router.get("/{locale}", response_model=Page[UserSchemaWithTravelExpertAndEmployees])
-@LocaleHandler.serialize_one_all_models_by_locale
+@router.get("/", response_model=Page[UserSchema])
 async def get_list_of_users(
     uow: UOWDependency,
-    locale: Annotated[LocaleHandler, Depends()],
     role_id: int | None = None,
 ):
     return await users_service.get_list_of_users(uow, role_id)
 
 
 
-@router.get("/{locale}/{id}", response_model=UserSchemaWithTravelExpertAndEmployees)
-@LocaleHandler.serialize_one_all_models_by_locale
+@router.get("/{id}", response_model=UserSchema)
 async def get_user_by_id(
     uow: UOWDependency,
     id: int,
-    locale: Annotated[LocaleHandler, Depends()]
 ):
     return await users_service.get_user_by_id(uow, id)
 

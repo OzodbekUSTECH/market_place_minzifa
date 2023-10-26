@@ -1,12 +1,13 @@
 from schemas.user_employees import (
-    CreateUserEmployeeSchema,
-    CreateUserEmployeeAssociationSchema,
+    CreateEmployeeSchema,
+    CreateEmployeeAssociationSchema,
 )
 from database import UnitOfWork, email_sender
 from utils.exceptions import CustomExceptions
 import models
 from utils.locale_handler import LocaleHandler
 from security.password import PasswordHandler
+from repositories import paginate
 
 
 class UserEmployeesService:
@@ -24,9 +25,9 @@ class UserEmployeesService:
     async def create_user_employee(
         self,
         uow: UnitOfWork,
-        employee_data: CreateUserEmployeeSchema,
+        employee_data: CreateEmployeeSchema,
         locale: LocaleHandler,
-    ) -> models.User:
+    ) -> models.UserEmployee:
         employee_dict = employee_data.model_dump()
         hashed_password = PasswordHandler.hash(employee_data.password)
 
@@ -37,29 +38,33 @@ class UserEmployeesService:
                 raise CustomExceptions.conflict("Already exists user with this email")
 
             employee: models.User = await uow.users.create(employee_dict)
-            await uow.user_employees.create(
-                CreateUserEmployeeAssociationSchema(
-                    user_id=employee_data.user_id, employee_id=employee.id
+            employee_assosiaction = await uow.user_employees.create(
+                CreateEmployeeAssociationSchema(
+                    travel_expert_id=employee_data.travel_expert_id, employee_id=employee.id
                 ).model_dump()
             )
             await uow.commit()
+            travel_expert: models.User = await uow.users.get_by_id(employee_data.travel_expert_id)
             await self.send_email_message_to_welcome_employee(
-                employee=employee, locale=locale, travel_expert=employee.travel_expert
+                employee=employee, locale=locale, travel_expert=travel_expert
             )
-            return employee
+            return employee_assosiaction
+        
+    async def get_employees_of_travel_expert(self, uow: UnitOfWork, travel_expert_id: int) -> list[models.User]:
+        async with uow:
+            return await uow.user_employees.get_all_by(travel_expert_id=travel_expert_id)
+
 
     async def delete_user_employee(
         self,
         uow: UnitOfWork,
-        user_id: int,
-        employee_id: int,
+        id: int,
     ) -> models.UserEmployee:
         async with uow:
-            deleted_user_employee = await uow.user_employees.delete_by(
-                user_id=user_id, employee_id=employee_id
-            )
+            employee_association: models.UserEmployee = await uow.user_employees.get_by_id(id)
+            await uow.user_employees.delete(employee_association.id)
             await uow.commit()
-            return deleted_user_employee
+            return employee_association
 
 
 user_employees_service = UserEmployeesService()

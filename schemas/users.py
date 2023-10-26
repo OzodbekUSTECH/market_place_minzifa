@@ -48,9 +48,7 @@ class UpdateUserSchema(UpdateBaseModel, BaseUserSchema):
 class UserSchema(IdResponseSchema, UpdateUserSchema):
     rating: int | float
     amount_reviews: int
-    role: RoleSchema
-
-    role_id: int = Field(exclude=True)
+    role_id: int
 
 
 class UserSchemaWithTravelExpertAndEmployees(UserSchema):
