@@ -72,11 +72,11 @@ class User(BaseTable):
     #     lazy="immediate",
     #     overlaps="travel_expert"  # Add this parameter
     # )
-    # tours: Mapped[list["Tour"]] = relationship(
-    #     back_populates="user", 
-    #     lazy="subquery",
-    #     primaryjoin="User.id == Tour.user_id",
-    # )
+    tours: Mapped[list["Tour"]] = relationship(
+        back_populates="user", 
+        lazy="subquery",
+        primaryjoin="User.id == Tour.user_id",
+    )
     # leader_tours: Mapped[list["Tour"]] = relationship(
     #     back_populates="tour_leader", 
     #     lazy="subquery",

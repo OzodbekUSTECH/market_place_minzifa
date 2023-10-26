@@ -176,7 +176,7 @@ class Tour(BaseTable):
             return False
         return None
 
-    # user: Mapped["User"] = relationship(back_populates="tours", foreign_keys=[user_id], lazy="subquery")
+    user: Mapped["User"] = relationship(back_populates="tours", foreign_keys=[user_id], lazy="subquery")
     # tour_leader: Mapped["User"] = relationship(back_populates="leader_tours", foreign_keys=[tour_leader_id], lazy="subquery",)
     # status: Mapped["TourStatus"] = relationship(lazy="subquery")
     # children_age: Mapped["TourChildrenAge"] = relationship(lazy="subquery")
