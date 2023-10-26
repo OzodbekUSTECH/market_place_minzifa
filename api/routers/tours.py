@@ -32,7 +32,7 @@ async def get_list_of_tours(
     return await tours_service.get_list_of_tours(uow, filter_params, locale)
 
 
-@router.get("/{locale}/{id}", response_model=OneTourSchema)
+@router.get("/{locale}/{id}", response_model=TourSchema)
 @LocaleHandler.serialize_one_all_models_by_locale
 async def get_tour_by_id(
     uow: UOWDependency,

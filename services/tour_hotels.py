@@ -8,6 +8,7 @@ from database import UnitOfWork
 from utils.media_handler import MediaHandler
 import models
 from fastapi import UploadFile
+from repositories import paginate
 class TourHotelsService:
     
 
@@ -36,6 +37,11 @@ class TourHotelsService:
             )
 
             await uow.commit()
+
+    async def get_hotels_of_tour(self, uow: UnitOfWork, tour_id: int) -> list[models.TourHotel]:
+        async with uow:
+            return await uow.tour_hotels.get_all_by(tour_id=tour_id)
+
 
     async def update_hotel(self, uow: UnitOfWork, id: int, hotel_data: UpdateTourHotelSchema) -> models.TourHotel:
         async with uow:

@@ -29,17 +29,19 @@ if TYPE_CHECKING:
         IncludeInPrice,
         ExcludeInPrice
     )
-
+from unidecode import unidecode
+import re
 
 class Tour(BaseTable):
     __tablename__ = "tours"
 
     title: Mapped[dict] = mapped_column(type_=JSONB)
+
     description: Mapped[dict] = mapped_column(type_=JSONB)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     tour_leader_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     status_id: Mapped[int] = mapped_column(ForeignKey("tour_statuses.id"))
-    map_link: Mapped[str | None]
+    # map_link: Mapped[str | None]
     age_group_from: Mapped[int]
     age_group_to: Mapped[int]
 
@@ -66,6 +68,15 @@ class Tour(BaseTable):
     # included_in_price: Mapped[list[dict]] = mapped_column(JSONB)
     # not_included_in_price: Mapped[list[dict]] = mapped_column(JSONB)
     
+    @hybrid_property
+    def url(self) -> str:
+        title_en = self.title.get("en", "")
+        # Заменяем все знаки препинания (включая пробелы) на тире
+        title_en = re.sub(r'[^\w\s-]', '-', title_en)
+        # Заменяем последовательности пробелов на одиночные тире
+        title_en = re.sub(r'\s+', '-', title_en)
+        return unidecode(title_en)
+
     @hybrid_property
     def total_free_places(self) -> int:
         return self.free_places
@@ -152,6 +163,7 @@ class Tour(BaseTable):
     def amount_countries(self) -> int:
         return len(self.countries)
     
+
     @hybrid_property
     def amount_regions(self) -> int:
         return len(self.regions)
@@ -164,14 +176,14 @@ class Tour(BaseTable):
             return False
         return None
 
-    user: Mapped["User"] = relationship(back_populates="tours", foreign_keys=[user_id], lazy="subquery")
-    tour_leader: Mapped["User"] = relationship(back_populates="leader_tours", foreign_keys=[tour_leader_id], lazy="subquery",)
-    status: Mapped["TourStatus"] = relationship(lazy="subquery")
-    children_age: Mapped["TourChildrenAge"] = relationship(lazy="subquery")
-    activity_level: Mapped["TourActivityLevel"] = relationship(lazy="subquery")
+    # user: Mapped["User"] = relationship(back_populates="tours", foreign_keys=[user_id], lazy="subquery")
+    # tour_leader: Mapped["User"] = relationship(back_populates="leader_tours", foreign_keys=[tour_leader_id], lazy="subquery",)
+    # status: Mapped["TourStatus"] = relationship(lazy="subquery")
+    # children_age: Mapped["TourChildrenAge"] = relationship(lazy="subquery")
+    # activity_level: Mapped["TourActivityLevel"] = relationship(lazy="subquery")
     photos: Mapped[list["TourMedia"]] = relationship(cascade="all, delete-orphan", lazy="subquery")
 
-    category: Mapped["Category"] = relationship(lazy="subquery")
+    # category: Mapped["Category"] = relationship(lazy="subquery")
     # categories: Mapped[list["Category"]] = relationship(secondary="tour_categories", lazy="subquery", cascade='all,delete')
     main_type: Mapped["Type"] = relationship(lazy="subquery")
     additional_types: Mapped[list["Type"]] = relationship(secondary="tour_additional_types", lazy="subquery",cascade="all, delete") 
@@ -187,7 +199,7 @@ class Tour(BaseTable):
             cascade="all, delete",
             overlaps="price_instance"  # Add this parameter
         )
-    comments: Mapped[list["TourComment"]] = relationship(lazy="immediate", cascade="all, delete-orphan")
+    comments: Mapped[list["TourComment"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     days: Mapped[list["TourDay"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     hotels: Mapped[list["TourHotel"]] = relationship(lazy="subquery", cascade="all, delete-orphan")
     importants: Mapped[list["TourImportant"]] = relationship(lazy="subquery", cascade="all, delete-orphan")

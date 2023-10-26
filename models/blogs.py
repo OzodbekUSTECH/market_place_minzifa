@@ -36,7 +36,9 @@ class BlogMedia(BaseTable):
     filename: Mapped[str]
 
     @hybrid_property
-    def media_url(self) -> str:
-        return f"{settings.BLOG_MEDIA_URL}{self.filename}"
+    def media_url(self) -> str | None:
+        if self.filename:
+            return f"{settings.BLOG_MEDIA_URL}{self.filename}"
+        return None
 
     

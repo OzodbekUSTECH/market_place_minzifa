@@ -34,11 +34,14 @@ class CustomTourPriceSchema(BaseModel):
     discount_start_date: str | None
     discount_end_date: str | None
 ##################################
-# class TourLeaderSchema(IdResponseSchema):
-#     first_name: str
-#     last_name: str
-#     about: str
-#     role: RoleSchema
+class CustomCountrySchema(BaseModel):
+    id: int
+    name: Union[dict[str, str], str]
+
+class CustomTypeSchema(CustomCountrySchema):
+    pass
+    
+
     
 
 
@@ -49,7 +52,6 @@ class CreateTourSchema(CreateBaseModel):
     user_id: int
     tour_leader_id: int
     status_id: int
-    map_link: str | None
     age_group_from: int = Field(le=100)
     age_group_to: int = Field(le=100)
 
@@ -104,24 +106,17 @@ class UpdateTourSchema(UpdateBaseModel, CreateTourSchema):
     pass
 
 class TourSchema(IdResponseSchema, UpdateTourSchema):
+    url: str
     duration: int | None
-    is_guaranteed: bool
-    is_one_day_tour: bool | None
-    # user: UserSchema
-    status: TourStatusSchema
-    # children_age: TourChildrenAgeSchema
-    # activity_level: TourActivityLevelSchema
     photos: list[TourMediaSchema]
-    category: CategorySchema
-    # categories: list[CategorySchema]
-    main_type: TypeSchema
-    # additional_types: list[TypeSchema]
-    # languages: list[LanguageSchema]
-    # activities: list[ActivitySchema]
-    # accommodations: list[AccommodationSchema]
-    # accommodation_types: list[AccommodationTypeSchema]
-    # countries: list[CountrySchema]
-    # regions: list[RegionSchema]
+    main_type: CustomTypeSchema
+    additional_type_ids: list[int]
+    language_ids: list[int]
+    activity_ids: list[int]
+    accommodation_ids: list[int]
+    accommodation_type_ids: list[int]
+    countries: list[CustomCountrySchema]
+    region_ids: list[int]
     prices: list[CustomTourPriceSchema]
 
     total_free_places: int
@@ -129,29 +124,11 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     amount_reviews: int
     amount_countries: int
     amount_regions: int
-    has_discount: bool | None
-
-    # days: list[TourDaySchema]
-    # hotels: list[TourHotelSchema]
-    # importants: list[TourImportantSchema]
-    # includes_in_price: list[IncludeInPriceSchema]
-    # excludes_in_price: list[ExcludeInPriceSchema]
     
-
-
-    ######################################
-    # user_id: int = Field(exclude=True)
     free_places: int = Field(exclude=True)
-    status_id: int = Field(exclude=True)
-    children_age_id: int = Field(exclude=True)
-    activity_level_id: int = Field(exclude=True)
     main_type_id: int = Field(exclude=True)
     start_month: int = Field(exclude=True)
-
-    category_id: int = Field(exclude=True)
-    
-
-   
+    category_id: int = Field(exclude=True)   
     currency_id: int = Field(None, exclude=True)
     price: int | None = Field(None, exclude=True)
     discount_percentage: float | None = Field(None, exclude=True)
@@ -159,14 +136,13 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     discount_start_date: str | None = Field(None, exclude=True)
     discount_end_date: str | None = Field(None, exclude=True)
     
-    # tour_days: list | None = Field(None, exclude=True)
+    
 
 class OneTourSchema(TourSchema):
-    # tour_leader: TourLeaderSchema
     children_age: TourChildrenAgeSchema
     activity_level: TourActivityLevelSchema
 
-    additional_types: list[TypeSchema]
+    additional_type_ids: list[int]
     languages: list[LanguageSchema]
     activities: list[ActivitySchema]
     accommodations: list[AccommodationSchema]

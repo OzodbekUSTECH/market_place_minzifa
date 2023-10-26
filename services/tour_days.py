@@ -8,6 +8,7 @@ from database import UnitOfWork
 from utils.media_handler import MediaHandler
 import models
 from fastapi import UploadFile
+from repositories import paginate
 class TourDaysService:
    
 
@@ -37,6 +38,10 @@ class TourDaysService:
                 ).model_dump() for filename in filenames]
             )
             await uow.commit()
+
+    async def get_days_of_tour(self, uow: UnitOfWork, tour_id: int) -> list[models.TourDay]:
+        async with uow:
+            return await uow.tour_days.get_all_by(tour_id=tour_id)
 
     async def update_tour_day(self, uow: UnitOfWork, id: int, day_data: UpdateTourDaySchema) -> models.TourDay:
         async with uow:

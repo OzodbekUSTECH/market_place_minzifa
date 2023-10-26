@@ -6,9 +6,11 @@ from schemas.tours_package.includes import (
     CreateMultipleIncludeInPrice,
     CreateIncludeInPriceSchema,
     UpdateIncludeInPriceSchema,
+    IncludeInPriceSchema
 )
 from schemas import IdResponseSchema
 from database import UOWDependency
+from utils.locale_handler import LocaleHandler
 
 router = APIRouter(
     prefix="/includes",
@@ -29,6 +31,14 @@ async def create_include_in_price(
     include_data: CreateIncludeInPriceSchema,
 ):
     return await tour_includes_service.create_include_in_price(uow, include_data)
+
+@router.get('/{locale}/{id}', response_model=Page[IncludeInPriceSchema])
+async def get_includes_in_price_of_tour(
+    uow: UOWDependency,
+    locale: Annotated[LocaleHandler, Depends()],
+    tour_id: int
+):
+    return await tour_includes_service.get_includes_in_price_of_tour(uow, tour_id)
 
 @router.put('/{id}', response_model=IdResponseSchema)
 async def update_include_in_price(

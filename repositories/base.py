@@ -79,6 +79,5 @@ class BaseRepository:
     
     async def get_all_by(self, **filters) -> list:
         stmt = select(self.model).filter_by(**filters)
-        result = await self.session.execute(stmt)
-        return result.scalars().all()
+        return await paginate(self.session, stmt)
     

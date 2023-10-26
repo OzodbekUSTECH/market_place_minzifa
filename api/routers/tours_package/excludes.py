@@ -6,9 +6,11 @@ from schemas.tours_package.excludes import (
     CreateMultipleExcludeInPrice,
     CreateExcludeInPriceSchema,
     UpdateExcludeInPriceSchema,
+    ExcludeInPriceSchema
 )
 from schemas import IdResponseSchema
 from database import UOWDependency
+from utils.locale_handler import LocaleHandler
 
 router = APIRouter(
     prefix="/excludes",
@@ -30,6 +32,15 @@ async def create_exclude_in_price(
     exclude_data: CreateExcludeInPriceSchema,
 ):
     return await tour_excludes_service.create_exclude_in_price(uow, exclude_data)
+
+@router.get('/{locale}/{tour_id}', response_model=Page[ExcludeInPriceSchema])
+@LocaleHandler.serialize_one_all_models_by_locale
+async def get_excludes_in_price_of_tour(
+    uow: UOWDependency,
+    locale: Annotated[LocaleHandler, Depends()],
+    tour_id: int
+):
+    return await tour_excludes_service.get_excludes_in_price_of_tour(uow, tour_id)
 
 @router.put('/{id}', response_model=IdResponseSchema)
 async def update_exclude_in_price(

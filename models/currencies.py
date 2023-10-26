@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class Currency(BaseTable):
     __tablename__ = 'currencies'
     
-    name: Mapped[dict] = mapped_column(type_=JSONB)
+    name: Mapped[str | None]
     symbol: Mapped[str]
     exchange_rate: Mapped[float | None]
     

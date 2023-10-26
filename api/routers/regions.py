@@ -27,9 +27,10 @@ async def create_region(
 @LocaleHandler.serialize_one_all_models_by_locale
 async def get_list_of_regions(
     uow: UOWDependency,
-    locale: Annotated[LocaleHandler, Depends()]
+    locale: Annotated[LocaleHandler, Depends()],
+    country_id: int | None = None,
 ):
-    return await regions_service.get_list_of_regions(uow)
+    return await regions_service.get_list_of_regions(uow, country_id)
 
 @router.get('/{locale}/{id}', response_model=RegionSchema)
 @LocaleHandler.serialize_one_all_models_by_locale

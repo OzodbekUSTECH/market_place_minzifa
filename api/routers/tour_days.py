@@ -1,15 +1,19 @@
 
 from schemas import IdResponseSchema
-from fastapi import APIRouter, UploadFile, File, Form
+from typing import Annotated
+from fastapi import APIRouter, UploadFile, File, Form, Depends
 import json
 from utils.exceptions import CustomExceptions
 from services import tour_days_service
 from schemas.tour_days import (
     CreateTourDaySchema,
 
-    UpdateTourDaySchema
+    UpdateTourDaySchema,
+    TourDaySchema
 )
+from repositories import Page
 from database import UOWDependency
+from utils.locale_handler import LocaleHandler
 
 router = APIRouter(
     prefix="/tour-days",
@@ -58,6 +62,16 @@ async def create_tour_day_media_group(
     media_group: list[UploadFile]
 ):
     return await tour_days_service.create_tour_day_media_group(uow, tour_day_id, media_group)
+
+@router.get('/{locale}/{tour_id}', response_model=Page[TourDaySchema])
+@LocaleHandler.serialize_one_all_models_by_locale
+async def get_days_of_tour(
+    uow: UOWDependency,
+    locale: Annotated[LocaleHandler, Depends()],
+    tour_id: int
+):
+    return await tour_days_service.get_days_of_tour(uow, tour_id)
+
 
 @router.put('/{id}', response_model=IdResponseSchema)
 async def update_tour_day(

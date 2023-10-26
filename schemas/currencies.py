@@ -2,7 +2,7 @@ from schemas import CreateBaseModel, UpdateBaseModel, IdResponseSchema
 from typing import Union
 
 class CreateCurrencySchema(CreateBaseModel):
-    name: Union[dict[str, str], str]
+    name: str
     symbol: str
     exchange_rate: float | None
 

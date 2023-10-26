@@ -1,6 +1,7 @@
 from schemas.regions import CreateRegionSchema, UpdateRegionSchema
 from database import UnitOfWork
 from utils.exceptions import CustomExceptions
+from repositories import paginate
 import models
 
 class RegionsService:
@@ -13,8 +14,10 @@ class RegionsService:
             await uow.commit()
             return region
         
-    async def get_list_of_regions(self, uow: UnitOfWork) -> list[models.Region]:
+    async def get_list_of_regions(self, uow: UnitOfWork, country_id: int | None) -> list[models.Region]:
         async with uow:
+            if country_id:
+                return paginate(await uow.regions.get_all_by(country_id=country_id))
             return await uow.regions.get_all()
         
     async def get_region_by_id(self, uow: UnitOfWork, id: int) -> models.Region:

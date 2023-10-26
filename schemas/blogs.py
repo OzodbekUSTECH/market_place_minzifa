@@ -2,7 +2,7 @@ from schemas import  CreateBaseModel, UpdateBaseModel, IdResponseSchema
 from pydantic import Field
 from typing import Union
 from fastapi import UploadFile
-from schemas.countries import CountrySchema
+from schemas.tours import CustomCountrySchema
     
 class CreateBlogMediaSchema(CreateBaseModel):
     blog_id: int
@@ -11,6 +11,9 @@ class CreateBlogMediaSchema(CreateBaseModel):
 class BlogMediaSchema(IdResponseSchema, CreateBlogMediaSchema):
     filename: str = Field(exclude=True)
     media_url: str
+
+#####################################
+
 
 ################################################################
 class CreateBlogSchema(CreateBaseModel):
@@ -26,4 +29,4 @@ class UpdateBlogSchema(UpdateBaseModel, CreateBlogSchema):
 class BlogSchema(IdResponseSchema, UpdateBlogSchema):
     views: int
     media: list[BlogMediaSchema]
-    countries: list[CountrySchema]
+    countries: list[CustomCountrySchema]

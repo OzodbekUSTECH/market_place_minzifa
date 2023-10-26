@@ -1,10 +1,15 @@
 from repositories import BaseRepository
 from utils.filters.filter_tours import FilterToursParams
-from sqlalchemy import insert, select, update, delete
+from sqlalchemy import insert, select, update, delete, literal_column
 from fastapi_pagination.ext.async_sqlalchemy import paginate
 from utils.locale_handler import LocaleHandler
 from fuzzywuzzy import fuzz
+from fastapi_pagination.ext.async_sqlalchemy import paginate
 
+
+from sqlalchemy.sql import select, and_
+from sqlalchemy.sql.expression import cast
+from sqlalchemy.types import ARRAY, Integer
 
 class ToursRepository(BaseRepository):
     ...

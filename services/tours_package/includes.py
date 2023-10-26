@@ -28,6 +28,10 @@ class IncludesInPriceService:
             await uow.commit()
             return include_in_price
         
+    async def get_includes_in_price_of_tour(self, uow: UnitOfWork, tour_id: int) -> list[models.IncludeInPrice]:
+        async with uow:
+            return await uow.tour_includes.get_all_by(tour_id=tour_id)
+        
     async def update_include_in_price(self, uow: UnitOfWork, id: int, include_data: UpdateIncludeInPriceSchema) -> models.IncludeInPrice:
         async with uow:
             include_in_price: models.IncludeInPrice = await uow.tour_includes.get_by_id(id)

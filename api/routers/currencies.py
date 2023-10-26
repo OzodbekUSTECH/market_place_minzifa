@@ -1,5 +1,4 @@
-from typing import Annotated
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from services import currencies_service
 from repositories import Page
 from schemas.currencies import (
@@ -8,7 +7,6 @@ from schemas.currencies import (
     UpdateCurrencySchema,
 )
 from schemas import IdResponseSchema
-from utils.locale_handler import LocaleHandler
 from database import UOWDependency
 
 router = APIRouter(
@@ -36,20 +34,16 @@ async def create_currency(
     return await currencies_service.create_currency(uow, currency_data)
 
 
-@router.get("/{locale}", response_model=Page[CurrencySchema])
-@LocaleHandler.serialize_one_all_models_by_locale
+@router.get("", response_model=Page[CurrencySchema])
 async def get_list_of_currencies(
     uow: UOWDependency,
-    locale: Annotated[LocaleHandler, Depends()],
 ):
     return await currencies_service.get_list_of_currencies(uow)
 
 
-@router.get("/{locale}/{id}", response_model=CurrencySchema)
-@LocaleHandler.serialize_one_all_models_by_locale
+@router.get("/{id}", response_model=CurrencySchema)
 async def get_currency_by_id(
     uow: UOWDependency,
-    locale: Annotated[LocaleHandler, Depends()],
     id: int,
 ):
     return await currencies_service.get_currency_by_id(uow, id)
