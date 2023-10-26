@@ -47,7 +47,7 @@ class UsersService:
         ) -> list[models.User]:
         async with uow:
             if role_id:
-                return paginate(await uow.users.get_all_by(role_id=role_id))
+                return await uow.users.get_all_by(role_id=role_id)
             return await uow.users.get_all()
         
     
