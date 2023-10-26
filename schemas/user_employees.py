@@ -11,3 +11,4 @@ class CreateEmployeeAssociationSchema(BaseModel):
 
 class EmployeeSchema(IdResponseSchema, CreateEmployeeAssociationSchema):
     ...
+
