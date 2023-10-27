@@ -138,7 +138,9 @@ class Tour(BaseTable):
     def region_ids(self) -> list[int]:
         return [region.id for region in self.regions]
     
-
+    @hybrid_property
+    def user_rating(self) -> int | float:
+        return self.user.rating
 
     @hybrid_property
     def rating(self) -> int | float:

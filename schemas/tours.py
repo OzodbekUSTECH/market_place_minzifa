@@ -107,6 +107,7 @@ class UpdateTourSchema(UpdateBaseModel, CreateTourSchema):
 
 class TourSchema(IdResponseSchema, UpdateTourSchema):
     url: str
+    user_rating: int | float
     duration: int | None
     photos: list[TourMediaSchema]
     main_type: CustomTypeSchema
