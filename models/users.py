@@ -35,7 +35,7 @@ class User(BaseTable):
                 amount_reviews += tour.amount_reviews
 
         if amount_reviews == 0:
-            return 1  # Возвращаем значение по умолчанию (1) если нет комментариев с рейтингом
+            return 0  # Возвращаем значение по умолчанию (1) если нет комментариев с рейтингом
         else:
             return round(total_rating / amount_reviews, 2)
         
