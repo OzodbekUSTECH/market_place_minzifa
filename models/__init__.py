@@ -32,6 +32,7 @@ from models.tour_prices import TourPrice
 
 from models.tours_package.excludes import ExcludeInPrice
 from models.tours_package.includes import IncludeInPrice
+from models.tours_package.favorite_tours import FavoriteTour
 
 from models.tour_days import TourDay, TourDayMediaGroup
 from models.tour_hotels import TourHotel, TourHotelMediaGroup

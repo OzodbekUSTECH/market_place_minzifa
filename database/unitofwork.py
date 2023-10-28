@@ -68,6 +68,9 @@ class UnitOfWork:
     ask_question_forms: Type[repositories.AskQuestionFormsRepository]
 
     orders: Type[repositories.OrdersRepository]
+
+    favorite_tours: Type[repositories.FavoriteToursRepository]
+
     
   
 
@@ -135,6 +138,8 @@ class UnitOfWork:
         self.ask_question_forms = repositories.AskQuestionFormsRepository(self.session, model=models.AskQuestionForm)
         
         self.orders = repositories.OrdersRepository(self.session, model=models.Order)
+
+        self.favorite_tours = repositories.FavoriteToursRepository(self.session, model=models.FavoriteTour)
 
     async def __aexit__(self, *args):
         await self.session.close()

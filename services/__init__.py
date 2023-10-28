@@ -29,6 +29,7 @@ from services.tour_importants import tour_importants_service
 
 from services.tours_package.includes import tour_includes_service
 from services.tours_package.excludes import tour_excludes_service
+from services.tours_package.favorite_tours import favorite_tours_service
 
 from services.blogs import blogs_service
 

@@ -41,6 +41,8 @@ class LocaleHandler:
                                 sub_localized_value = sub_value.get(locale.get_language, None)
                                 if sub_localized_value is not None:
                                     setattr(value, sub_key, sub_localized_value)
+                    elif isinstance(value, list):
+                        await process_attribute(value)
 
             # Process a list of models
             if isinstance(attr_value, list):

@@ -35,6 +35,7 @@ from repositories.tour_importants import TourImportantsRepository
 
 from repositories.tours_package.includes import IncludesInPriceRepository
 from repositories.tours_package.excludes import ExcludesInPriceRepository
+from repositories.tours_package.favorite_tours import FavoriteToursRepository
 
 
 

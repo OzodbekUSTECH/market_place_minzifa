@@ -26,6 +26,7 @@ from api.routers.tour_comments import router as tour_comments_router
 
 from api.routers.tours_package.includes import router as tour_includes_router
 from api.routers.tours_package.excludes import router as tour_excludes_router
+from api.routers.tours_package.favorite_tours import router as favorite_tours_router
 
 from api.routers.blogs import router as blogs_router
 
@@ -82,7 +83,9 @@ all_routers = [
 
     forms_router,
     
-    orders_router
+    orders_router,
+    
+    favorite_tours_router
     # maillist_router,
     # roles_router,
     # travelermanagers_router,
