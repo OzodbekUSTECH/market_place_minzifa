@@ -74,7 +74,7 @@ class User(BaseTable):
     # )
     tours: Mapped[list["Tour"]] = relationship(
         back_populates="user", 
-        lazy="subquery",
+        lazy="immediate",
         primaryjoin="User.id == Tour.user_id",
     )
     # leader_tours: Mapped[list["Tour"]] = relationship(

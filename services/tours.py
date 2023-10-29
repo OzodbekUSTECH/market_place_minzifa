@@ -106,9 +106,9 @@ class ToursService:
     ) -> list[models.Tour]:
         async with uow:
             await self._delete_expired_discounts(uow)
-            tours = await uow.tours.get_all()
-            filtered_tours = await filter_params.get_filtered_items(tours.items, locale)
-            return paginate(filtered_tours)
+            tours = await uow.tours.get_all_without_pagination()
+            filtered_tours = await filter_params.get_filtered_items(tours, locale)
+            return filtered_tours
 
     async def get_tour_by_id(self, uow: UnitOfWork, id: int) -> models.Tour:
         async with uow:

@@ -197,7 +197,7 @@ class Tour(BaseTable):
     regions: Mapped[list["Region"]] = relationship(secondary="tour_regions", lazy="subquery",cascade="all, delete")
     prices: Mapped[list["Currency"]] = relationship(
             secondary="tour_prices",
-            lazy="subquery",
+            lazy="immediate",
             cascade="all, delete",
             overlaps="price_instance"  # Add this parameter
         )

@@ -21,6 +21,7 @@ async def create_tour(
 ):
     return await tours_service.create_tour(uow, tour_data)
 
+from repositories import paginate
 
 @router.get("", response_model=Page[TourSchema])
 @LocaleHandler.serialize_one_all_models_by_locale
@@ -29,7 +30,7 @@ async def get_list_of_tours(
     locale: Annotated[LocaleHandler, Depends()],
     filter_params: Annotated[FilterToursParams, Depends()]
 ):
-    return await tours_service.get_list_of_tours(uow, filter_params, locale)
+    return paginate(await tours_service.get_list_of_tours(uow, filter_params, locale))
 
 
 @router.get("/{locale}/{id}", response_model=TourSchema)
