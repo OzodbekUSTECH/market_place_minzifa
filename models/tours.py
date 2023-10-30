@@ -70,7 +70,7 @@ class Tour(BaseTable):
     
     @hybrid_property
     def url(self) -> str:
-        title_en = self.title.get("en", "")
+        title_en = self.title.get("en") if isinstance(self.title, dict) else self.title
         # Заменяем все знаки препинания (включая пробелы) на тире
         title_en = re.sub(r'[^\w\s-]', '-', title_en)
         # Заменяем последовательности пробелов на одиночные тире
@@ -83,12 +83,13 @@ class Tour(BaseTable):
     
     @hybrid_property
     def start_month(self) -> int:
-        if self.start_date:
+        if self.start_date is not None:
+            
             # Преобразование строки start_date в объект даты
             start_date_obj = datetime.strptime(self.start_date, "%d.%m.%Y")
             # Извлечение месяца в виде числа (1-12)
             return start_date_obj.month
-            
+
         return 0
     
     @hybrid_property

@@ -75,6 +75,7 @@ class LocaleHandler:
                             setattr(item, attr_name, localized_value)
             else:
                 for attr_name, attr_value in model.__dict__.items():
+                    print(attr_name)
                     localized_value = await process_attribute(attr_value)
                     if localized_value is not None:
                         setattr(model, attr_name, localized_value)

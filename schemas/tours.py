@@ -111,6 +111,50 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     duration: int | None
     photos: list[TourMediaSchema]
     main_type: CustomTypeSchema
+    # additional_type_ids: list[int]
+    # language_ids: list[int]
+    # activity_ids: list[int]
+    # accommodation_ids: list[int]
+    # accommodation_type_ids: list[int]
+    countries: list[CustomCountrySchema]
+    # region_ids: list[int]
+    prices: list[CustomTourPriceSchema]
+
+    # total_free_places: int
+    
+    # amount_reviews: int
+    amount_countries: int
+    amount_regions: int
+    
+    main_type_id: int = Field(exclude=True)
+    start_month: int = Field(exclude=True)
+    category_id: int = Field(exclude=True)   
+    currency_id: int = Field(None, exclude=True)
+    price: int | None = Field(None, exclude=True)
+    discount_percentage: float | None = Field(None, exclude=True)
+    new_price: float | None = Field(None, exclude=True)
+    discount_start_date: str | None = Field(None, exclude=True)
+    discount_end_date: str | None = Field(None, exclude=True)
+    ############################
+    age_group_from: int = Field(exclude=True)
+    age_group_to: int = Field(exclude=True)
+    children_age_id: int = Field(exclude=True)
+    activity_level_id: int = Field(exclude=True)
+    start_date: str | None = Field(None, exclude=True)
+    end_date: str | None = Field(None, exclude=True)
+    total_places: int = Field(exclude=True)
+    free_places: int = Field(exclude=True)
+    is_guaranteed: bool = Field(exclude=True)
+    
+    
+
+class OneTourSchema(IdResponseSchema, UpdateTourSchema):
+    
+    user_rating: int | float
+    url: str
+    duration: int | None
+    photos: list[TourMediaSchema]
+    main_type: CustomTypeSchema
     additional_type_ids: list[int]
     language_ids: list[int]
     activity_ids: list[int]
@@ -126,7 +170,6 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     amount_countries: int
     amount_regions: int
     
-    free_places: int = Field(exclude=True)
     main_type_id: int = Field(exclude=True)
     start_month: int = Field(exclude=True)
     category_id: int = Field(exclude=True)   
@@ -136,25 +179,32 @@ class TourSchema(IdResponseSchema, UpdateTourSchema):
     new_price: float | None = Field(None, exclude=True)
     discount_start_date: str | None = Field(None, exclude=True)
     discount_end_date: str | None = Field(None, exclude=True)
-    
-    
+    ############################
+    # age_group_from: int = Field(exclude=True)
+    # age_group_to: int = Field(exclude=True)
+    # children_age_id: int = Field(exclude=True)
+    # activity_level_id: int = Field(exclude=True)
+    # start_date: str | None = Field(None, exclude=True)
+    # end_date: str | None = Field(None, exclude=True)
+    # total_places: int = Field(exclude=True)
+    # free_places: int = Field(exclude=True)
+    # is_guaranteed: bool = Field(exclude=True)
 
-class OneTourSchema(TourSchema):
-    children_age: TourChildrenAgeSchema
-    activity_level: TourActivityLevelSchema
+    # children_age: TourChildrenAgeSchema
+    # activity_level: TourActivityLevelSchema
 
-    additional_type_ids: list[int]
-    languages: list[LanguageSchema]
-    activities: list[ActivitySchema]
-    accommodations: list[AccommodationSchema]
-    accommodation_types: list[AccommodationTypeSchema]
-    countries: list[CountrySchema]
-    regions: list[RegionSchema]
+    # additional_type_ids: list[int]
+    # languages: list[LanguageSchema]
+    # activities: list[ActivitySchema]
+    # accommodations: list[AccommodationSchema]
+    # accommodation_types: list[AccommodationTypeSchema]
+    # countries: list[CountrySchema]
+    # regions: list[RegionSchema]
 
-    days: list[TourDaySchema]
-    hotels: list[TourHotelSchema]
-    importants: list[TourImportantSchema]
-    includes_in_price: list[IncludeInPriceSchema]
-    excludes_in_price: list[ExcludeInPriceSchema]
+    # days: list[TourDaySchema]
+    # hotels: list[TourHotelSchema]
+    # importants: list[TourImportantSchema]
+    # includes_in_price: list[IncludeInPriceSchema]
+    # excludes_in_price: list[ExcludeInPriceSchema]
 
     

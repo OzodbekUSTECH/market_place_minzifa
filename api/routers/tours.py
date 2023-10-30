@@ -31,9 +31,10 @@ async def get_list_of_tours(
     filter_params: Annotated[FilterToursParams, Depends()]
 ):
     return paginate(await tours_service.get_list_of_tours(uow, filter_params, locale))
+    # return await tours_service.get_list_of_tours(uow, filter_params, locale)
 
 
-@router.get("/{locale}/{id}", response_model=TourSchema)
+@router.get("/{locale}/{id}", response_model=OneTourSchema)
 @LocaleHandler.serialize_one_all_models_by_locale
 async def get_tour_by_id(
     uow: UOWDependency,

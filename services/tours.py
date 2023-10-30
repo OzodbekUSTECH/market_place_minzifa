@@ -105,6 +105,7 @@ class ToursService:
         locale: LocaleHandler,
     ) -> list[models.Tour]:
         async with uow:
+            # return await uow.tours.get_filtered_tours(filter_params, locale)
             await self._delete_expired_discounts(uow)
             tours = await uow.tours.get_all_without_pagination()
             filtered_tours = await filter_params.get_filtered_items(tours, locale)
@@ -112,7 +113,8 @@ class ToursService:
 
     async def get_tour_by_id(self, uow: UnitOfWork, id: int) -> models.Tour:
         async with uow:
-            return await uow.tours.get_by_id(id)
+            tour = await uow.tours.get_by_id(id)
+            return tour
 
     async def _update_items(
         self, 
