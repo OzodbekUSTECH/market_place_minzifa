@@ -90,8 +90,11 @@ class FilterToursParams(BaseFilterParams):
             )
 
         if self.country_name != "0":
-            filters.append(self.country_name.lower() in [country.name[locale.get_language].lower() for country in tour.countries])
+            country_names = [country.name["en"].lower() for country in tour.countries] + [country.name["ru"].lower() for country in tour.countries]
 
+            # Используйте созданный массив для фильтрации
+            filters.append(self.country_name.lower() in country_names)
+        
         if self.user_id:
             filters.append(tour.user_id == self.user_id)
 
