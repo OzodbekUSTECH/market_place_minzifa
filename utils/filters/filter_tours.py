@@ -12,6 +12,7 @@ class FilterToursParams(BaseFilterParams):
         region_id: int = Query(0),
         start_month: int = Query(0),
         query: str = Query(0),
+        country_name: str = Query(0),
         user_id: int = Query(0),
         rating: int | float = Query(0),
         status_id: int = Query(0),
@@ -40,6 +41,7 @@ class FilterToursParams(BaseFilterParams):
         self.region_id = region_id
         self.start_month = start_month 
         self.query = query
+        self.country_name = country_name
         self.user_id = user_id
         self.rating = rating
         self.status_id = status_id
@@ -86,6 +88,9 @@ class FilterToursParams(BaseFilterParams):
                     self.query.lower(), tour.title[locale.get_language].lower()
                 ) >= 60
             )
+
+        if self.country_name != "0":
+            filters.append(self.country_name.lower() in [country.name[locale.get_language].lower() for country in tour.countries])
 
         if self.user_id:
             filters.append(tour.user_id == self.user_id)
